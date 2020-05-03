@@ -36,7 +36,6 @@ namespace IWBTM.Game.Player
 
             Origin = Anchor.Centre;
             Size = new Vector2(15);
-            Position = new Vector2(260, 360 - 7.5f);
             AddInternal(spritesContainer = new Container
             {
                 RelativeSizeAxes = Axes.Both
@@ -56,7 +55,14 @@ namespace IWBTM.Game.Player
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            SetDefaultPosition();
             state.BindValueChanged(onStateChanged, true);
+        }
+
+        public void SetDefaultPosition()
+        {
+            Position = new Vector2(260, 360 - 7.5f);
+            Scale = Vector2.One;
         }
 
         protected override void Update()

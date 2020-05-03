@@ -5,6 +5,11 @@ using osu.Framework.Graphics.Shapes;
 using IWBTM.Game.Player;
 using System.Collections.Generic;
 using System.Linq;
+using IWBTM.Game.Objects;
+using osu.Framework.Audio.Track;
+using osu.Framework.Audio;
+using osu.Framework.Input.Events;
+using osuTK.Input;
 
 namespace IWBTM.Game.Playfield
 {
@@ -12,6 +17,9 @@ namespace IWBTM.Game.Playfield
     {
         public static int WIDTH = 26;
         public static int HEIGHT = 19;
+
+        private DefaultPlayer player;
+        private Track track;
 
         public DefaultPlayfield()
         {
@@ -22,7 +30,7 @@ namespace IWBTM.Game.Playfield
         }
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(AudioManager audio)
         {
             AddRangeInternal(new Drawable[]
             {
@@ -76,9 +84,39 @@ namespace IWBTM.Game.Playfield
                 }
             });
 
-            AddInternal(new DefaultPlayer(GetTiles()));
+            AddInternal(player = new DefaultPlayer(GetTiles()));
+            AddInternal(new ObjectsController(player));
+
+            track = audio.Tracks.Get("Ghost Rule");
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            restart();
         }
 
         public List<Tile> GetTiles() => InternalChildren.OfType<Tile>().ToList();
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (!e.Repeat)
+            {
+                switch(e.Key)
+                {
+                    case Key.R:
+                        restart();
+                        return true;
+                }
+            }
+
+            return base.OnKeyDown(e);
+        }
+
+        private void restart()
+        {
+            track.Restart();
+            player.SetDefaultPosition();
+        }
     }
 }
