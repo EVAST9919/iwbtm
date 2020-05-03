@@ -1,0 +1,10 @@
+﻿{
+  "solution": {
+    "path": "IWBTM.sln",
+    "projects": [
+      "IWBTM.Desktop\\IWBTM.Desktop.csproj",
+      "IWBTM.Game\\IWBTM.Game.csproj",
+      "IWBTM.Resources\\IWBTM.Resources.csproj"
+    ]
+  }
+}
