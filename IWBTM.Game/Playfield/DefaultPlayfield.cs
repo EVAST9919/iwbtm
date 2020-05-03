@@ -20,6 +20,7 @@ namespace IWBTM.Game.Playfield
 
         private DefaultPlayer player;
         private Track track;
+        private Container objectsControllerPlaceholder;
 
         public DefaultPlayfield()
         {
@@ -85,7 +86,10 @@ namespace IWBTM.Game.Playfield
             });
 
             AddInternal(player = new DefaultPlayer(GetTiles()));
-            AddInternal(new ObjectsController(player));
+            AddInternal(objectsControllerPlaceholder = new Container
+            {
+                RelativeSizeAxes = Axes.Both
+            });
 
             track = audio.Tracks.Get("Ghost Rule");
         }
@@ -117,6 +121,7 @@ namespace IWBTM.Game.Playfield
         {
             track.Restart();
             player.SetDefaultPosition();
+            objectsControllerPlaceholder.Child = new ObjectsController(player);
         }
     }
 }
