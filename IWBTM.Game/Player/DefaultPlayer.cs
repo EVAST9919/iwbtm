@@ -6,17 +6,18 @@ using osu.Framework.Input.Events;
 using osuTK.Input;
 using osu.Framework.Graphics;
 using osuTK;
-using osuTK.Graphics;
-using osu.Framework.Graphics.Shapes;
 using IWBTM.Game.Playfield;
 using System.Collections.Generic;
 using System;
+using osu.Framework.Bindables;
 
 namespace IWBTM.Game.Player
 {
     public class DefaultPlayer : CompositeDrawable
     {
         private const double base_speed = 1.0 / 6.5;
+
+        private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
 
         private int horizontalDirection;
         private int availableJumpCount = 2;
@@ -27,6 +28,7 @@ namespace IWBTM.Game.Player
         private DrawableSample doubleJump;
 
         private readonly List<Tile> tiles;
+        private readonly Container spritesContainer;
 
         public DefaultPlayer(List<Tile> tiles)
         {
@@ -35,10 +37,9 @@ namespace IWBTM.Game.Player
             Origin = Anchor.Centre;
             Size = new Vector2(15);
             Position = new Vector2(260, 360 - 7.5f);
-            AddInternal(new Box
+            AddInternal(spritesContainer = new Container
             {
-                RelativeSizeAxes = Axes.Both,
-                Colour = Color4.Black
+                RelativeSizeAxes = Axes.Both
             });
         }
 
@@ -50,6 +51,12 @@ namespace IWBTM.Game.Player
                 jump = new DrawableSample(audio.Samples.Get("jump")),
                 doubleJump = new DrawableSample(audio.Samples.Get("double-jump"))
             });
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            state.BindValueChanged(onStateChanged, true);
         }
 
         protected override void Update()
@@ -99,6 +106,8 @@ namespace IWBTM.Game.Player
                 
                 X = (float)newX;
             }
+
+            updatePlayerState();
         }
 
         private void resetJumpLogic()
@@ -180,6 +189,31 @@ namespace IWBTM.Game.Player
             }
 
             base.OnKeyUp(e);
+        }
+
+        private void onStateChanged(ValueChangedEvent<PlayerState> s) => spritesContainer.Child = new PlayerAnimation(s.NewValue);
+
+        private void updatePlayerState()
+        {
+            if (verticalSpeed < 0)
+            {
+                state.Value = PlayerState.Fall;
+                return;
+            }
+
+            if (verticalSpeed > 0)
+            {
+                state.Value = PlayerState.Jump;
+                return;
+            }
+
+            if (horizontalDirection != 0)
+            {
+                state.Value = PlayerState.Run;
+                return;
+            }
+
+            state.Value = PlayerState.Idle;
         }
     }
 }
