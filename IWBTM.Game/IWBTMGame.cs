@@ -9,7 +9,7 @@ namespace IWBTM.Game
         [BackgroundDependencyLoader]
         private void load()
         {
-            Add(new DefaultPlayfield(26, 19)
+            Add(new DefaultPlayfield()
             {
                 Scale = new Vector2(2) // Temp
             });

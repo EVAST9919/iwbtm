@@ -2,21 +2,21 @@
 using osu.Framework.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Shapes;
+using IWBTM.Game.Player;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IWBTM.Game.Playfield
 {
     public class DefaultPlayfield : CompositeDrawable
     {
-        private readonly int height;
-        private readonly int width;
+        public static int WIDTH = 26;
+        public static int HEIGHT = 19;
 
-        public DefaultPlayfield(int width, int height)
+        public DefaultPlayfield()
         {
-            this.width = width;
-            this.height = height;
-
-            Width = width * Tile.SIZE;
-            Height = height * Tile.SIZE;
+            Width = WIDTH * Tile.SIZE;
+            Height = HEIGHT * Tile.SIZE;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
         }
@@ -33,7 +33,7 @@ namespace IWBTM.Game.Playfield
                 new Tile(TileType.PlatformMiddle)
                 {
                     X = Tile.SIZE,
-                    Width = (width - 2) * Tile.SIZE,
+                    Width = (WIDTH - 2) * Tile.SIZE,
                     Height = Tile.SIZE,
                 },
                 new Tile(TileType.PlatformMiddle)
@@ -41,13 +41,13 @@ namespace IWBTM.Game.Playfield
                     Anchor = Anchor.BottomLeft,
                     Origin = Anchor.BottomLeft,
                     X = Tile.SIZE,
-                    Width = (width - 2) * Tile.SIZE,
+                    Width = (WIDTH - 2) * Tile.SIZE,
                     Height = Tile.SIZE,
                 },
                 new Tile(TileType.PlatformMiddleRotated)
                 {
                     Y = Tile.SIZE,
-                    Height = (height - 2) * Tile.SIZE,
+                    Height = (HEIGHT - 2) * Tile.SIZE,
                     Width = Tile.SIZE
                 },
                 new Tile(TileType.PlatformMiddleRotated)
@@ -55,7 +55,7 @@ namespace IWBTM.Game.Playfield
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
                     Y = Tile.SIZE,
-                    Height = (height - 2) * Tile.SIZE,
+                    Height = (HEIGHT - 2) * Tile.SIZE,
                     Width = Tile.SIZE
                 },
                 new BasicTile(TileType.PlatformCorner),
@@ -75,6 +75,10 @@ namespace IWBTM.Game.Playfield
                     Origin = Anchor.BottomRight
                 }
             });
+
+            AddInternal(new DefaultPlayer(GetTiles()));
         }
+
+        public List<Tile> GetTiles() => InternalChildren.OfType<Tile>().ToList();
     }
 }
