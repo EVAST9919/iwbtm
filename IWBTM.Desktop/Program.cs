@@ -8,10 +8,8 @@ namespace IWBTM.Desktop
     {
         public static void Main()
         {
-            using GameHost host = Host.GetSuitableHost(@"IWBTM");
-
-            using osu.Framework.Game game = new IWBTMGame();
-            host.Run(game);
+            GameHost host = Host.GetSuitableHost(@"IWBTM");
+            host.Run(new IWBTMGame());
         }
     }
 }

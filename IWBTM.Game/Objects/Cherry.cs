@@ -12,7 +12,7 @@ namespace IWBTM.Game.Objects
     {
         public double StartTime { get; set; }
 
-        public double TimePreempt { get; set; }
+        public double CreationTime { get; set; }
 
         private readonly Sprite sprite;
         private readonly Sprite overlay;
@@ -44,6 +44,9 @@ namespace IWBTM.Game.Objects
                     Position = new Vector2(1, -1)
                 }
             });
+
+            Scale = Vector2.Zero;
+            AlwaysPresent = true;
         }
 
         [BackgroundDependencyLoader]
@@ -54,6 +57,27 @@ namespace IWBTM.Game.Objects
             branch.Texture = textures.Get("Objects/Cherry/cherry-branch");
 
             sprite.Colour = Color4.Red;
+        }
+
+        private bool started;
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (Time.Current - CreationTime < StartTime)
+                return;
+
+            if (!started)
+            {
+                OnStart();
+                started = true;
+            }
+        }
+
+        protected virtual void OnStart()
+        {
+            this.ScaleTo(Vector2.One, 400);
         }
     }
 }

@@ -31,20 +31,15 @@ namespace IWBTM.Game.Objects
                 var startTime = RNG.NextDouble() * 60000;
                 var xPos = RNG.NextDouble() * DefaultPlayfield.WIDTH * Tile.SIZE;
                 var yPos = RNG.NextDouble() * DefaultPlayfield.HEIGHT * Tile.SIZE;
-                var timePreempt = 400;
 
                 var cherry = new Cherry
                 {
-                    TimePreempt = timePreempt,
                     StartTime = startTime,
                     Position = new Vector2((float)xPos, (float)yPos),
                     Scale = new Vector2(0),
                 };
 
                 AddInternal(cherry);
-
-                using (cherry.BeginDelayedSequence(startTime))
-                    cherry.ScaleTo(new Vector2(1), timePreempt);
             }
         }
     }
