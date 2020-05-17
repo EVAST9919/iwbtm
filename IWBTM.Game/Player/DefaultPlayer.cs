@@ -30,6 +30,7 @@ namespace IWBTM.Game.Player
 
         private DrawableSample jump;
         private DrawableSample doubleJump;
+        private DrawableSample shoot;
 
         private int horizontalDirection;
         private int availableJumpCount = 2;
@@ -88,7 +89,8 @@ namespace IWBTM.Game.Player
             AddRangeInternal(new[]
             {
                 jump = new DrawableSample(audio.Samples.Get("jump")),
-                doubleJump = new DrawableSample(audio.Samples.Get("double-jump"))
+                doubleJump = new DrawableSample(audio.Samples.Get("double-jump")),
+                shoot = new DrawableSample(audio.Samples.Get("shoot")),
             });
         }
 
@@ -128,6 +130,10 @@ namespace IWBTM.Game.Player
 
                     case Key.ShiftLeft:
                         onJumpPressed();
+                        return true;
+
+                    case Key.Z:
+                        onShoot();
                         return true;
                 }
             };
@@ -334,6 +340,15 @@ namespace IWBTM.Game.Player
                 return;
 
             verticalSpeed *= vertical_stop_speed_multiplier;
+        }
+
+        private void onShoot()
+        {
+            shoot.Play();
+            bulletsContainer.Add(new Bullet(Rightwards(), Clock.CurrentTime)
+            {
+                Position = PlayerPosition()
+            });
         }
 
         private void onStateChanged(ValueChangedEvent<PlayerState> s)
