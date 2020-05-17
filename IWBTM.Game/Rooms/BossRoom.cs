@@ -1,28 +1,28 @@
 ﻿using osuTK;
 
-namespace IWBTM.Game.Maps
+namespace IWBTM.Game.Rooms
 {
-    public class EmptyMap : Map
+    public class BossRoom : Room
     {
-        public override Vector2 GetPlayerSpawnPosition() => new Vector2(12, 18);
+        public override Vector2 GetPlayerSpawnPosition() => new Vector2(2, 18);
 
-        protected override string CreatePlayfield() =>
+        protected override string CreateLayout() =>
             "+XXXXXXXXXXXXXXXXXXXXXX+" +
             "-                      -" +
             "-                      -" +
+            "-  +XXX+  +XXX+        -" +
             "-                      -" +
             "-                      -" +
+            "-  +XXX+               -" +
+            "-         +XXX+        -" +
+            "-                      -" +
+            "-  +XXX+               -" +
+            "-                      -" +
+            "-         +XXX+        -" +
+            "-  +XXX+               -" +
             "-                      -" +
             "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
+            "-  +XXX+  +XXX+        -" +
             "-                      -" +
             "-                      -" +
             "+XXXXXXXXXXXXXXXXXXXXXX+";

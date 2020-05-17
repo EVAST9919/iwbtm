@@ -3,17 +3,17 @@ using osuTK;
 using System;
 using System.Linq;
 
-namespace IWBTM.Game.Maps
+namespace IWBTM.Game.Rooms
 {
-    public abstract class Map
+    public abstract class Room
     {
-        private readonly string playfield;
+        private readonly string layout;
 
-        public Map()
+        public Room()
         {
-            playfield = CreatePlayfield();
+            layout = CreateLayout();
 
-            if (playfield.Length != DefaultPlayfield.TILES_HEIGHT * DefaultPlayfield.TILES_WIDTH)
+            if (layout.Length != DefaultPlayfield.TILES_HEIGHT * DefaultPlayfield.TILES_WIDTH)
                 throw new IndexOutOfRangeException("Playfield size is incorrect");
         }
 
@@ -22,12 +22,12 @@ namespace IWBTM.Game.Maps
             if (x >= DefaultPlayfield.TILES_WIDTH || x < 0 || y >= DefaultPlayfield.TILES_HEIGHT || y < 0)
                 throw new IndexOutOfRangeException($"Incorrect input parameters: x: {x}, y: {y}");
 
-            return playfield.ElementAt(y * DefaultPlayfield.TILES_WIDTH + x);
+            return layout.ElementAt(y * DefaultPlayfield.TILES_WIDTH + x);
         }
 
         public static bool TileIsEmpty(char c) => c == ' ';
 
-        protected abstract string CreatePlayfield();
+        protected abstract string CreateLayout();
 
         public abstract Vector2 GetPlayerSpawnPosition();
     }

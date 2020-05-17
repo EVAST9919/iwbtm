@@ -9,7 +9,7 @@ using osuTK;
 using IWBTM.Game.Playfield;
 using System;
 using osu.Framework.Bindables;
-using IWBTM.Game.Maps;
+using IWBTM.Game.Rooms;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Utils;
@@ -42,11 +42,11 @@ namespace IWBTM.Game.Player
         private readonly Container bulletsContainer;
         private readonly Container animationContainer;
         private readonly Container hitbox;
-        private readonly Map map;
+        private readonly Room room;
 
-        public DefaultPlayer(Map map)
+        public DefaultPlayer(Room room)
         {
-            this.map = map;
+            this.room = room;
 
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
@@ -111,7 +111,7 @@ namespace IWBTM.Game.Player
 
         public void SetDefaultPosition()
         {
-            var playerSpawnPosition = map.GetPlayerSpawnPosition();
+            var playerSpawnPosition = room.GetPlayerSpawnPosition();
             Player.Position = new Vector2(playerSpawnPosition.X * Tile.SIZE + PlayerSize().X / 2, playerSpawnPosition.Y * Tile.SIZE - PlayerSize().Y / 2);
             rightwards = true;
             updateVisual();
@@ -219,11 +219,11 @@ namespace IWBTM.Game.Player
             var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
             var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
 
-            var topTile = map.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
-            var middleTile = map.GetTileAt(playerRightBorderPosition, playerMiddleBorderPosition);
-            var bottomTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
+            var topTile = room.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
+            var middleTile = room.GetTileAt(playerRightBorderPosition, playerMiddleBorderPosition);
+            var bottomTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
 
-            if (!Map.TileIsEmpty(topTile) || !Map.TileIsEmpty(middleTile))
+            if (!Room.TileIsEmpty(topTile) || !Room.TileIsEmpty(middleTile))
             {
                 Player.X = playerRightBorderPosition * Tile.SIZE - PlayerSize().X / 2;
             }
@@ -231,7 +231,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && Map.TileIsEmpty(bottomTile))
+                if (!midAir && Room.TileIsEmpty(bottomTile))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -248,11 +248,11 @@ namespace IWBTM.Game.Player
             var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
             var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
 
-            var topTile = map.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
-            var middleTile = map.GetTileAt(playerLeftBorderPosition, playerMiddleBorderPosition);
-            var bottomTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
+            var topTile = room.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
+            var middleTile = room.GetTileAt(playerLeftBorderPosition, playerMiddleBorderPosition);
+            var bottomTile = room.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            if (!Map.TileIsEmpty(topTile) || !Map.TileIsEmpty(middleTile))
+            if (!Room.TileIsEmpty(topTile) || !Room.TileIsEmpty(middleTile))
             {
                 Player.X = (playerLeftBorderPosition + 1) * Tile.SIZE + PlayerSize().X / 2;
             }
@@ -260,7 +260,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && Map.TileIsEmpty(bottomTile))
+                if (!midAir && Room.TileIsEmpty(bottomTile))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -274,10 +274,10 @@ namespace IWBTM.Game.Player
             var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
             var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
 
-            var leftTile = map.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
-            var rightTile = map.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
+            var leftTile = room.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
+            var rightTile = room.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
 
-            if (!Map.TileIsEmpty(leftTile) || !Map.TileIsEmpty(rightTile))
+            if (!Room.TileIsEmpty(leftTile) || !Room.TileIsEmpty(rightTile))
             {
                 Player.Y = (playerTopBorderPosition + 1) * Tile.SIZE + PlayerSize().Y / 2;
                 verticalSpeed = 0;
@@ -290,10 +290,10 @@ namespace IWBTM.Game.Player
             var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
             var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
 
-            var leftTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
-            var rightTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
+            var leftTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
+            var rightTile = room.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            if (!Map.TileIsEmpty(leftTile) || !Map.TileIsEmpty(rightTile))
+            if (!Room.TileIsEmpty(leftTile) || !Room.TileIsEmpty(rightTile))
             {
                 resetJumpLogic();
                 Player.Y = playerBottomBorderPosition * Tile.SIZE - PlayerSize().Y / 2;

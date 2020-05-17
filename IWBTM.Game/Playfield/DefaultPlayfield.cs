@@ -8,8 +8,8 @@ using osu.Framework.Audio;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
-using IWBTM.Game.Maps;
 using osu.Framework.Bindables;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Playfield
 {
@@ -31,7 +31,7 @@ namespace IWBTM.Game.Playfield
             Origin = Anchor.Centre;
             //Scale = new Vector2(2);
 
-            var map = new BossMap();
+            var room = new BossRoom();
 
             AddRangeInternal(new Drawable[]
             {
@@ -39,10 +39,10 @@ namespace IWBTM.Game.Playfield
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new DrawableMap(map)
+                new DrawableRoom(room)
             });
 
-            AddInternal(player = new DefaultPlayer(map));
+            AddInternal(player = new DefaultPlayer(room));
         }
 
         [BackgroundDependencyLoader]

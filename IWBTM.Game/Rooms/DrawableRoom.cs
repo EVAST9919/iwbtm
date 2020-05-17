@@ -4,13 +4,13 @@ using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
 
-namespace IWBTM.Game.Maps
+namespace IWBTM.Game.Rooms
 {
-    public class DrawableMap : CompositeDrawable
+    public class DrawableRoom : CompositeDrawable
     {
-        private readonly Map map;
+        private readonly Room map;
 
-        public DrawableMap(Map map)
+        public DrawableRoom(Room map)
         {
             this.map = map;
 
@@ -26,7 +26,7 @@ namespace IWBTM.Game.Maps
                 {
                     var tile = map.GetTileAt(i, j);
 
-                    if (!Map.TileIsEmpty(tile))
+                    if (!Room.TileIsEmpty(tile))
                     {
                         AddInternal(new Tile(getTileType(tile))
                         {
