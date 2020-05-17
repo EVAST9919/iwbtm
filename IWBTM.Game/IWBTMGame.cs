@@ -15,6 +15,14 @@ namespace IWBTM.Game
         [BackgroundDependencyLoader]
         private void load()
         {
+            Add(new PlayfieldAdjustmentContainer
+            {
+                Child = new DefaultPlayfield
+                {
+                    ShowHitbox = { BindTarget = showHitbox }
+                }
+            });
+
             Add(new Container
             {
                 AutoSizeAxes = Axes.Both,
@@ -32,14 +40,6 @@ namespace IWBTM.Game
                             Current = showHitbox
                         }
                     }
-                }
-            });
-
-            Add(new PlayfieldAdjustmentContainer
-            {
-                Child = new DefaultPlayfield
-                {
-                    ShowHitbox = { BindTarget = showHitbox }
                 }
             });
         }
