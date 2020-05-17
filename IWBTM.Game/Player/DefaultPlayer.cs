@@ -64,8 +64,8 @@ namespace IWBTM.Game.Player
                         {
                             Anchor = Anchor.BottomCentre,
                             Origin = Anchor.BottomCentre,
-                            X = -3,
-                            Size = new Vector2(25f)
+                            X = -1.5f,
+                            Size = new Vector2(Tile.SIZE)
                         },
                         hitbox = new Container
                         {
@@ -189,7 +189,7 @@ namespace IWBTM.Game.Player
                 rightwards = horizontalDirection > 0;
 
                 animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
-                animationContainer.X = rightwards ? -3 : 3; ;
+                animationContainer.X = rightwards ? -1.5f : 1.5f;
 
                 if (rightwards)
                     checkRightCollision(elapsedFrameTime);
