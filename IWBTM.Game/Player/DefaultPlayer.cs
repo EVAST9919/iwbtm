@@ -217,9 +217,7 @@ namespace IWBTM.Game.Player
             var middleTile = map.GetTileAt(playerRightBorderPosition, playerMiddleBorderPosition);
             var bottomTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
 
-            var bottomIsSolid = bottomTile != ' ';
-
-            if (topTile != ' ' || middleTile != ' ')
+            if (!Map.TileIsEmpty(topTile) || !Map.TileIsEmpty(middleTile))
             {
                 Player.X = playerRightBorderPosition * Tile.SIZE - PlayerSize().X / 2;
             }
@@ -227,7 +225,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && !bottomIsSolid)
+                if (!midAir && Map.TileIsEmpty(bottomTile))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -248,9 +246,7 @@ namespace IWBTM.Game.Player
             var middleTile = map.GetTileAt(playerLeftBorderPosition, playerMiddleBorderPosition);
             var bottomTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            var bottomIsSolid = bottomTile != ' ';
-
-            if (topTile != ' ' || middleTile != ' ')
+            if (!Map.TileIsEmpty(topTile) || !Map.TileIsEmpty(middleTile))
             {
                 Player.X = (playerLeftBorderPosition + 1) * Tile.SIZE + PlayerSize().X / 2;
             }
@@ -258,7 +254,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && !bottomIsSolid)
+                if (!midAir && Map.TileIsEmpty(bottomTile))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -275,7 +271,7 @@ namespace IWBTM.Game.Player
             var leftTile = map.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
             var rightTile = map.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
 
-            if (leftTile != ' ' || rightTile != ' ')
+            if (!Map.TileIsEmpty(leftTile) || !Map.TileIsEmpty(rightTile))
             {
                 Player.Y = (playerTopBorderPosition + 1) * Tile.SIZE + PlayerSize().Y / 2;
                 verticalSpeed = 0;
@@ -291,7 +287,7 @@ namespace IWBTM.Game.Player
             var leftTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
             var rightTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            if (leftTile != ' ' || rightTile != ' ')
+            if (!Map.TileIsEmpty(leftTile) || !Map.TileIsEmpty(rightTile))
             {
                 resetJumpLogic();
                 Player.Y = playerBottomBorderPosition * Tile.SIZE - PlayerSize().Y / 2;

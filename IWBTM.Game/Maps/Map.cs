@@ -24,6 +24,8 @@ namespace IWBTM.Game.Maps
             return playfield.ElementAt(y * DefaultPlayfield.TILES_WIDTH + x);
         }
 
+        public static bool TileIsEmpty(char c) => c == ' ';
+
         protected abstract string CreatePlayfield();
     }
 }

@@ -26,7 +26,7 @@ namespace IWBTM.Game.Maps
                 {
                     var tile = map.GetTileAt(i, j);
 
-                    if (tile != ' ')
+                    if (!Map.TileIsEmpty(tile))
                     {
                         AddInternal(new Tile(getTileType(tile))
                         {
