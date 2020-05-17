@@ -9,6 +9,7 @@ using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
 using IWBTM.Game.Maps;
+using osu.Framework.Bindables;
 
 namespace IWBTM.Game.Playfield
 {
@@ -18,7 +19,9 @@ namespace IWBTM.Game.Playfield
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
 
-        private DefaultPlayer player;
+        public BindableBool ShowHitbox => player.ShowHitbox;
+
+        private readonly DefaultPlayer player;
         private Track track;
 
         public DefaultPlayfield()
@@ -27,11 +30,7 @@ namespace IWBTM.Game.Playfield
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
             //Scale = new Vector2(2);
-        }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
             var map = new BossMap();
 
             AddRangeInternal(new Drawable[]
@@ -44,6 +43,11 @@ namespace IWBTM.Game.Playfield
             });
 
             AddInternal(player = new DefaultPlayer(map));
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
+        {
             track = audio.Tracks.Get("Ghost Rule");
         }
 

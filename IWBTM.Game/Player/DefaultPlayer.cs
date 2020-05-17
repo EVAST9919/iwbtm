@@ -27,6 +27,7 @@ namespace IWBTM.Game.Player
         private const double max_vertical_speed = 9;
 
         private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
+        public readonly BindableBool ShowHitbox = new BindableBool();
 
         private DrawableSample jump;
         private DrawableSample doubleJump;
@@ -70,7 +71,6 @@ namespace IWBTM.Game.Player
                         hitbox = new Container
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Alpha = 0,
                             Child = new Box
                             {
                                 RelativeSizeAxes = Axes.Both,
@@ -100,6 +100,7 @@ namespace IWBTM.Game.Player
 
             SetDefaultPosition();
             state.BindValueChanged(onStateChanged, true);
+            ShowHitbox.BindValueChanged(value => hitbox.Alpha = value.NewValue ? 1 : 0, true);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
