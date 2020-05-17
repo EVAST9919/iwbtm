@@ -111,8 +111,10 @@ namespace IWBTM.Game.Player
 
         public void SetDefaultPosition()
         {
-            Player.Position = new Vector2(DefaultPlayfield.BASE_SIZE.X / 2f, DefaultPlayfield.BASE_SIZE.Y - PlayerSize().Y / 2f - Tile.SIZE);
-            Scale = Vector2.One;
+            var playerSpawnPosition = map.GetPlayerSpawnPosition();
+            Player.Position = new Vector2(playerSpawnPosition.X * Tile.SIZE + PlayerSize().X / 2, playerSpawnPosition.Y * Tile.SIZE - PlayerSize().Y / 2);
+            rightwards = true;
+            updateVisual();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -181,9 +183,7 @@ namespace IWBTM.Game.Player
             if (horizontalDirection != 0)
             {
                 rightwards = horizontalDirection > 0;
-
-                animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
-                animationContainer.X = rightwards ? -1.5f : 1.5f;
+                updateVisual();
 
                 if (rightwards)
                     checkRightCollision(elapsedFrameTime);
@@ -202,6 +202,12 @@ namespace IWBTM.Game.Player
             }
 
             updatePlayerState();
+        }
+
+        private void updateVisual()
+        {
+            animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
+            animationContainer.X = rightwards ? -1.5f : 1.5f;
         }
 
         private void checkRightCollision(double elapsedFrameTime)

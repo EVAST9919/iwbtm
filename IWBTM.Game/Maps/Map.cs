@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Playfield;
+using osuTK;
 using System;
 using System.Linq;
 
@@ -27,5 +28,7 @@ namespace IWBTM.Game.Maps
         public static bool TileIsEmpty(char c) => c == ' ';
 
         protected abstract string CreatePlayfield();
+
+        public abstract Vector2 GetPlayerSpawnPosition();
     }
 }
