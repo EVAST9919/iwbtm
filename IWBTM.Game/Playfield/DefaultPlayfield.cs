@@ -26,6 +26,7 @@ namespace IWBTM.Game.Playfield
             Size = BASE_SIZE;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
+            //Scale = new Vector2(2);
         }
 
         [BackgroundDependencyLoader]

@@ -213,7 +213,7 @@ namespace IWBTM.Game.Player
         private void checkRightCollision(double elapsedFrameTime)
         {
             var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 + 1) / Tile.SIZE);
-            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 - 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2) / Tile.SIZE);
 
             var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2) / Tile.SIZE);
             var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
@@ -244,7 +244,7 @@ namespace IWBTM.Game.Player
         private void checkLeftCollision(double elapsedFrameTime)
         {
             var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 - 1) / Tile.SIZE);
-            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2) / Tile.SIZE);
 
             var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2) / Tile.SIZE);
             var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
