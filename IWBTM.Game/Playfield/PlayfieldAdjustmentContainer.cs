@@ -32,7 +32,7 @@ namespace IWBTM.Game.Playfield
             protected override void Update()
             {
                 base.Update();
-                Scale = new Vector2(Parent.ChildSize.X / (DefaultPlayfield.WIDTH * Tile.SIZE));
+                Scale = new Vector2(Parent.ChildSize.X / DefaultPlayfield.BASE_SIZE.X);
                 Size = Vector2.Divide(Vector2.One, Scale);
             }
         }

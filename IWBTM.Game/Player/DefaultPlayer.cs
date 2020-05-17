@@ -7,38 +7,78 @@ using osuTK.Input;
 using osu.Framework.Graphics;
 using osuTK;
 using IWBTM.Game.Playfield;
-using System.Collections.Generic;
 using System;
 using osu.Framework.Bindables;
+using IWBTM.Game.Maps;
+using osu.Framework.Graphics.Shapes;
+using osuTK.Graphics;
+using osu.Framework.Utils;
 
 namespace IWBTM.Game.Player
 {
     public class DefaultPlayer : CompositeDrawable
     {
-        private const double base_speed = 1.0 / 6.5;
+        // Legacy constants
+        private const double max_horizontal_speed = 0.15;
+        private const double vertical_stop_speed_multiplier = 0.45;
+        private const double jump_speed = 8.5;
+        private const double jump2_speed = 7;
+        private const double gravity = 0.4;
+        private const double max_vertical_speed = 9;
 
         private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
-
-        private int horizontalDirection;
-        private int availableJumpCount = 2;
-        private float verticalSpeed;
-        private bool midAir;
 
         private DrawableSample jump;
         private DrawableSample doubleJump;
 
-        private readonly List<Tile> tiles;
-        private readonly Container spritesContainer;
+        private int horizontalDirection;
+        private int availableJumpCount = 2;
+        private double verticalSpeed;
+        private bool midAir;
 
-        public DefaultPlayer(List<Tile> tiles)
+        public readonly Container Player;
+        private readonly Container bulletsContainer;
+        private readonly Container animationContainer;
+        private readonly Container hitbox;
+        private readonly Map map;
+
+        public DefaultPlayer(Map map)
         {
-            this.tiles = tiles;
+            this.map = map;
 
-            Origin = Anchor.Centre;
-            Size = new Vector2(15);
-            AddInternal(spritesContainer = new Container
+            RelativeSizeAxes = Axes.Both;
+            AddRangeInternal(new Drawable[]
             {
-                RelativeSizeAxes = Axes.Both
+                bulletsContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both
+                },
+                Player = new Container
+                {
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(11, 21),
+                    Children = new Drawable[]
+                    {
+                        animationContainer = new Container
+                        {
+                            Anchor = Anchor.BottomCentre,
+                            Origin = Anchor.BottomCentre,
+                            X = -3,
+                            Size = new Vector2(25f)
+                        },
+                        hitbox = new Container
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0,
+                            Child = new Box
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Colour = Color4.Red,
+                                Alpha = 0.5f,
+                            }
+                        }
+                    }
+                }
             });
         }
 
@@ -55,103 +95,21 @@ namespace IWBTM.Game.Player
         protected override void LoadComplete()
         {
             base.LoadComplete();
+
             SetDefaultPosition();
             state.BindValueChanged(onStateChanged, true);
         }
 
+        public Vector2 PlayerPosition() => Player.Position;
+
+        public Vector2 PlayerSize() => Player.Size;
+
+        public PlayerState GetCurrentState() => state.Value;
+
         public void SetDefaultPosition()
         {
-            Position = new Vector2(260, 360 - 7.5f);
+            Player.Position = new Vector2(DefaultPlayfield.BASE_SIZE.X / 2f, DefaultPlayfield.BASE_SIZE.Y - PlayerSize().Y / 2f - Tile.SIZE);
             Scale = Vector2.One;
-        }
-
-        protected override void Update()
-        {
-            base.Update();
-
-            if (Y > (DefaultPlayfield.HEIGHT - 1) * Tile.SIZE - DrawHeight / 2f)
-            {
-                resetJumpLogic();
-                Y = (DefaultPlayfield.HEIGHT - 1) * Tile.SIZE - DrawHeight / 2f;
-            }
-
-            if (midAir)
-            {
-                verticalSpeed -= (float)Clock.ElapsedFrameTime / 3.5f;
-
-                // Limit maximum falling speed
-                if (verticalSpeed < -100)
-                    verticalSpeed = -100;
-
-                Y -= (float)(Clock.ElapsedFrameTime * verticalSpeed * 0.0045);
-            }
-
-
-            // Horizontal movement
-            if (horizontalDirection != 0)
-            {
-                Scale = new Vector2(horizontalDirection > 0 ? 1 : -1, 1);
-
-                var newX = X + Math.Sign(horizontalDirection) * Clock.ElapsedFrameTime * base_speed;
-
-                // Moving left
-                if (horizontalDirection < 0)
-                {
-                    if (newX < Tile.SIZE + DrawWidth / 2f)
-                    {
-                        newX = Tile.SIZE + DrawWidth / 2f;
-                    }
-                }
-                else // Moving right
-                {
-                    if (newX > DefaultPlayfield.WIDTH * Tile.SIZE - Tile.SIZE - DrawWidth / 2f)
-                    {
-                        newX = DefaultPlayfield.WIDTH * Tile.SIZE - Tile.SIZE - DrawWidth / 2f;
-                    }
-                }
-                
-                X = (float)newX;
-            }
-
-            updatePlayerState();
-        }
-
-        private void resetJumpLogic()
-        {
-            availableJumpCount = 2;
-            verticalSpeed = 0;
-            midAir = false;
-        }
-
-        private void onJumpPressed()
-        {
-            if (availableJumpCount == 0)
-                return;
-
-            midAir = true;
-
-            availableJumpCount--;
-
-            switch (availableJumpCount)
-            {
-                case 1:
-                    jump.Play();
-                    verticalSpeed = 90;
-                    break;
-
-                case 0:
-                    doubleJump.Play();
-                    verticalSpeed = 80;
-                    break;
-            }
-        }
-
-        private void onJumpReleased()
-        {
-            if (verticalSpeed < 0)
-                return;
-
-            verticalSpeed /= 2;
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -197,7 +155,191 @@ namespace IWBTM.Game.Player
             base.OnKeyUp(e);
         }
 
-        private void onStateChanged(ValueChangedEvent<PlayerState> s) => spritesContainer.Child = new PlayerAnimation(s.NewValue);
+        private bool rightwards = true;
+
+        public bool Rightwards() => rightwards;
+
+        protected override void Update()
+        {
+            base.Update();
+
+            var elapsedFrameTime = Clock.ElapsedFrameTime;
+
+            // Limit vertical speed
+            if (Math.Abs(verticalSpeed) > max_vertical_speed)
+                verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
+
+            if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
+                verticalSpeed = 0;
+
+            if (verticalSpeed < 0)
+                checkBottomCollision();
+
+            if (verticalSpeed > 0)
+                checkTopCollision();
+
+            if (horizontalDirection != 0)
+            {
+                rightwards = horizontalDirection > 0;
+
+                animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
+                animationContainer.X = rightwards ? -3 : 3; ;
+
+                if (rightwards)
+                    checkRightCollision(elapsedFrameTime);
+                else
+                    checkLeftCollision(elapsedFrameTime);
+            }
+
+            if (midAir)
+            {
+                var legacyDistance = verticalSpeed;
+                var adjustedDistance = legacyDistance * (elapsedFrameTime / 20);
+
+                Player.Y -= (float)adjustedDistance;
+
+                verticalSpeed -= gravity * (elapsedFrameTime / 20);
+            }
+
+            updatePlayerState();
+        }
+
+        private void checkRightCollision(double elapsedFrameTime)
+        {
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 - 1) / Tile.SIZE);
+
+            var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2) / Tile.SIZE);
+            var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
+            var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
+
+            var topTile = map.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
+            var middleTile = map.GetTileAt(playerRightBorderPosition, playerMiddleBorderPosition);
+            var bottomTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
+
+            var bottomIsSolid = bottomTile != ' ';
+
+            if (topTile != ' ' || middleTile != ' ')
+            {
+                Player.X = playerRightBorderPosition * Tile.SIZE - PlayerSize().X / 2;
+            }
+            else
+            {
+                Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
+
+                if (!midAir && !bottomIsSolid)
+                {
+                    midAir = true;
+                    availableJumpCount = 1;
+                }
+            }
+        }
+
+        private void checkLeftCollision(double elapsedFrameTime)
+        {
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 - 1) / Tile.SIZE);
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 + 1) / Tile.SIZE);
+
+            var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2) / Tile.SIZE);
+            var playerMiddleBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
+            var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
+
+            var topTile = map.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
+            var middleTile = map.GetTileAt(playerLeftBorderPosition, playerMiddleBorderPosition);
+            var bottomTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
+
+            var bottomIsSolid = bottomTile != ' ';
+
+            if (topTile != ' ' || middleTile != ' ')
+            {
+                Player.X = (playerLeftBorderPosition + 1) * Tile.SIZE + PlayerSize().X / 2;
+            }
+            else
+            {
+                Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
+
+                if (!midAir && !bottomIsSolid)
+                {
+                    midAir = true;
+                    availableJumpCount = 1;
+                }
+            }
+        }
+
+        private void checkTopCollision()
+        {
+            var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2 - 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
+
+            var leftTile = map.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
+            var rightTile = map.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
+
+            if (leftTile != ' ' || rightTile != ' ')
+            {
+                Player.Y = (playerTopBorderPosition + 1) * Tile.SIZE + PlayerSize().Y / 2;
+                verticalSpeed = 0;
+            }
+        }
+
+        private void checkBottomCollision()
+        {
+            var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
+
+            var leftTile = map.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
+            var rightTile = map.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
+
+            if (leftTile != ' ' || rightTile != ' ')
+            {
+                resetJumpLogic();
+                Player.Y = playerBottomBorderPosition * Tile.SIZE - PlayerSize().Y / 2;
+            }
+        }
+
+        private void resetJumpLogic()
+        {
+            availableJumpCount = 2;
+            verticalSpeed = 0;
+            midAir = false;
+        }
+
+        private void onJumpPressed()
+        {
+            if (availableJumpCount == 0)
+                return;
+
+            midAir = true;
+
+            availableJumpCount--;
+
+            switch (availableJumpCount)
+            {
+                case 1:
+                    jump.Play();
+                    verticalSpeed = jump_speed;
+                    break;
+
+                case 0:
+                    doubleJump.Play();
+                    verticalSpeed = jump2_speed;
+                    break;
+            }
+        }
+
+        private void onJumpReleased()
+        {
+            if (verticalSpeed < 0)
+                return;
+
+            verticalSpeed *= vertical_stop_speed_multiplier;
+        }
+
+        private void onStateChanged(ValueChangedEvent<PlayerState> s)
+        {
+            animationContainer.Child = new PlayerAnimation(s.NewValue);
+        }
 
         private void updatePlayerState()
         {

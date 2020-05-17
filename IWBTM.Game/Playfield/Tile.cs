@@ -1,15 +1,14 @@
-﻿using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
+﻿using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Allocation;
 using System;
+using osuTK;
 
 namespace IWBTM.Game.Playfield
 {
-    public class Tile : CompositeDrawable
+    public class Tile : Sprite
     {
-        public const int SIZE = 20;
+        public const int SIZE = 32;
 
         [Resolved]
         private TextureStore textures { get; set; }
@@ -19,16 +18,13 @@ namespace IWBTM.Game.Playfield
         public Tile(TileType type)
         {
             this.type = type;
+            Size = new Vector2(SIZE);
         }
 
         [BackgroundDependencyLoader]
         private void load()
         {
-            AddInternal(new Sprite
-            {
-                RelativeSizeAxes = Axes.Both,
-                Texture = getTexture()
-            });
+            Texture = getTexture();
         }
 
         private Texture getTexture()
