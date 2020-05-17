@@ -20,6 +20,7 @@ namespace IWBTM.Game.Playfield
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
                 FillMode = FillMode.Fit,
+                FillAspectRatio = 24f / 19,
                 Child = content = new ScalingContainer
                 {
                     RelativeSizeAxes = Axes.Both
