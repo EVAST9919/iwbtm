@@ -121,14 +121,6 @@ namespace IWBTM.Game.Player
             {
                 switch (e.Key)
                 {
-                    case Key.Right:
-                        horizontalDirection++;
-                        return true;
-
-                    case Key.Left:
-                        horizontalDirection--;
-                        return true;
-
                     case Key.ShiftLeft:
                         onJumpPressed();
                         return true;
@@ -146,14 +138,6 @@ namespace IWBTM.Game.Player
         {
             switch (e.Key)
             {
-                case Key.Left:
-                    horizontalDirection++;
-                    return;
-
-                case Key.Right:
-                    horizontalDirection--;
-                    return;
-
                 case Key.ShiftLeft:
                     onJumpReleased();
                     return;
@@ -184,6 +168,15 @@ namespace IWBTM.Game.Player
 
             if (verticalSpeed > 0)
                 checkTopCollision();
+
+            horizontalDirection = 0;
+
+            var keys = GetContainingInputManager().CurrentState.Keyboard.Keys;
+
+            if (keys.IsPressed(Key.Right))
+                horizontalDirection = 1;
+            else if (keys.IsPressed(Key.Left))
+                horizontalDirection = -1;
 
             if (horizontalDirection != 0)
             {
