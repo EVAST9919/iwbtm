@@ -160,6 +160,18 @@ namespace IWBTM.Game.Screens.Edit
                 case TileType.PlatformMiddleRotated:
                     return '-';
 
+                case TileType.SpikeBottom:
+                    return 'q';
+
+                case TileType.SpikeTop:
+                    return 'w';
+
+                case TileType.SpikeLeft:
+                    return 'e';
+
+                case TileType.SpikeRight:
+                    return 'r';
+
                 default:
                     return ' ';
             }

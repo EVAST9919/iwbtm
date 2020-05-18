@@ -42,6 +42,18 @@ namespace IWBTM.Game.Playfield
 
                 case TileType.PlayerStart:
                     return textures.Get("Tiles/player-start");
+
+                case TileType.SpikeBottom:
+                    return textures.Get("Tiles/spike-bottom");
+
+                case TileType.SpikeTop:
+                    return textures.Get("Tiles/spike-top");
+
+                case TileType.SpikeLeft:
+                    return textures.Get("Tiles/spike-left");
+
+                case TileType.SpikeRight:
+                    return textures.Get("Tiles/spike-right");
             }
 
             throw new NotImplementedException($"{Type} tile is not implemented");
@@ -53,7 +65,11 @@ namespace IWBTM.Game.Playfield
         PlatformCorner,
         PlatformMiddle,
         PlatformMiddleRotated,
-        PlayerStart
+        PlayerStart,
+        SpikeTop,
+        SpikeBottom,
+        SpikeLeft,
+        SpikeRight,
     }
 
     public enum TileDirection

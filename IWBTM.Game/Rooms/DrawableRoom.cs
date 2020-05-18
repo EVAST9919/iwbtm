@@ -50,6 +50,18 @@ namespace IWBTM.Game.Rooms
                 case '-':
                     return TileType.PlatformMiddleRotated;
 
+                case 'q':
+                    return TileType.SpikeBottom;
+
+                case 'w':
+                    return TileType.SpikeTop;
+
+                case 'e':
+                    return TileType.SpikeLeft;
+
+                case 'r':
+                    return TileType.SpikeRight;
+
                 default:
                     throw new NotImplementedException($"char {input} is not supported");
             }
