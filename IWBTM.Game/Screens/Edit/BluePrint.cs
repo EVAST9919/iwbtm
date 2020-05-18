@@ -61,6 +61,9 @@ namespace IWBTM.Game.Screens.Edit
         {
             base.OnHoverLost(e);
 
+            if (IsDisposed)
+                return;
+
             hoverLayer.Clear();
             tileToPlace?.Expire();
         }
