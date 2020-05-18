@@ -29,6 +29,10 @@ namespace IWBTM.Game.Rooms
 
         public static bool TileIsEmpty(char c) => c == ' ';
 
+        public static bool TileIsSpike(char c) => c == 'q' || c == 'w' || c == 'e' || c == 'r';
+
+        public static bool TileIsSolid(char c) => !TileIsEmpty(c) && !TileIsSpike(c);
+
         public Vector2 GetPlayerSpawnPosition() => playerSpawnPosition;
     }
 }

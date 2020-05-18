@@ -159,8 +159,6 @@ namespace IWBTM.Game.Player
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
 
-            checkDeathPosition();
-
             // Limit vertical speed
             if (Math.Abs(verticalSpeed) > max_vertical_speed)
                 verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
@@ -207,16 +205,6 @@ namespace IWBTM.Game.Player
             updatePlayerState();
         }
 
-        // Temporary
-        private void checkDeathPosition()
-        {
-            var position = PlayerPosition();
-            var size = PlayerSize();
-
-            if (position.X - size.X / 2 < 0 || position.Y - size.Y / 2 < 0 || position.X + size.X / 2 > DefaultPlayfield.BASE_SIZE.X || position.Y + size.Y / 2 > DefaultPlayfield.BASE_SIZE.Y)
-                SetDefaultPosition();
-        }
-
         private void updateVisual()
         {
             animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
@@ -236,7 +224,7 @@ namespace IWBTM.Game.Player
             var middleTile = room.GetTileAt(playerRightBorderPosition, playerMiddleBorderPosition);
             var bottomTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
 
-            if (!Room.TileIsEmpty(topTile) || !Room.TileIsEmpty(middleTile))
+            if (Room.TileIsSolid(topTile) || Room.TileIsSolid(middleTile))
             {
                 Player.X = playerRightBorderPosition * Tile.SIZE - PlayerSize().X / 2;
             }
@@ -244,7 +232,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && Room.TileIsEmpty(bottomTile))
+                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile)))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -265,7 +253,7 @@ namespace IWBTM.Game.Player
             var middleTile = room.GetTileAt(playerLeftBorderPosition, playerMiddleBorderPosition);
             var bottomTile = room.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            if (!Room.TileIsEmpty(topTile) || !Room.TileIsEmpty(middleTile))
+            if (Room.TileIsSolid(topTile) || Room.TileIsSolid(middleTile))
             {
                 Player.X = (playerLeftBorderPosition + 1) * Tile.SIZE + PlayerSize().X / 2;
             }
@@ -273,7 +261,7 @@ namespace IWBTM.Game.Player
             {
                 Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && Room.TileIsEmpty(bottomTile))
+                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile)))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -290,7 +278,7 @@ namespace IWBTM.Game.Player
             var leftTile = room.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
             var rightTile = room.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
 
-            if (!Room.TileIsEmpty(leftTile) || !Room.TileIsEmpty(rightTile))
+            if (Room.TileIsSolid(leftTile) || Room.TileIsSolid(rightTile))
             {
                 Player.Y = (playerTopBorderPosition + 1) * Tile.SIZE + PlayerSize().Y / 2;
                 verticalSpeed = 0;
@@ -306,7 +294,7 @@ namespace IWBTM.Game.Player
             var leftTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
             var rightTile = room.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
 
-            if (!Room.TileIsEmpty(leftTile) || !Room.TileIsEmpty(rightTile))
+            if (Room.TileIsSolid(leftTile) || Room.TileIsSolid(rightTile))
             {
                 resetJumpLogic();
                 Player.Y = playerBottomBorderPosition * Tile.SIZE - PlayerSize().Y / 2;
