@@ -159,6 +159,8 @@ namespace IWBTM.Game.Player
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
 
+            checkDeathPosition();
+
             // Limit vertical speed
             if (Math.Abs(verticalSpeed) > max_vertical_speed)
                 verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
@@ -203,6 +205,16 @@ namespace IWBTM.Game.Player
             }
 
             updatePlayerState();
+        }
+
+        // Temporary
+        private void checkDeathPosition()
+        {
+            var position = PlayerPosition();
+            var size = PlayerSize();
+
+            if (position.X - size.X / 2 < 0 || position.Y - size.Y / 2 < 0 || position.X + size.X / 2 > DefaultPlayfield.BASE_SIZE.X || position.Y + size.Y / 2 > DefaultPlayfield.BASE_SIZE.Y)
+                SetDefaultPosition();
         }
 
         private void updateVisual()
