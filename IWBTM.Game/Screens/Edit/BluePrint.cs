@@ -70,6 +70,9 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnMouseDown(MouseDownEvent e)
         {
+            if (!IsHovered)
+                return false;
+
             switch(e.Button)
             {
                 case MouseButton.Left:

@@ -4,6 +4,7 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Bindables;
 using IWBTM.Game.Playfield;
+using osu.Framework.Input.Events;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -31,5 +32,7 @@ namespace IWBTM.Game.Screens.Edit
                 Child = control = new ObjectSelectorTabControl()
             });
         }
+
+        protected override bool OnHover(HoverEvent e) => true;
     }
 }
