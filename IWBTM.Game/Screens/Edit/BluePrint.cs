@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osuTK;
 using System.Linq;
+using osuTK.Input;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -13,7 +14,7 @@ namespace IWBTM.Game.Screens.Edit
     {
         public readonly Bindable<TileType> Selected = new Bindable<TileType>();
 
-        private readonly Container objectsLayer;
+        private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
 
         public BluePrint()
@@ -26,15 +27,12 @@ namespace IWBTM.Game.Screens.Edit
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                objectsLayer = new Container
-                {
-                    Size = DefaultPlayfield.BASE_SIZE,
-                },
+                objectsLayer = new ObjectsLayer(),
+                new Grid(),
                 hoverLayer = new Container
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new Grid()
             });
         }
 
@@ -48,10 +46,10 @@ namespace IWBTM.Game.Screens.Edit
             if (!hoverLayer.Any())
                 hoverLayer.Child = tileToPlace = new Tile(Selected.Value)
                 {
-                    Origin = Anchor.Centre
+                    Alpha = 0.5f
                 };
 
-            tileToPlace.Position = mousePosition;
+            tileToPlace.Position = GetSnappedPosition(mousePosition);
 
             return base.OnMouseMove(e);
         }
@@ -64,17 +62,23 @@ namespace IWBTM.Game.Screens.Edit
             tileToPlace?.Expire();
         }
 
-        protected override bool OnClick(ClickEvent e)
+        protected override bool OnMouseDown(MouseDownEvent e)
         {
-            objectsLayer.Add(new Tile(Selected.Value)
+            switch(e.Button)
             {
-                Position = getSnappedPosition(mousePosition)
-            });
+                case MouseButton.Left:
+                    objectsLayer.TryPlace(Selected.Value, mousePosition);
+                    return true;
 
-            return base.OnClick(e);
+                case MouseButton.Right:
+                    objectsLayer.TryRemove(mousePosition);
+                    return true;
+            }
+
+            return base.OnMouseDown(e);
         }
 
-        private static Vector2 getSnappedPosition(Vector2 input)
+        public static Vector2 GetSnappedPosition(Vector2 input)
         {
             return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT)) * Tile.SIZE;
         }

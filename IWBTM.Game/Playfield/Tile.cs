@@ -13,11 +13,11 @@ namespace IWBTM.Game.Playfield
         [Resolved]
         private TextureStore textures { get; set; }
 
-        private readonly TileType type;
+        public readonly TileType Type;
 
         public Tile(TileType type)
         {
-            this.type = type;
+            Type = type;
             Size = new Vector2(SIZE);
         }
 
@@ -29,7 +29,7 @@ namespace IWBTM.Game.Playfield
 
         private Texture getTexture()
         {
-            switch (type)
+            switch (Type)
             {
                 case TileType.PlatformCorner:
                     return textures.Get("Tiles/platform-corner");
@@ -41,7 +41,7 @@ namespace IWBTM.Game.Playfield
                     return textures.Get("Tiles/platform-middle-rotated");
             }
 
-            throw new NotImplementedException($"{type} tile is not implemented");
+            throw new NotImplementedException($"{Type} tile is not implemented");
         }
     }
 
