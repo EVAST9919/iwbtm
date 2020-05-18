@@ -2,11 +2,17 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
+using osu.Framework.Bindables;
+using IWBTM.Game.Playfield;
 
 namespace IWBTM.Game.Screens.Edit
 {
     public class ObjectSelector : CompositeDrawable
     {
+        public Bindable<TileType> Selected => control.Current;
+
+        private readonly ObjectSelectorTabControl control;
+
         public ObjectSelector()
         {
             Width = 200;
@@ -22,7 +28,7 @@ namespace IWBTM.Game.Screens.Edit
             {
                 RelativeSizeAxes = Axes.Both,
                 Padding = new MarginPadding(5),
-                Child = new ObjectSelectorTabControl()
+                Child = control = new ObjectSelectorTabControl()
             });
         }
     }
