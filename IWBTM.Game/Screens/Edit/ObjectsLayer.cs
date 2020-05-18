@@ -1,7 +1,6 @@
 ﻿using IWBTM.Game.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
-using System;
 using System.Linq;
 
 namespace IWBTM.Game.Screens.Edit
@@ -108,11 +107,9 @@ namespace IWBTM.Game.Screens.Edit
                 case TileType.PlatformMiddleRotated:
                     return '-';
 
-                case null:
+                default:
                     return ' ';
             }
-
-            throw new NotImplementedException("Conversion failed");
         }
     }
 }
