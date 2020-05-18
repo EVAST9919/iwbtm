@@ -37,7 +37,7 @@ namespace IWBTM.Game.Screens.Edit
             });
         }
 
-        public Room CreateRoom() => new Room(objectsLayer.CreateLayout(), new Vector2(2, 18));
+        public Room CreateRoom() => new Room(objectsLayer.CreateLayout(), objectsLayer.GetPlayerSpawnPosition());
 
         private Tile tileToPlace;
         private Vector2 mousePosition;

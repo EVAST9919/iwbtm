@@ -39,6 +39,9 @@ namespace IWBTM.Game.Playfield
 
                 case TileType.PlatformMiddleRotated:
                     return textures.Get("Tiles/platform-middle-rotated");
+
+                case TileType.PlayerStart:
+                    return textures.Get("Tiles/player-start");
             }
 
             throw new NotImplementedException($"{Type} tile is not implemented");
@@ -49,7 +52,8 @@ namespace IWBTM.Game.Playfield
     {
         PlatformCorner,
         PlatformMiddle,
-        PlatformMiddleRotated
+        PlatformMiddleRotated,
+        PlayerStart
     }
 
     public enum TileDirection

@@ -111,8 +111,9 @@ namespace IWBTM.Game.Player
 
         public void SetDefaultPosition()
         {
-            var playerSpawnPosition = room.GetPlayerSpawnPosition();
-            Player.Position = new Vector2(playerSpawnPosition.X * Tile.SIZE + PlayerSize().X / 2, playerSpawnPosition.Y * Tile.SIZE - PlayerSize().Y / 2);
+            var position = room.GetPlayerSpawnPosition();
+            Player.Position = new Vector2(position.X + 16, position.Y + 16);
+            midAir = true;
             rightwards = true;
             updateVisual();
         }

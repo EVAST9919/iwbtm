@@ -22,6 +22,12 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
+            if (tile == TileType.PlayerStart)
+            {
+                tryPlacePlayerStart(snappedPosition);
+                return;
+            }
+
             Tile placed = null;
 
             foreach (Tile child in Children)
@@ -60,6 +66,34 @@ namespace IWBTM.Game.Screens.Edit
             }
         }
 
+        private void tryPlacePlayerStart(Vector2 position)
+        {
+            Tile player = null;
+
+            foreach (var child in Children)
+            {
+                if (child.Type == TileType.PlayerStart)
+                {
+                    player = child;
+                    break;
+                }
+            }
+
+            if (player != null)
+                player.Expire();
+
+            foreach (Tile child in Children)
+            {
+                if (child.Position == position)
+                {
+                    child.Expire();
+                    break;
+                }
+            }
+
+            addTile(TileType.PlayerStart, position);
+        }
+
         private void addTile(TileType tile, Vector2 position)
         {
             Add(new Tile(tile)
@@ -92,6 +126,25 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             return s;
+        }
+
+        public Vector2 GetPlayerSpawnPosition()
+        {
+            Tile player = null;
+
+            foreach (var child in Children)
+            {
+                if (child.Type == TileType.PlayerStart)
+                {
+                    player = child;
+                    break;
+                }
+            }
+
+            if (player == null)
+                return Vector2.Zero;
+
+            return BluePrint.GetSnappedPosition(player.Position);
         }
 
         private static char getChar(TileType? type)
