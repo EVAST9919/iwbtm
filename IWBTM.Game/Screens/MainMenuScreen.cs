@@ -28,6 +28,9 @@ namespace IWBTM.Game.Screens
                         Action = () => this.Push(new GameplayScreen())
                     },
                     new Button("Edit")
+                    {
+                        Action = () => this.Push(new EditorScreen())
+                    }
                 }
             });
         }
