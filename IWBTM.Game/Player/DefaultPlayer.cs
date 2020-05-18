@@ -13,6 +13,7 @@ using IWBTM.Game.Rooms;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Utils;
+using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Player
 {
@@ -113,6 +114,7 @@ namespace IWBTM.Game.Player
         {
             var position = room.GetPlayerSpawnPosition();
             Player.Position = new Vector2(position.X + 16, position.Y + 16);
+            verticalSpeed = 0;
             midAir = true;
             rightwards = true;
             updateVisual();
@@ -202,7 +204,57 @@ namespace IWBTM.Game.Player
                 verticalSpeed -= gravity * (elapsedFrameTime / 20);
             }
 
+            checkSpikes();
             updatePlayerState();
+        }
+
+        private void checkSpikes()
+        {
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2) / Tile.SIZE);
+            var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
+            var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2) / Tile.SIZE);
+            var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 - 1) / Tile.SIZE);
+
+            var topLeftTile = room.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
+            var topRightTile = room.GetTileAt(playerRightBorderPosition, playerTopBorderPosition);
+            var bottomLeftTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);
+            var bottomRightTile = room.GetTileAt(playerRightBorderPosition, playerBottomBorderPosition);
+
+            if (Room.TileIsSpike(topLeftTile))
+            {
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerTopBorderPosition), topLeftTile))
+                {
+                    SetDefaultPosition();
+                    return;
+                }
+            }
+
+            if (Room.TileIsSpike(topRightTile))
+            {
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerTopBorderPosition), topRightTile))
+                {
+                    SetDefaultPosition();
+                    return;
+                }
+            }
+
+            if (Room.TileIsSpike(bottomLeftTile))
+            {
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), bottomLeftTile))
+                {
+                    SetDefaultPosition();
+                    return;
+                }
+            }
+
+            if (Room.TileIsSpike(bottomRightTile))
+            {
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerBottomBorderPosition), bottomRightTile))
+                {
+                    SetDefaultPosition();
+                    return;
+                }
+            }
         }
 
         private void updateVisual()
