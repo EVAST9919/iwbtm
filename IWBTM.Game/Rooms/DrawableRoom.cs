@@ -31,7 +31,6 @@ namespace IWBTM.Game.Rooms
                         AddInternal(new Tile(getTileType(tile))
                         {
                             Position = new Vector2(i * Tile.SIZE, j * Tile.SIZE),
-                            Size = new Vector2(Tile.SIZE + 0.1f)
                         });
                     }
                 }
