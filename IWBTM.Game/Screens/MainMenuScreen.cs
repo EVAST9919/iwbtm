@@ -14,6 +14,15 @@ namespace IWBTM.Game.Screens
     {
         public MainMenuScreen()
         {
+            AddInternal(new SpriteText
+            {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                Text = "IWBTM",
+                Font = FontUsage.Default.With(size: 30),
+                Y = -100
+            });
+
             AddInternal(new FillFlowContainer<Button>
             {
                 AutoSizeAxes = Axes.Both,
