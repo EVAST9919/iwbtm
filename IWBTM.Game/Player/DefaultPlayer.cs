@@ -23,7 +23,7 @@ namespace IWBTM.Game.Player
         private const double vertical_stop_speed_multiplier = 0.45;
         private const double jump_speed = 8.5;
         private const double jump2_speed = 7;
-        private const double gravity = 0.4;
+        private const double gravity = 0.45; // 0.4 is legacy, but this one matches better for some reason
         private const double max_vertical_speed = 9;
 
         private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
