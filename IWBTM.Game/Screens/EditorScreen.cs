@@ -23,6 +23,11 @@ namespace IWBTM.Game.Screens
                         },
                         new Grid()
                     }
+                },
+                new ObjectSelector
+                {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight
                 }
             });
         }
