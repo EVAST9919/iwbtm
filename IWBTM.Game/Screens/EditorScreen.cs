@@ -60,7 +60,7 @@ namespace IWBTM.Game.Screens
 
         private void test()
         {
-            this.Push(new GameplayScreen(blueprint.CreateRoom()));
+            this.Push(new TestGameplayScreen(blueprint.CreateRoom()));
         }
 
         private class TestButon : ClickableContainer

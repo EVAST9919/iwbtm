@@ -8,7 +8,6 @@ using osu.Framework.Audio;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
-using osu.Framework.Bindables;
 using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Playfield
@@ -19,9 +18,7 @@ namespace IWBTM.Game.Playfield
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
 
-        public BindableBool ShowHitbox => player.ShowHitbox;
-
-        private readonly DefaultPlayer player;
+        public readonly DefaultPlayer Player;
         private Track track;
 
         public DefaultPlayfield(Room room)
@@ -39,7 +36,7 @@ namespace IWBTM.Game.Playfield
                 new DrawableRoom(room)
             });
 
-            AddInternal(player = new DefaultPlayer(room));
+            AddInternal(Player = new DefaultPlayer(room));
         }
 
         [BackgroundDependencyLoader]
@@ -72,7 +69,7 @@ namespace IWBTM.Game.Playfield
         private void restart()
         {
             //track.Restart();
-            player.SetDefaultPosition();
+            Player.SetDefaultPosition();
         }
     }
 }
