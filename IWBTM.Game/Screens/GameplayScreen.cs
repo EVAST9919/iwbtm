@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Playfield;
+using IWBTM.Game.Rooms;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -11,13 +12,13 @@ namespace IWBTM.Game.Screens
     {
         private readonly BindableBool showHitbox = new BindableBool(false);
 
-        public GameplayScreen()
+        public GameplayScreen(Room room)
         {
             AddRangeInternal(new Drawable[]
             {
                 new PlayfieldAdjustmentContainer
                 {
-                    Child = new DefaultPlayfield
+                    Child = new DefaultPlayfield(room)
                     {
                         ShowHitbox = { BindTarget = showHitbox }
                     }

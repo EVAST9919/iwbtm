@@ -5,13 +5,15 @@ using System.Linq;
 
 namespace IWBTM.Game.Rooms
 {
-    public abstract class Room
+    public class Room
     {
         private readonly string layout;
+        private readonly Vector2 playerSpawnPosition;
 
-        public Room()
+        public Room(string layout, Vector2 playerSpawnPosition)
         {
-            layout = CreateLayout();
+            this.layout = layout;
+            this.playerSpawnPosition = playerSpawnPosition;
 
             if (layout.Length != DefaultPlayfield.TILES_HEIGHT * DefaultPlayfield.TILES_WIDTH)
                 throw new IndexOutOfRangeException("Playfield size is incorrect");
@@ -27,8 +29,6 @@ namespace IWBTM.Game.Rooms
 
         public static bool TileIsEmpty(char c) => c == ' ';
 
-        protected abstract string CreateLayout();
-
-        public abstract Vector2 GetPlayerSpawnPosition();
+        public Vector2 GetPlayerSpawnPosition() => playerSpawnPosition;
     }
 }

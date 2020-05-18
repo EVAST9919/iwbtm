@@ -2,8 +2,12 @@
 using IWBTM.Game.Screens.Edit;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using osuTK.Graphics;
+using osu.Framework.Screens;
 
 namespace IWBTM.Game.Screens
 {
@@ -12,11 +16,11 @@ namespace IWBTM.Game.Screens
         private readonly Bindable<TileType> selectedObject = new Bindable<TileType>();
 
         private readonly SpriteText selectedText;
+        private readonly BluePrint blueprint;
 
         public EditorScreen()
         {
             ObjectSelector selector;
-            BluePrint blueprint;
 
             AddRangeInternal(new Drawable[]
             {
@@ -33,6 +37,13 @@ namespace IWBTM.Game.Screens
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight
+                },
+                new TestButon()
+                {
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
+                    Margin = new MarginPadding { Right = 50, Bottom = 50 },
+                    Action = test
                 }
             });
 
@@ -45,6 +56,34 @@ namespace IWBTM.Game.Screens
             base.LoadComplete();
 
             selectedObject.BindValueChanged(newSelected => selectedText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
+        }
+
+        private void test()
+        {
+            this.Push(new GameplayScreen(blueprint.CreateRoom()));
+        }
+
+        private class TestButon : ClickableContainer
+        {
+            public TestButon()
+            {
+                Size = new Vector2(100, 50);
+
+                AddRangeInternal(new Drawable[]
+                {
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both
+                    },
+                    new SpriteText
+                    {
+                        Text = "Test",
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Colour = Color4.Black
+                    }
+                });
+            }
         }
     }
 }

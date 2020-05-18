@@ -1,4 +1,5 @@
-﻿using osu.Framework.Graphics;
+﻿using IWBTM.Game.Rooms;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -34,7 +35,7 @@ namespace IWBTM.Game.Screens
                 {
                     new Button("Play")
                     {
-                        Action = () => this.Push(new GameplayScreen())
+                        Action = () => this.Push(new GameplayScreen(new BossRoom()))
                     },
                     new Button("Edit")
                     {

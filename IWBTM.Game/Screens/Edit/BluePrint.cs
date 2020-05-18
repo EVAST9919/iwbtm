@@ -7,6 +7,7 @@ using osu.Framework.Input.Events;
 using osuTK;
 using System.Linq;
 using osuTK.Input;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -35,6 +36,8 @@ namespace IWBTM.Game.Screens.Edit
                 },
             });
         }
+
+        public Room CreateRoom() => new Room(objectsLayer.CreateLayout(), new Vector2(2, 18));
 
         private Tile tileToPlace;
         private Vector2 mousePosition;

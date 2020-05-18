@@ -24,14 +24,11 @@ namespace IWBTM.Game.Playfield
         private readonly DefaultPlayer player;
         private Track track;
 
-        public DefaultPlayfield()
+        public DefaultPlayfield(Room room)
         {
             Size = BASE_SIZE;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
-            //Scale = new Vector2(1.5f);
-
-            var room = new BossRoom();
 
             AddRangeInternal(new Drawable[]
             {

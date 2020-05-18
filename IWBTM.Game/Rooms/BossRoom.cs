@@ -4,9 +4,13 @@ namespace IWBTM.Game.Rooms
 {
     public class BossRoom : Room
     {
-        public override Vector2 GetPlayerSpawnPosition() => new Vector2(2, 18);
+        public BossRoom()
+            : base(layout, new Vector2(2, 18))
+        {
 
-        protected override string CreateLayout() =>
+        }
+
+        private static readonly string layout =
             "+XXXXXXXXXXXXXXXXXXXXXX+" +
             "-                      -" +
             "-                      -" +
