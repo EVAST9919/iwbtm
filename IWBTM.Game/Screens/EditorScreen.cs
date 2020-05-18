@@ -2,7 +2,6 @@
 using IWBTM.Game.Screens.Edit;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 
@@ -17,6 +16,7 @@ namespace IWBTM.Game.Screens
         public EditorScreen()
         {
             ObjectSelector selector;
+            BluePrint blueprint;
 
             AddRangeInternal(new Drawable[]
             {
@@ -27,14 +27,7 @@ namespace IWBTM.Game.Screens
                 new PlayfieldAdjustmentContainer
                 {
                     Scale = new Vector2(0.9f),
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both
-                        },
-                        new Grid()
-                    }
+                    Child = blueprint = new BluePrint()
                 },
                 selector = new ObjectSelector
                 {
@@ -44,6 +37,7 @@ namespace IWBTM.Game.Screens
             });
 
             selectedObject.BindTo(selector.Selected);
+            blueprint.Selected.BindTo(selector.Selected);
         }
 
         protected override void LoadComplete()
