@@ -12,6 +12,8 @@ using osu.Framework.Allocation;
 using osu.Framework.Platform;
 using System.IO;
 using IWBTM.Game.Rooms;
+using IWBTM.Game.Overlays;
+using osu.Framework.Graphics.UserInterface;
 
 namespace IWBTM.Game.Screens
 {
@@ -21,13 +23,17 @@ namespace IWBTM.Game.Screens
 
         private SpriteText selectedText;
         private BluePrint blueprint;
+        private EditorTextbox textbox;
 
         private Storage storage;
 
+        private NotificationOverlay notifications;
+
         [BackgroundDependencyLoader]
-        private void load(Storage storage)
+        private void load(Storage storage, NotificationOverlay notifications)
         {
             this.storage = storage.GetStorageForDirectory(@"Rooms");
+            this.notifications = notifications;
 
             ObjectSelector selector;
 
@@ -60,6 +66,7 @@ namespace IWBTM.Game.Screens
                         Spacing = new Vector2(10),
                         Children = new Drawable[]
                         {
+                            textbox = new EditorTextbox(),
                             new EditorButon("Test")
                             {
                                 Action = test
@@ -86,17 +93,44 @@ namespace IWBTM.Game.Screens
 
         private void test()
         {
+            notifications.Push("test", NotificationState.Good);
             this.Push(new TestGameplayScreen(new Room(blueprint.Layout(), blueprint.PlayerSpawnPosition())));
         }
 
         private void save()
         {
             var playerPosition = blueprint.PlayerSpawnPosition();
-            using (StreamWriter sw = File.CreateText(storage.GetFullPath("test")))
+
+            if (playerPosition == new Vector2(-1))
+            {
+                notifications.Push("Set player spawn position", NotificationState.Bad);
+                return;
+            }
+
+            var name = textbox.Text;
+
+            if (string.IsNullOrEmpty(name))
+            {
+                notifications.Push("Set room name", NotificationState.Bad);
+                return;
+            }
+
+            using (StreamWriter sw = File.CreateText(storage.GetFullPath(name)))
             {
                 sw.WriteLine(blueprint.Layout());
                 sw.WriteLine(playerPosition.X.ToString());
                 sw.WriteLine(playerPosition.Y.ToString());
+            }
+
+            notifications.Push("Room has been saved!", NotificationState.Good);
+        }
+
+        private class EditorTextbox : BasicTextBox
+        {
+            public EditorTextbox()
+            {
+                Height = 30;
+                Width = 100;
             }
         }
 

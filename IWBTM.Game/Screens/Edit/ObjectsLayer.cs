@@ -142,7 +142,7 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             if (player == null)
-                return Vector2.Zero;
+                return new Vector2(-1);
 
             return BluePrint.GetSnappedPosition(player.Position);
         }
