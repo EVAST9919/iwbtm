@@ -40,7 +40,7 @@ namespace IWBTM.Game.Player
         private bool midAir;
 
         public readonly Container Player;
-        private readonly Container bulletsContainer;
+        private readonly BulletsContainer bulletsContainer;
         private readonly Container animationContainer;
         private readonly Container hitbox;
         private readonly Room room;
@@ -52,10 +52,7 @@ namespace IWBTM.Game.Player
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
             {
-                bulletsContainer = new Container
-                {
-                    RelativeSizeAxes = Axes.Both
-                },
+                bulletsContainer = new BulletsContainer(room),
                 Player = new Container
                 {
                     Origin = Anchor.Centre,
@@ -394,10 +391,7 @@ namespace IWBTM.Game.Player
         private void onShoot()
         {
             shoot.Play();
-            bulletsContainer.Add(new Bullet(Rightwards())
-            {
-                Position = PlayerPosition()
-            });
+            bulletsContainer.GenerateBullet(PlayerPosition(), rightwards);
         }
 
         private void onStateChanged(ValueChangedEvent<PlayerState> s)
