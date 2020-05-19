@@ -1,12 +1,15 @@
 ﻿using IWBTM.Game.Rooms;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
+using osu.Framework.Platform;
 using osuTK;
 using osuTK.Graphics;
 using System;
+using System.IO;
 
 namespace IWBTM.Game.Screens.Select
 {
@@ -14,15 +17,18 @@ namespace IWBTM.Game.Screens.Select
     {
         public Action<Room> OnSelection;
 
-        public Carousel()
+        [BackgroundDependencyLoader]
+        private void load(Storage storage)
         {
+            FillFlowContainer<RoomItem> flow;
+
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);
 
             AddInternal(new BasicScrollContainer
             {
                 RelativeSizeAxes = Axes.Both,
-                Child = new FillFlowContainer<RoomItem>
+                Child = flow = new FillFlowContainer<RoomItem>
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
@@ -41,6 +47,25 @@ namespace IWBTM.Game.Screens.Select
                     }
                 }
             });
+
+            var roomsStorage = storage.GetStorageForDirectory(@"Rooms");
+
+            foreach (var file in roomsStorage.GetFiles(""))
+            {
+                using (StreamReader sr = File.OpenText(roomsStorage.GetFullPath(file)))
+                {
+                    var layout = sr.ReadLine();
+                    var x = sr.ReadLine();
+                    var y = sr.ReadLine();
+
+                    var room = new Room(layout, new Vector2(float.Parse(x), float.Parse(y)));
+
+                    flow.Add(new RoomItem(file, room)
+                    {
+                        Selected = room => OnSelection(room)
+                    });
+                }
+            }
         }
 
         private class RoomItem : ClickableContainer
