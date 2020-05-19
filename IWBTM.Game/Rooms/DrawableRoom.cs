@@ -9,10 +9,12 @@ namespace IWBTM.Game.Rooms
     public class DrawableRoom : CompositeDrawable
     {
         private readonly Room map;
+        private readonly bool showPlayerSpawn;
 
-        public DrawableRoom(Room map)
+        public DrawableRoom(Room map, bool showPlayerSpawn = false)
         {
             this.map = map;
+            this.showPlayerSpawn = showPlayerSpawn;
 
             Size = DefaultPlayfield.BASE_SIZE;
         }
@@ -34,6 +36,16 @@ namespace IWBTM.Game.Rooms
                         });
                     }
                 }
+            }
+
+            if (showPlayerSpawn)
+            {
+                var playerPosition = map.GetPlayerSpawnPosition();
+
+                AddInternal(new Tile(TileType.PlayerStart)
+                {
+                    Position = new Vector2(playerPosition.X, playerPosition.Y - Tile.SIZE)
+                });
             }
         }
 

@@ -35,7 +35,7 @@ namespace IWBTM.Game.Screens
                 {
                     new Button("Play")
                     {
-                        Action = () => this.Push(new GameplayScreen(new BossRoom()))
+                        Action = () => this.Push(new SelectScreen())
                     },
                     new Button("Edit")
                     {
