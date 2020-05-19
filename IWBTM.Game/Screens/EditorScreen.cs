@@ -93,6 +93,12 @@ namespace IWBTM.Game.Screens
 
         private void test()
         {
+            if (blueprint.PlayerSpawnPosition() == new Vector2(-1))
+            {
+                notifications.Push("Set player spawn position", NotificationState.Bad);
+                return;
+            }
+
             this.Push(new TestGameplayScreen(new Room(blueprint.Layout(), blueprint.PlayerSpawnPosition())));
         }
 
