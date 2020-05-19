@@ -18,7 +18,7 @@ namespace IWBTM.Game.Player
 
         public void GenerateBullet(Vector2 position, bool rightwards)
         {
-            AddInternal(new Bullet(rightwards)
+            AddInternal(new Bullet(room, rightwards)
             {
                 Position = position
             });

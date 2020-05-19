@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using IWBTM.Game.Playfield;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Player
 {
@@ -15,10 +16,12 @@ namespace IWBTM.Game.Player
         private readonly Sprite sprite;
 
         private readonly bool right;
+        private readonly Room room;
 
-        public Bullet(bool right)
+        public Bullet(Room room, bool right)
         {
             this.right = right;
+            this.room = room;
 
             Size = new Vector2(3);
             Origin = Anchor.Centre;
@@ -40,14 +43,22 @@ namespace IWBTM.Game.Player
         {
             base.Update();
 
-            if (Position.X > DefaultPlayfield.BASE_SIZE.X || Position.X < 0)
+            // check borders
+            if (Position.X <= 0 || Position.X >= DefaultPlayfield.BASE_SIZE.X)
+            {
+                Expire();
+                return;
+            }
+
+            // check solid tiles
+            var tile = room.GetTileAt((int)(Position.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(Position.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT));
+            if (Room.TileIsSolid(tile))
             {
                 Expire();
                 return;
             }
 
             var delta = (right ? 1 : -1) * (float)(speed / 20 * Clock.ElapsedFrameTime);
-
             X += delta;
         }
     }
