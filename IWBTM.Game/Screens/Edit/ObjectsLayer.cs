@@ -172,6 +172,9 @@ namespace IWBTM.Game.Screens.Edit
                 case TileType.SpikeRight:
                     return 'r';
 
+                case TileType.Save:
+                    return 's';
+
                 default:
                     return ' ';
             }

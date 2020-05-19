@@ -62,6 +62,9 @@ namespace IWBTM.Game.Rooms
                 case 'r':
                     return TileType.SpikeRight;
 
+                case 's':
+                    return TileType.Save;
+
                 default:
                     throw new NotImplementedException($"char {input} is not supported");
             }

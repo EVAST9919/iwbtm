@@ -54,6 +54,9 @@ namespace IWBTM.Game.Playfield
 
                 case TileType.SpikeRight:
                     return textures.Get("Tiles/spike-right");
+
+                case TileType.Save:
+                    return textures.Get("Tiles/save");
             }
 
             throw new NotImplementedException($"{Type} tile is not implemented");
@@ -70,6 +73,7 @@ namespace IWBTM.Game.Playfield
         SpikeBottom,
         SpikeLeft,
         SpikeRight,
+        Save
     }
 
     public enum TileDirection
