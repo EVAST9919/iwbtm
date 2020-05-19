@@ -10,6 +10,8 @@ namespace IWBTM.Game.Player
 {
     public class Bullet : CompositeDrawable
     {
+        private const double speed = 16.0;
+
         private readonly Sprite sprite;
 
         private readonly bool right;
@@ -54,7 +56,7 @@ namespace IWBTM.Game.Player
                 return;
             }
 
-            var delta = (right ? 1 : -1) * (float)Clock.ElapsedFrameTime;
+            var delta = (right ? 1 : -1) * (float)(speed / 20 * Clock.ElapsedFrameTime);
 
             X += delta;
         }
