@@ -93,7 +93,6 @@ namespace IWBTM.Game.Screens
 
         private void test()
         {
-            notifications.Push("test", NotificationState.Good);
             this.Push(new TestGameplayScreen(new Room(blueprint.Layout(), blueprint.PlayerSpawnPosition())));
         }
 
