@@ -128,6 +128,7 @@ namespace IWBTM.Game.Player
 
             verticalSpeed = 0;
             midAir = true;
+            availableJumpCount = 2;
             updateVisual();
         }
 
@@ -169,6 +170,8 @@ namespace IWBTM.Game.Player
         protected override void Update()
         {
             base.Update();
+
+            checkBorders();
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
 
@@ -217,6 +220,13 @@ namespace IWBTM.Game.Player
 
             checkSpikes();
             updatePlayerState();
+        }
+
+        private void checkBorders()
+        {
+            if (PlayerPosition().X - PlayerSize().X / 2f <= 0 || PlayerPosition().X + PlayerSize().X / 2f >= DefaultPlayfield.BASE_SIZE.X
+                || PlayerPosition().Y - PlayerSize().Y / 2f <= 0 || PlayerPosition().Y + PlayerSize().Y / 2f + 1 >= DefaultPlayfield.BASE_SIZE.Y)
+                SetSavedPosition();
         }
 
         private void checkSpikes()
