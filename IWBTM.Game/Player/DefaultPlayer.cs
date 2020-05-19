@@ -394,7 +394,7 @@ namespace IWBTM.Game.Player
         private void onShoot()
         {
             shoot.Play();
-            bulletsContainer.Add(new Bullet(Rightwards(), Clock.CurrentTime)
+            bulletsContainer.Add(new Bullet(Rightwards())
             {
                 Position = PlayerPosition()
             });

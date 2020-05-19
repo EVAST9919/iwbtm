@@ -15,12 +15,10 @@ namespace IWBTM.Game.Player
         private readonly Sprite sprite;
 
         private readonly bool right;
-        private readonly double spawnTime;
 
-        public Bullet(bool right, double spawnTime)
+        public Bullet(bool right)
         {
             this.right = right;
-            this.spawnTime = spawnTime;
 
             Size = new Vector2(3);
             Origin = Anchor.Centre;
@@ -41,14 +39,6 @@ namespace IWBTM.Game.Player
         protected override void Update()
         {
             base.Update();
-
-            if (Clock.CurrentTime < spawnTime)
-            {
-                this.FadeOut();
-                return;
-            }
-
-            this.FadeIn();
 
             if (Position.X > DefaultPlayfield.BASE_SIZE.X || Position.X < 0)
             {
