@@ -45,6 +45,8 @@ namespace IWBTM.Game.Player
         private readonly Container hitbox;
         private readonly Room room;
 
+        private (Vector2 position, bool rightwards) savedPosition;
+
         public DefaultPlayer(Room room)
         {
             this.room = room;
@@ -52,7 +54,10 @@ namespace IWBTM.Game.Player
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
             {
-                bulletsContainer = new BulletsContainer(room),
+                bulletsContainer = new BulletsContainer(room)
+                {
+                    OnSave = () => savedPosition = (PlayerPosition(), Rightwards())
+                },
                 Player = new Container
                 {
                     Origin = Anchor.Centre,
@@ -96,7 +101,7 @@ namespace IWBTM.Game.Player
         {
             base.LoadComplete();
 
-            SetDefaultPosition();
+            SetSavedPosition();
             state.BindValueChanged(onStateChanged, true);
             ShowHitbox.BindValueChanged(value => hitbox.Alpha = value.NewValue ? 1 : 0, true);
         }
@@ -107,13 +112,22 @@ namespace IWBTM.Game.Player
 
         public PlayerState GetCurrentState() => state.Value;
 
-        public void SetDefaultPosition()
+        public void SetSavedPosition()
         {
-            var position = room.GetPlayerSpawnPosition();
-            Player.Position = new Vector2(position.X + 16, position.Y + 16);
+            if (savedPosition == default)
+            {
+                var position = room.GetPlayerSpawnPosition();
+                Player.Position = new Vector2(position.X + 16, position.Y + 16);
+                rightwards = true;
+            }
+            else
+            {
+                Player.Position = savedPosition.position;
+                rightwards = savedPosition.rightwards;
+            }
+
             verticalSpeed = 0;
             midAir = true;
-            rightwards = true;
             updateVisual();
         }
 
@@ -221,7 +235,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerTopBorderPosition), topLeftTile))
                 {
-                    SetDefaultPosition();
+                    SetSavedPosition();
                     return;
                 }
             }
@@ -230,7 +244,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerTopBorderPosition), topRightTile))
                 {
-                    SetDefaultPosition();
+                    SetSavedPosition();
                     return;
                 }
             }
@@ -239,7 +253,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), bottomLeftTile))
                 {
-                    SetDefaultPosition();
+                    SetSavedPosition();
                     return;
                 }
             }
@@ -248,7 +262,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerBottomBorderPosition), bottomRightTile))
                 {
-                    SetDefaultPosition();
+                    SetSavedPosition();
                     return;
                 }
             }

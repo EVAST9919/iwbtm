@@ -69,7 +69,7 @@ namespace IWBTM.Game.Playfield
         private void restart()
         {
             //track.Restart();
-            Player.SetDefaultPosition();
+            Player.SetSavedPosition();
         }
     }
 }

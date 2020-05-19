@@ -6,11 +6,14 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using IWBTM.Game.Playfield;
 using IWBTM.Game.Rooms;
+using System;
 
 namespace IWBTM.Game.Player
 {
     public class Bullet : CompositeDrawable
     {
+        public Action OnSave;
+
         private const double speed = 16.0;
 
         private readonly Sprite sprite;
@@ -54,6 +57,13 @@ namespace IWBTM.Game.Player
             var tile = room.GetTileAt((int)(Position.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(Position.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT));
             if (Room.TileIsSolid(tile))
             {
+                Expire();
+                return;
+            }
+
+            if (Room.TileIsSave(tile))
+            {
+                OnSave?.Invoke();
                 Expire();
                 return;
             }

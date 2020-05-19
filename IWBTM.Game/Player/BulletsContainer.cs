@@ -2,11 +2,14 @@
 using IWBTM.Game.Rooms;
 using osu.Framework.Graphics.Containers;
 using osuTK;
+using System;
 
 namespace IWBTM.Game.Player
 {
     public class BulletsContainer : CompositeDrawable
     {
+        public Action OnSave;
+
         private readonly Room room;
 
         public BulletsContainer(Room room)
@@ -20,7 +23,8 @@ namespace IWBTM.Game.Player
         {
             AddInternal(new Bullet(room, rightwards)
             {
-                Position = position
+                Position = position,
+                OnSave = OnSave
             });
         }
     }
