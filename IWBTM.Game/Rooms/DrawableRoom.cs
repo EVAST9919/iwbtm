@@ -40,11 +40,9 @@ namespace IWBTM.Game.Rooms
 
             if (showPlayerSpawn)
             {
-                var playerPosition = map.GetPlayerSpawnPosition();
-
                 AddInternal(new Tile(TileType.PlayerStart)
                 {
-                    Position = new Vector2(playerPosition.X, playerPosition.Y - Tile.SIZE)
+                    Position = map.GetPlayerSpawnPosition()
                 });
             }
         }

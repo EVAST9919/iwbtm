@@ -117,7 +117,7 @@ namespace IWBTM.Game.Player
             if (savedPosition == default)
             {
                 var position = room.GetPlayerSpawnPosition();
-                Player.Position = new Vector2(position.X + 16, position.Y + 16);
+                Player.Position = new Vector2(position.X + 16, position.Y + Tile.SIZE - PlayerSize().Y / 2f);
                 rightwards = true;
             }
             else
