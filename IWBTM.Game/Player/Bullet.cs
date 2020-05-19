@@ -20,7 +20,7 @@ namespace IWBTM.Game.Player
             this.right = right;
             this.spawnTime = spawnTime;
 
-            Size = new Vector2(6);
+            Size = new Vector2(3);
             Origin = Anchor.Centre;
             InternalChild = sprite = new Sprite
             {
