@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Select;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -14,7 +15,7 @@ namespace IWBTM.Game.Screens
     {
         private readonly RoomPreviewContainer preview;
 
-        private Room selected;
+        private readonly Bindable<Room> selectedRoom = new Bindable<Room>();
 
         private readonly Carousel carousel;
 
@@ -25,7 +26,6 @@ namespace IWBTM.Game.Screens
                 carousel = new Carousel
                 {
                     Width = 0.5f,
-                    OnSelection = roomSelected,
                     OnEdit = editRequested,
                 },
                 preview = new RoomPreviewContainer
@@ -40,17 +40,19 @@ namespace IWBTM.Game.Screens
                     Origin = Anchor.BottomRight,
                     Action = () =>
                     {
-                        if (selected != default)
-                            this.Push(new GameplayScreen(selected));
+                        if (selectedRoom.Value != default)
+                            this.Push(new GameplayScreen(selectedRoom.Value));
                     }
                 }
             });
+
+            selectedRoom.BindTo(carousel.Current);
         }
 
-        private void roomSelected(Room room)
+        protected override void LoadComplete()
         {
-            selected = room;
-            preview.Preview(room);
+            base.LoadComplete();
+            selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue));
         }
 
         private void editRequested(Room room)
