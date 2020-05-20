@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.Overlays;
+﻿using IWBTM.Game.Helpers;
+using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -12,7 +13,6 @@ using osu.Framework.Platform;
 using osuTK;
 using osuTK.Graphics;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace IWBTM.Game.Screens.Select
@@ -44,12 +44,12 @@ namespace IWBTM.Game.Screens.Select
                     Spacing = new Vector2(0, 10),
                     Children = new[]
                     {
-                        new RoomItem("Boss room", new BossRoom())
+                        new RoomItem(new BossRoom())
                         {
                             Selected = room => OnSelection(room),
                             Deleted = deleteRequested
                         },
-                        new RoomItem("Empty room", new EmptyRoom())
+                        new RoomItem(new EmptyRoom())
                         {
                             Selected = room => OnSelection(room),
                             Deleted = deleteRequested
@@ -60,28 +60,19 @@ namespace IWBTM.Game.Screens.Select
 
             roomsStorage = storage.GetStorageForDirectory(@"Rooms");
 
-            foreach (var file in roomsStorage.GetFiles(""))
+            foreach (var room in RoomStorage.GetRooms(storage.GetStorageForDirectory(@"Rooms")))
             {
-                using (StreamReader sr = File.OpenText(roomsStorage.GetFullPath(file)))
+                flow.Add(new RoomItem(room, true)
                 {
-                    var layout = sr.ReadLine();
-                    var x = sr.ReadLine();
-                    var y = sr.ReadLine();
-
-                    var room = new Room(layout, new Vector2(float.Parse(x), float.Parse(y)));
-
-                    flow.Add(new RoomItem(file, room, true)
-                    {
-                        Selected = room => OnSelection(room),
-                        Deleted = deleteRequested
-                    });
-                }
+                    Selected = room => OnSelection(room),
+                    Deleted = deleteRequested
+                });
             }
         }
 
         private void deleteRequested(RoomItem item, string name)
         {
-            File.Delete(roomsStorage.GetFullPath(name));
+            RoomStorage.DeleteRoom(name, roomsStorage);
             notifications.Push($"{name} room has been deleted!", NotificationState.Good);
             flow.Children.FirstOrDefault().Select();
             item.Expire();
@@ -93,7 +84,6 @@ namespace IWBTM.Game.Screens.Select
             public Action<RoomItem, string> Deleted;
 
             private readonly Room room;
-            private readonly string name;
             private readonly bool custom;
 
             [Resolved]
@@ -104,9 +94,8 @@ namespace IWBTM.Game.Screens.Select
                 new MenuItem("Delete", onDelete)
             };
 
-            public RoomItem(string name, Room room, bool custom = false)
+            public RoomItem(Room room, bool custom = false)
             {
-                this.name = name;
                 this.room = room;
                 this.custom = custom;
 
@@ -122,7 +111,7 @@ namespace IWBTM.Game.Screens.Select
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Text = name,
+                        Text = room.Name,
                         Colour = Color4.Black
                     }
                 });
@@ -136,7 +125,7 @@ namespace IWBTM.Game.Screens.Select
                     return;
                 }
 
-                Deleted?.Invoke(this, name);
+                Deleted?.Invoke(this, room.Name);
             }
 
             public void Select() => Selected?.Invoke(room);

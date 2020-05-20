@@ -9,11 +9,11 @@ using osuTK.Graphics;
 using osu.Framework.Screens;
 using osu.Framework.Allocation;
 using osu.Framework.Platform;
-using System.IO;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Overlays;
 using osu.Framework.Graphics.UserInterface;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Screens
 {
@@ -99,7 +99,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            this.Push(new TestGameplayScreen(new Room(blueprint.Layout(), blueprint.PlayerSpawnPosition())));
+            this.Push(new TestGameplayScreen(new Room("", blueprint.Layout(), blueprint.PlayerSpawnPosition())));
         }
 
         private void save()
@@ -120,13 +120,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            using (StreamWriter sw = File.CreateText(storage.GetFullPath(name)))
-            {
-                sw.WriteLine(blueprint.Layout());
-                sw.WriteLine(playerPosition.X.ToString());
-                sw.WriteLine(playerPosition.Y.ToString());
-            }
-
+            RoomStorage.CreateRoom(storage, name, blueprint.Layout(), playerPosition);
             notifications.Push("Room has been saved!", NotificationState.Good);
         }
 

@@ -7,11 +7,14 @@ namespace IWBTM.Game.Rooms
 {
     public class Room
     {
+        public string Name { get; private set; }
+
         private readonly string layout;
         private readonly Vector2 playerSpawnPosition;
 
-        public Room(string layout, Vector2 playerSpawnPosition)
+        public Room(string name, string layout, Vector2 playerSpawnPosition)
         {
+            Name = name;
             this.layout = layout;
             this.playerSpawnPosition = playerSpawnPosition;
 
