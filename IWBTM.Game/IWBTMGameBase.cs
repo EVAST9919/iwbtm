@@ -2,7 +2,6 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
-using osuTK.Graphics.ES30;
 
 namespace IWBTM.Game
 {
@@ -12,6 +11,7 @@ namespace IWBTM.Game
     public abstract class IWBTMGameBase : osu.Framework.Game
     {
         private TextureStore textures;
+        private PixelTextureStore pixelTextures;
 
         private DependencyContainer dependencies;
 
@@ -23,8 +23,10 @@ namespace IWBTM.Game
 
             // To preserve the 8-bit aesthetic, disable texture filtering
             // so they won't become blurry when upscaled
-            textures = new TextureStore(Textures, filteringMode: All.Nearest);
+            textures = new TextureStore(Textures);
+            pixelTextures = new PixelTextureStore(Textures);
             dependencies.Cache(textures);
+            dependencies.Cache(pixelTextures);
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)

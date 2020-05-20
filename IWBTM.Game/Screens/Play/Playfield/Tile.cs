@@ -11,6 +11,9 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public const int SIZE = 32;
 
         [Resolved]
+        private PixelTextureStore pixelTextures { get; set; }
+
+        [Resolved]
         private TextureStore textures { get; set; }
 
         public readonly TileType Type;
@@ -32,13 +35,13 @@ namespace IWBTM.Game.Screens.Play.Playfield
             switch (Type)
             {
                 case TileType.PlatformCorner:
-                    return textures.Get("Tiles/platform-corner");
+                    return pixelTextures.Get("Tiles/platform-corner");
 
                 case TileType.PlatformMiddle:
-                    return textures.Get("Tiles/platform-middle");
+                    return pixelTextures.Get("Tiles/platform-middle");
 
                 case TileType.PlatformMiddleRotated:
-                    return textures.Get("Tiles/platform-middle-rotated");
+                    return pixelTextures.Get("Tiles/platform-middle-rotated");
 
                 case TileType.PlayerStart:
                     return textures.Get("Tiles/player-start");
@@ -74,11 +77,5 @@ namespace IWBTM.Game.Screens.Play.Playfield
         SpikeLeft,
         SpikeRight,
         Save
-    }
-
-    public enum TileDirection
-    {
-        Vertical,
-        Horizontal
     }
 }
