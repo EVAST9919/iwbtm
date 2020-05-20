@@ -37,7 +37,7 @@ namespace IWBTM.Game.Screens
                     {
                         Action = () => this.Push(new SelectScreen())
                     },
-                    new Button("Edit")
+                    new Button("Create")
                     {
                         Action = () => this.Push(new EditorScreen())
                     }
