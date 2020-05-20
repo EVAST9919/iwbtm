@@ -3,6 +3,7 @@ using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK;
@@ -48,13 +49,13 @@ namespace IWBTM.Game.Screens.Select
                 new CarouselRoomItem(new BossRoom())
                 {
                     Selected = onSelection,
-                    OnEdit = room => OnEdit(room),
+                    OnEdit = editRequested,
                     Deleted = deleteRequested,
                 },
                 new CarouselRoomItem(new EmptyRoom())
                 {
                     Selected = onSelection,
-                    OnEdit = room => OnEdit(room),
+                    OnEdit = editRequested,
                     Deleted = deleteRequested,
                 }
             });
@@ -64,7 +65,7 @@ namespace IWBTM.Game.Screens.Select
                 flow.Add(new CarouselRoomItem(r, true)
                 {
                     Selected = onSelection,
-                    OnEdit = room => OnEdit(room),
+                    OnEdit = editRequested,
                     Deleted = deleteRequested,
                 });
             }
@@ -72,17 +73,30 @@ namespace IWBTM.Game.Screens.Select
             selectFirst();
         }
 
-        private void deleteRequested(CarouselRoomItem item, string name)
+        private void deleteRequested(CarouselRoomItem item)
         {
+            var name = item.Room.Name;
+
             RoomStorage.DeleteRoom(name);
             notifications.Push($"{name} room has been deleted!", NotificationState.Good);
             selectFirst();
             item.Expire();
         }
 
-        private void onSelection(Room room)
+        private void editRequested(CarouselRoomItem item)
         {
-            Current.Value = room;
+            OnEdit?.Invoke(item.Room);
+        }
+
+        private void onSelection(CarouselRoomItem item)
+        {
+            Current.Value = item.Room;
+
+            flow.Children.ForEach(i =>
+            {
+                if (i != item)
+                    i.Deselect();
+            });
         }
 
         private void selectFirst()

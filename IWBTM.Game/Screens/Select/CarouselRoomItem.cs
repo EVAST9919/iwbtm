@@ -15,11 +15,12 @@ namespace IWBTM.Game.Screens.Select
 {
     public class CarouselRoomItem : ClickableContainer, IHasContextMenu
     {
-        public Action<Room> Selected;
-        public Action<CarouselRoomItem, string> Deleted;
-        public Action<Room> OnEdit;
+        public Action<CarouselRoomItem> Selected;
+        public Action<CarouselRoomItem> Deleted;
+        public Action<CarouselRoomItem> OnEdit;
 
-        private readonly Room room;
+        public Room Room { get; private set; }
+
         private readonly bool custom;
 
         [Resolved]
@@ -28,16 +29,19 @@ namespace IWBTM.Game.Screens.Select
         public MenuItem[] ContextMenuItems => new[]
         {
             new MenuItem("Delete", onDelete),
-            new MenuItem("Edit", () => OnEdit?.Invoke(room)),
+            new MenuItem("Edit", () => OnEdit?.Invoke(this)),
         };
 
         public CarouselRoomItem(Room room, bool custom = false)
         {
-            this.room = room;
+            Room = room;
             this.custom = custom;
 
             RelativeSizeAxes = Axes.X;
             Height = 50;
+            Masking = true;
+            BorderColour = Color4.Red;
+            CornerRadius = 7;
             AddRangeInternal(new Drawable[]
             {
                 new Box
@@ -58,14 +62,23 @@ namespace IWBTM.Game.Screens.Select
         {
             if (!custom)
             {
-                notifications.Push("Can't delete not custom room.", NotificationState.Bad);
+                notifications.Push("Can't delete default room.", NotificationState.Bad);
                 return;
             }
 
-            Deleted?.Invoke(this, room.Name);
+            Deleted?.Invoke(this);
         }
 
-        public void Select() => Selected?.Invoke(room);
+        public void Select()
+        {
+            Selected?.Invoke(this);
+            BorderThickness = 5;
+        }
+
+        public void Deselect()
+        {
+            BorderThickness = 0;
+        }
 
         protected override bool OnClick(ClickEvent e)
         {

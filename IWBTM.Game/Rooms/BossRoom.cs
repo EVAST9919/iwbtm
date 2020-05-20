@@ -6,7 +6,7 @@ namespace IWBTM.Game.Rooms
     public class BossRoom : Room
     {
         public BossRoom()
-            : base("Miku room", layout, new Vector2(2 * Tile.SIZE, 17 * Tile.SIZE))
+            : base("Miku", layout, new Vector2(2 * Tile.SIZE, 17 * Tile.SIZE))
         {
         }
 
