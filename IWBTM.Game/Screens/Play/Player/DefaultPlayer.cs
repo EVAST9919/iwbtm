@@ -402,6 +402,9 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void onJumpPressed()
         {
+            if (died)
+                return;
+
             if (availableJumpCount == 0)
                 return;
 
