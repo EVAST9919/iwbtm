@@ -26,7 +26,7 @@ namespace IWBTM.Game.Screens
 
         private NotificationOverlay notifications;
 
-        public EditorScreen()
+        public EditorScreen(Room room = null)
         {
             ObjectSelector selector;
 
@@ -39,7 +39,7 @@ namespace IWBTM.Game.Screens
                 new PlayfieldAdjustmentContainer
                 {
                     Scale = new Vector2(0.9f),
-                    Child = blueprint = new BluePrint()
+                    Child = blueprint = new BluePrint(room)
                 },
                 selector = new ObjectSelector
                 {
@@ -75,6 +75,9 @@ namespace IWBTM.Game.Screens
 
             selectedObject.BindTo(selector.Selected);
             blueprint.Selected.BindTo(selector.Selected);
+
+            if (room != null)
+                textbox.Text = room.Name;
         }
 
         [BackgroundDependencyLoader]

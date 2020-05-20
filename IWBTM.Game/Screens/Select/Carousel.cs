@@ -19,6 +19,7 @@ namespace IWBTM.Game.Screens.Select
     public class Carousel : CompositeDrawable
     {
         public Action<Room> OnSelection;
+        public Action<Room> OnEdit;
 
         [Resolved]
         private NotificationOverlay notifications { get; set; }
@@ -38,29 +39,37 @@ namespace IWBTM.Game.Screens.Select
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
                     Direction = FillDirection.Vertical,
-                    Spacing = new Vector2(0, 10),
-                    Children = new[]
-                    {
-                        new RoomItem(new BossRoom())
-                        {
-                            Selected = room => OnSelection(room),
-                            Deleted = deleteRequested
-                        },
-                        new RoomItem(new EmptyRoom())
-                        {
-                            Selected = room => OnSelection(room),
-                            Deleted = deleteRequested
-                        }
-                    }
+                    Spacing = new Vector2(0, 10)
+                }
+            });
+        }
+
+        public void UpdateItems()
+        {
+            flow.Clear();
+            flow.AddRange(new[]
+            {
+                new RoomItem(new BossRoom())
+                {
+                    Selected = room => OnSelection(room),
+                    OnEdit = room => OnEdit(room),
+                    Deleted = deleteRequested,
+                },
+                new RoomItem(new EmptyRoom())
+                {
+                    Selected = room => OnSelection(room),
+                    OnEdit = room => OnEdit(room),
+                    Deleted = deleteRequested,
                 }
             });
 
-            foreach (var room in RoomStorage.GetRooms())
+            foreach (var r in RoomStorage.GetRooms())
             {
-                flow.Add(new RoomItem(room, true)
+                flow.Add(new RoomItem(r, true)
                 {
                     Selected = room => OnSelection(room),
-                    Deleted = deleteRequested
+                    OnEdit = room => OnEdit(room),
+                    Deleted = deleteRequested,
                 });
             }
         }
@@ -77,6 +86,7 @@ namespace IWBTM.Game.Screens.Select
         {
             public Action<Room> Selected;
             public Action<RoomItem, string> Deleted;
+            public Action<Room> OnEdit;
 
             private readonly Room room;
             private readonly bool custom;
@@ -86,7 +96,8 @@ namespace IWBTM.Game.Screens.Select
 
             public MenuItem[] ContextMenuItems => new[]
             {
-                new MenuItem("Delete", onDelete)
+                new MenuItem("Delete", onDelete),
+                new MenuItem("Edit", () => OnEdit?.Invoke(room)),
             };
 
             public RoomItem(Room room, bool custom = false)

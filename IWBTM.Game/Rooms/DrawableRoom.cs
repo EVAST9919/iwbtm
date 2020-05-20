@@ -8,12 +8,12 @@ namespace IWBTM.Game.Rooms
 {
     public class DrawableRoom : CompositeDrawable
     {
-        private readonly Room map;
+        private readonly Room room;
         private readonly bool showPlayerSpawn;
 
-        public DrawableRoom(Room map, bool showPlayerSpawn = false)
+        public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
-            this.map = map;
+            this.room = room;
             this.showPlayerSpawn = showPlayerSpawn;
 
             Size = DefaultPlayfield.BASE_SIZE;
@@ -26,11 +26,11 @@ namespace IWBTM.Game.Rooms
             {
                 for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
                 {
-                    var tile = map.GetTileAt(i, j);
+                    var tile = room.GetTileAt(i, j);
 
                     if (!Room.TileIsEmpty(tile))
                     {
-                        AddInternal(new Tile(getTileType(tile))
+                        AddInternal(new Tile(GetTileType(tile))
                         {
                             Position = new Vector2(i * Tile.SIZE, j * Tile.SIZE),
                         });
@@ -42,12 +42,12 @@ namespace IWBTM.Game.Rooms
             {
                 AddInternal(new Tile(TileType.PlayerStart)
                 {
-                    Position = map.GetPlayerSpawnPosition()
+                    Position = room.GetPlayerSpawnPosition()
                 });
             }
         }
 
-        private TileType getTileType(char input)
+        public static TileType GetTileType(char input)
         {
             switch (input)
             {

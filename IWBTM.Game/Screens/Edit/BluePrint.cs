@@ -7,6 +7,7 @@ using osuTK;
 using System.Linq;
 using osuTK.Input;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -17,7 +18,7 @@ namespace IWBTM.Game.Screens.Edit
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
 
-        public BluePrint()
+        public BluePrint(Room room)
         {
             Size = DefaultPlayfield.BASE_SIZE;
 
@@ -34,9 +35,14 @@ namespace IWBTM.Game.Screens.Edit
                     RelativeSizeAxes = Axes.Both
                 },
             });
+
+            if (room != null)
+            {
+                objectsLayer.SetRoom(room);
+            }
         }
 
-        public string Layout() => objectsLayer.CreateLayout();
+        public string Layout() => objectsLayer.GetLayout();
 
         public Vector2 PlayerSpawnPosition() => objectsLayer.GetPlayerSpawnPosition();
 

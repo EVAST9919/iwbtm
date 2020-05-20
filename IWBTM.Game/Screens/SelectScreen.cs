@@ -16,14 +16,17 @@ namespace IWBTM.Game.Screens
 
         private Room selected;
 
+        private readonly Carousel carousel;
+
         public SelectScreen()
         {
             AddRangeInternal(new Drawable[]
             {
-                new Carousel
+                carousel = new Carousel
                 {
                     Width = 0.5f,
-                    OnSelection = roomSelected
+                    OnSelection = roomSelected,
+                    OnEdit = editRequested,
                 },
                 preview = new RoomPreviewContainer
                 {
@@ -48,6 +51,23 @@ namespace IWBTM.Game.Screens
         {
             selected = room;
             preview.Preview(room);
+        }
+
+        private void editRequested(Room room)
+        {
+            this.Push(new EditorScreen(room));
+        }
+
+        public override void OnEntering(IScreen last)
+        {
+            base.OnEntering(last);
+            carousel.UpdateItems();
+        }
+
+        public override void OnResuming(IScreen last)
+        {
+            base.OnResuming(last);
+            carousel.UpdateItems();
         }
 
         private class PlayButton : ClickableContainer

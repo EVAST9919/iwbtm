@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Rooms;
+using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System.Linq;
@@ -94,6 +95,24 @@ namespace IWBTM.Game.Screens.Edit
             addTile(TileType.PlayerStart, position);
         }
 
+        public void SetRoom(Room room)
+        {
+            for (int i = 0; i < DefaultPlayfield.TILES_WIDTH; i++)
+            {
+                for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
+                {
+                    var tile = room.GetTileAt(i, j);
+
+                    if (!Room.TileIsEmpty(tile))
+                    {
+                        addTile(DrawableRoom.GetTileType(tile), new Vector2(i * Tile.SIZE, j * Tile.SIZE));
+                    }
+                }
+            }
+
+            addTile(TileType.PlayerStart, room.GetPlayerSpawnPosition());
+        }
+
         private void addTile(TileType tile, Vector2 position)
         {
             Add(new Tile(tile)
@@ -102,7 +121,7 @@ namespace IWBTM.Game.Screens.Edit
             });
         }
 
-        public string CreateLayout()
+        public string GetLayout()
         {
             string s = string.Empty;
 
