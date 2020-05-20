@@ -33,6 +33,7 @@ namespace IWBTM.Game.Player
         private DrawableSample jump;
         private DrawableSample doubleJump;
         private DrawableSample shoot;
+        private DrawableSample death;
 
         private int horizontalDirection;
         private int availableJumpCount = 2;
@@ -94,6 +95,7 @@ namespace IWBTM.Game.Player
                 jump = new DrawableSample(audio.Samples.Get("jump")),
                 doubleJump = new DrawableSample(audio.Samples.Get("double-jump")),
                 shoot = new DrawableSample(audio.Samples.Get("shoot")),
+                death = new DrawableSample(audio.Samples.Get("death")),
             });
         }
 
@@ -114,6 +116,8 @@ namespace IWBTM.Game.Player
 
         public void SetSavedPosition()
         {
+            death.Stop();
+
             if (savedPosition == default)
             {
                 var position = room.GetPlayerSpawnPosition();
@@ -129,6 +133,9 @@ namespace IWBTM.Game.Player
             verticalSpeed = 0;
             midAir = true;
             availableJumpCount = 2;
+
+            died = false;
+            Player.Show();
             updateVisual();
         }
 
@@ -151,6 +158,15 @@ namespace IWBTM.Game.Player
             return base.OnKeyDown(e);
         }
 
+        private bool died;
+
+        private void onDeath()
+        {
+            died = true;
+            death.Play();
+            Player.Hide();
+        }
+
         protected override void OnKeyUp(KeyUpEvent e)
         {
             switch (e.Key)
@@ -170,6 +186,9 @@ namespace IWBTM.Game.Player
         protected override void Update()
         {
             base.Update();
+
+            if (died)
+                return;
 
             checkBorders();
 
@@ -226,7 +245,7 @@ namespace IWBTM.Game.Player
         {
             if (PlayerPosition().X - PlayerSize().X / 2f <= 0 || PlayerPosition().X + PlayerSize().X / 2f >= DefaultPlayfield.BASE_SIZE.X
                 || PlayerPosition().Y - PlayerSize().Y / 2f <= 0 || PlayerPosition().Y + PlayerSize().Y / 2f + 1 >= DefaultPlayfield.BASE_SIZE.Y)
-                SetSavedPosition();
+                onDeath();
         }
 
         private void checkSpikes()
@@ -245,7 +264,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerTopBorderPosition), topLeftTile))
                 {
-                    SetSavedPosition();
+                    onDeath();
                     return;
                 }
             }
@@ -254,7 +273,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerTopBorderPosition), topRightTile))
                 {
-                    SetSavedPosition();
+                    onDeath();
                     return;
                 }
             }
@@ -263,7 +282,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), bottomLeftTile))
                 {
-                    SetSavedPosition();
+                    onDeath();
                     return;
                 }
             }
@@ -272,7 +291,7 @@ namespace IWBTM.Game.Player
             {
                 if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), new Vector2(playerRightBorderPosition, playerBottomBorderPosition), bottomRightTile))
                 {
-                    SetSavedPosition();
+                    onDeath();
                     return;
                 }
             }
