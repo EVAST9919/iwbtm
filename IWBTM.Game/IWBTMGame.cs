@@ -2,6 +2,8 @@
 using IWBTM.Game.Screens;
 using osu.Framework.Allocation;
 using IWBTM.Game.Overlays;
+using osu.Framework.Graphics.Cursor;
+using osu.Framework.Graphics;
 
 namespace IWBTM.Game
 {
@@ -19,10 +21,17 @@ namespace IWBTM.Game
             dependencies.Cache(notifications = new NotificationOverlay());
 
             ScreenStack screens = new ScreenStack();
-            Add(screens);
             screens.Push(new MainMenuScreen());
 
-            Add(notifications);
+            Add(new BasicContextMenuContainer
+            {
+                RelativeSizeAxes = Axes.Both,
+                Children = new Drawable[]
+                {
+                    screens,
+                    notifications,
+                }
+            });
         }
     }
 }
