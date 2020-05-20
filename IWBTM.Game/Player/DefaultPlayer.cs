@@ -30,10 +30,12 @@ namespace IWBTM.Game.Player
         private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
         public readonly BindableBool ShowHitbox = new BindableBool();
 
+        public Action OnDeath;
+        public Action OnRespawn;
+
         private DrawableSample jump;
         private DrawableSample doubleJump;
         private DrawableSample shoot;
-        private DrawableSample death;
 
         private int horizontalDirection;
         private int availableJumpCount = 2;
@@ -95,7 +97,6 @@ namespace IWBTM.Game.Player
                 jump = new DrawableSample(audio.Samples.Get("jump")),
                 doubleJump = new DrawableSample(audio.Samples.Get("double-jump")),
                 shoot = new DrawableSample(audio.Samples.Get("shoot")),
-                death = new DrawableSample(audio.Samples.Get("death")),
             });
         }
 
@@ -103,7 +104,6 @@ namespace IWBTM.Game.Player
         {
             base.LoadComplete();
 
-            SetSavedPosition();
             state.BindValueChanged(onStateChanged, true);
             ShowHitbox.BindValueChanged(value => hitbox.Alpha = value.NewValue ? 1 : 0, true);
         }
@@ -116,7 +116,7 @@ namespace IWBTM.Game.Player
 
         public void SetSavedPosition()
         {
-            death.Stop();
+            OnRespawn?.Invoke();
 
             if (savedPosition == default)
             {
@@ -163,8 +163,8 @@ namespace IWBTM.Game.Player
         private void onDeath()
         {
             died = true;
-            death.Play();
             Player.Hide();
+            OnDeath?.Invoke();
         }
 
         protected override void OnKeyUp(KeyUpEvent e)

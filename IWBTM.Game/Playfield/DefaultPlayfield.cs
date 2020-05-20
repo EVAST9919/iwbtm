@@ -9,6 +9,7 @@ using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
 using IWBTM.Game.Rooms;
+using IWBTM.Game.Screens.Play;
 
 namespace IWBTM.Game.Playfield
 {
@@ -19,6 +20,7 @@ namespace IWBTM.Game.Playfield
         public static readonly int TILES_HEIGHT = 19;
 
         public readonly DefaultPlayer Player;
+        private readonly DeathOverlay deathOverlay;
         private Track track;
 
         public DefaultPlayfield(Room room)
@@ -33,10 +35,14 @@ namespace IWBTM.Game.Playfield
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new DrawableRoom(room)
+                new DrawableRoom(room),
+                Player = new DefaultPlayer(room)
+                {
+                    OnDeath = onDeath,
+                    OnRespawn = onRespawn
+                },
+                deathOverlay = new DeathOverlay()
             });
-
-            AddInternal(Player = new DefaultPlayer(room));
         }
 
         [BackgroundDependencyLoader]
@@ -49,6 +55,16 @@ namespace IWBTM.Game.Playfield
         {
             base.LoadComplete();
             restart();
+        }
+
+        private void onDeath()
+        {
+            deathOverlay.Play();
+        }
+
+        private void onRespawn()
+        {
+            deathOverlay.Restore();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
