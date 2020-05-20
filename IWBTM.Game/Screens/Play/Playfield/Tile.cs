@@ -4,7 +4,7 @@ using osu.Framework.Allocation;
 using System;
 using osuTK;
 
-namespace IWBTM.Game.Playfield
+namespace IWBTM.Game.Screens.Play.Playfield
 {
     public class Tile : Sprite
     {

@@ -1,10 +1,10 @@
-﻿using IWBTM.Game.Playfield;
-using IWBTM.Game.Rooms;
+﻿using IWBTM.Game.Rooms;
+using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
 
-namespace IWBTM.Game.Player
+namespace IWBTM.Game.Screens.Play.Player
 {
     public class BulletsContainer : CompositeDrawable
     {

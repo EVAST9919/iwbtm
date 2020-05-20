@@ -6,7 +6,6 @@ using osu.Framework.Input.Events;
 using osuTK.Input;
 using osu.Framework.Graphics;
 using osuTK;
-using IWBTM.Game.Playfield;
 using System;
 using osu.Framework.Bindables;
 using IWBTM.Game.Rooms;
@@ -14,8 +13,9 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
+using IWBTM.Game.Screens.Play.Playfield;
 
-namespace IWBTM.Game.Player
+namespace IWBTM.Game.Screens.Play.Player
 {
     public class DefaultPlayer : CompositeDrawable
     {

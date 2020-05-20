@@ -2,7 +2,7 @@
 using osu.Framework.Graphics.Containers;
 using osuTK;
 
-namespace IWBTM.Game.Playfield
+namespace IWBTM.Game.Screens.Play.Playfield
 {
     public class PlayfieldAdjustmentContainer : Container
     {

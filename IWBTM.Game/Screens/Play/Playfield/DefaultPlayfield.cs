@@ -2,16 +2,15 @@
 using osu.Framework.Graphics;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Shapes;
-using IWBTM.Game.Player;
 using osu.Framework.Audio.Track;
 using osu.Framework.Audio;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
 using IWBTM.Game.Rooms;
-using IWBTM.Game.Screens.Play;
+using IWBTM.Game.Screens.Play.Player;
 
-namespace IWBTM.Game.Playfield
+namespace IWBTM.Game.Screens.Play.Playfield
 {
     public class DefaultPlayfield : CompositeDrawable
     {
@@ -71,7 +70,7 @@ namespace IWBTM.Game.Playfield
         {
             if (!e.Repeat)
             {
-                switch(e.Key)
+                switch (e.Key)
                 {
                     case Key.R:
                         restart();

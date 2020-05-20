@@ -4,11 +4,11 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
-using IWBTM.Game.Playfield;
 using IWBTM.Game.Rooms;
 using System;
+using IWBTM.Game.Screens.Play.Playfield;
 
-namespace IWBTM.Game.Player
+namespace IWBTM.Game.Screens.Play.Player
 {
     public class Bullet : CompositeDrawable
     {

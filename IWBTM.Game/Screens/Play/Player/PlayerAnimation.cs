@@ -3,7 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Animations;
 using osu.Framework.Graphics.Textures;
 
-namespace IWBTM.Game.Player
+namespace IWBTM.Game.Screens.Play.Player
 {
     public class PlayerAnimation : TextureAnimation
     {

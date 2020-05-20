@@ -3,8 +3,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Bindables;
-using IWBTM.Game.Playfield;
 using osu.Framework.Input.Events;
+using IWBTM.Game.Screens.Play.Playfield;
 
 namespace IWBTM.Game.Screens.Edit
 {

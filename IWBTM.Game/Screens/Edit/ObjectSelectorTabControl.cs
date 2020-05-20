@@ -1,10 +1,10 @@
-﻿using IWBTM.Game.Playfield;
-using osu.Framework.Graphics.UserInterface;
+﻿using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics;
 using osuTK;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using System;
+using IWBTM.Game.Screens.Play.Playfield;
 
 namespace IWBTM.Game.Screens.Edit
 {
