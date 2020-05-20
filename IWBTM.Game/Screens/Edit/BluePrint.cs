@@ -51,6 +51,9 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
+            if (!IsHovered)
+                return false;
+
             mousePosition = e.MousePosition;
 
             if (!hoverLayer.Any())
@@ -60,6 +63,20 @@ namespace IWBTM.Game.Screens.Edit
                 };
 
             tileToPlace.Position = GetSnappedPosition(mousePosition);
+
+            var buttons = e.CurrentState.Mouse.Buttons;
+
+            if (buttons.IsPressed(MouseButton.Left))
+            {
+                objectsLayer.TryPlace(Selected.Value, mousePosition);
+                return true;
+            }
+
+            if (buttons.IsPressed(MouseButton.Right))
+            {
+                objectsLayer.TryRemove(mousePosition);
+                return true;
+            }
 
             return base.OnMouseMove(e);
         }

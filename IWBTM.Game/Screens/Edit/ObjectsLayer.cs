@@ -69,19 +69,11 @@ namespace IWBTM.Game.Screens.Edit
 
         private void tryPlacePlayerStart(Vector2 position)
         {
-            Tile player = null;
-
             foreach (var child in Children)
             {
                 if (child.Type == TileType.PlayerStart)
-                {
-                    player = child;
-                    break;
-                }
+                    child.Expire();
             }
-
-            if (player != null)
-                player.Expire();
 
             foreach (Tile child in Children)
             {
