@@ -9,7 +9,6 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
-using osu.Framework.Platform;
 using osuTK;
 using osuTK.Graphics;
 using System;
@@ -24,11 +23,9 @@ namespace IWBTM.Game.Screens.Select
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
-        private Storage roomsStorage;
-        private FillFlowContainer<RoomItem> flow;
+        private readonly FillFlowContainer<RoomItem> flow;
 
-        [BackgroundDependencyLoader]
-        private void load(Storage storage)
+        public Carousel()
         {
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);
@@ -58,9 +55,7 @@ namespace IWBTM.Game.Screens.Select
                 }
             });
 
-            roomsStorage = storage.GetStorageForDirectory(@"Rooms");
-
-            foreach (var room in RoomStorage.GetRooms(storage.GetStorageForDirectory(@"Rooms")))
+            foreach (var room in RoomStorage.GetRooms())
             {
                 flow.Add(new RoomItem(room, true)
                 {
@@ -72,7 +67,7 @@ namespace IWBTM.Game.Screens.Select
 
         private void deleteRequested(RoomItem item, string name)
         {
-            RoomStorage.DeleteRoom(name, roomsStorage);
+            RoomStorage.DeleteRoom(name);
             notifications.Push($"{name} room has been deleted!", NotificationState.Good);
             flow.Children.FirstOrDefault().Select();
             item.Expire();

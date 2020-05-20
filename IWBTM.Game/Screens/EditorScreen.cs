@@ -8,7 +8,6 @@ using osuTK;
 using osuTK.Graphics;
 using osu.Framework.Screens;
 using osu.Framework.Allocation;
-using osu.Framework.Platform;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Overlays;
 using osu.Framework.Graphics.UserInterface;
@@ -25,16 +24,10 @@ namespace IWBTM.Game.Screens
         private BluePrint blueprint;
         private EditorTextbox textbox;
 
-        private Storage storage;
-
         private NotificationOverlay notifications;
 
-        [BackgroundDependencyLoader]
-        private void load(Storage storage, NotificationOverlay notifications)
+        public EditorScreen()
         {
-            this.storage = storage.GetStorageForDirectory(@"Rooms");
-            this.notifications = notifications;
-
             ObjectSelector selector;
 
             AddRangeInternal(new Drawable[]
@@ -84,6 +77,12 @@ namespace IWBTM.Game.Screens
             blueprint.Selected.BindTo(selector.Selected);
         }
 
+        [BackgroundDependencyLoader]
+        private void load(NotificationOverlay notifications)
+        {
+            this.notifications = notifications;
+        }
+
         protected override void LoadComplete()
         {
             base.LoadComplete();
@@ -120,7 +119,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            RoomStorage.CreateRoom(storage, name, blueprint.Layout(), playerPosition);
+            RoomStorage.CreateRoom(name, blueprint.Layout(), playerPosition);
             notifications.Push("Room has been saved!", NotificationState.Good);
         }
 
