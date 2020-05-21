@@ -44,25 +44,10 @@ namespace IWBTM.Game.Screens.Select
         public void UpdateItems()
         {
             flow.Clear();
-            flow.AddRange(new[]
-            {
-                new CarouselRoomItem(new BossRoom())
-                {
-                    Selected = onSelection,
-                    OnEdit = editRequested,
-                    Deleted = deleteRequested,
-                },
-                new CarouselRoomItem(new EmptyRoom())
-                {
-                    Selected = onSelection,
-                    OnEdit = editRequested,
-                    Deleted = deleteRequested,
-                }
-            });
 
             foreach (var r in RoomStorage.GetRooms())
             {
-                flow.Add(new CarouselRoomItem(r, true)
+                flow.Add(new CarouselRoomItem(r)
                 {
                     Selected = onSelection,
                     OnEdit = editRequested,

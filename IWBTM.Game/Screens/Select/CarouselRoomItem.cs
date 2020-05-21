@@ -1,6 +1,4 @@
-﻿using IWBTM.Game.Overlays;
-using IWBTM.Game.Rooms;
-using osu.Framework.Allocation;
+﻿using IWBTM.Game.Rooms;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -21,21 +19,15 @@ namespace IWBTM.Game.Screens.Select
 
         public Room Room { get; private set; }
 
-        private readonly bool custom;
-
-        [Resolved]
-        private NotificationOverlay notifications { get; set; }
-
         public MenuItem[] ContextMenuItems => new[]
         {
             new MenuItem("Delete", onDelete),
             new MenuItem("Edit", () => OnEdit?.Invoke(this)),
         };
 
-        public CarouselRoomItem(Room room, bool custom = false)
+        public CarouselRoomItem(Room room)
         {
             Room = room;
-            this.custom = custom;
 
             RelativeSizeAxes = Axes.X;
             Height = 50;
@@ -58,16 +50,7 @@ namespace IWBTM.Game.Screens.Select
             });
         }
 
-        private void onDelete()
-        {
-            if (!custom)
-            {
-                notifications.Push("Can't delete default room.", NotificationState.Bad);
-                return;
-            }
-
-            Deleted?.Invoke(this);
-        }
+        private void onDelete() => Deleted?.Invoke(this);
 
         public void Select()
         {
