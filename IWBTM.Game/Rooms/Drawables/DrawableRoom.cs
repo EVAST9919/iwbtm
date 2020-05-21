@@ -1,7 +1,6 @@
 ﻿using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
-using System;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
@@ -53,39 +52,6 @@ namespace IWBTM.Game.Rooms.Drawables
             }
 
             return null;
-        }
-
-        public static TileType GetTileType(char input)
-        {
-            switch (input)
-            {
-                case '+':
-                    return TileType.PlatformCorner;
-
-                case 'X':
-                    return TileType.PlatformMiddle;
-
-                case '-':
-                    return TileType.PlatformMiddleRotated;
-
-                case 'q':
-                    return TileType.SpikeBottom;
-
-                case 'w':
-                    return TileType.SpikeTop;
-
-                case 'e':
-                    return TileType.SpikeLeft;
-
-                case 'r':
-                    return TileType.SpikeRight;
-
-                case 's':
-                    return TileType.Save;
-
-                default:
-                    throw new NotImplementedException($"char {input} is not supported");
-            }
         }
     }
 }
