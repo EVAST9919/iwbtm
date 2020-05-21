@@ -328,7 +328,7 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile)))
+                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile) || Room.TileIsSave(bottomTile)))
                 {
                     midAir = true;
                     availableJumpCount = 1;
@@ -357,7 +357,7 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
 
-                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile)))
+                if (!midAir && (Room.TileIsEmpty(bottomTile) || Room.TileIsSpike(bottomTile) || Room.TileIsSave(bottomTile)))
                 {
                     midAir = true;
                     availableJumpCount = 1;
