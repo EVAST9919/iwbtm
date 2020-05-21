@@ -1,12 +1,13 @@
 ﻿using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
+using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
 
 namespace IWBTM.Game.Rooms
 {
-    public class DrawableRoom : CompositeDrawable
+    public class DrawableRoom : Container<Tile>
     {
         private readonly Room room;
         private readonly bool showPlayerSpawn;
@@ -30,21 +31,45 @@ namespace IWBTM.Game.Rooms
 
                     if (!Room.TileIsEmpty(tile))
                     {
-                        AddInternal(new Tile(GetTileType(tile))
+                        var type = GetTileType(tile);
+                        var position = new Vector2(i * Tile.SIZE, j * Tile.SIZE);
+
+                        if (type == TileType.Save)
                         {
-                            Position = new Vector2(i * Tile.SIZE, j * Tile.SIZE),
-                        });
+                            Add(new SaveTile
+                            {
+                                Position = position
+                            });
+                        }
+                        else
+                        {
+                            Add(new Tile(type)
+                            {
+                                Position = position
+                            });
+                        }
                     }
                 }
             }
 
             if (showPlayerSpawn)
             {
-                AddInternal(new Tile(TileType.PlayerStart)
+                Add(new Tile(TileType.PlayerStart)
                 {
                     Position = room.GetPlayerSpawnPosition()
                 });
             }
+        }
+
+        public Tile GetTileAt(int x, int y)
+        {
+            foreach (var child in Children)
+            {
+                if (child.Position == new Vector2(x * Tile.SIZE, y * Tile.SIZE))
+                    return child;
+            }
+
+            return null;
         }
 
         public static TileType GetTileType(char input)

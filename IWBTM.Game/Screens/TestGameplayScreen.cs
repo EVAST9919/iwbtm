@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Rooms;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
@@ -9,11 +10,16 @@ namespace IWBTM.Game.Screens
 {
     public class TestGameplayScreen : GameplayScreen
     {
-        private readonly SpriteText xPosition;
-        private readonly SpriteText yPosition;
+        private SpriteText xPosition;
+        private SpriteText yPosition;
 
         public TestGameplayScreen(Room room)
             : base(room)
+        {
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
         {
             AddInternal(new Container
             {

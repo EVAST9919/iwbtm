@@ -14,7 +14,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         private PixelTextureStore pixelTextures { get; set; }
 
         [Resolved]
-        private TextureStore textures { get; set; }
+        protected TextureStore Textures { get; private set; }
 
         public readonly TileType Type;
 
@@ -44,22 +44,22 @@ namespace IWBTM.Game.Screens.Play.Playfield
                     return pixelTextures.Get("Tiles/platform-middle-rotated");
 
                 case TileType.PlayerStart:
-                    return textures.Get("Tiles/player-start");
+                    return Textures.Get("Tiles/player-start");
 
                 case TileType.SpikeBottom:
-                    return textures.Get("Tiles/spike-bottom");
+                    return Textures.Get("Tiles/spike-bottom");
 
                 case TileType.SpikeTop:
-                    return textures.Get("Tiles/spike-top");
+                    return Textures.Get("Tiles/spike-top");
 
                 case TileType.SpikeLeft:
-                    return textures.Get("Tiles/spike-left");
+                    return Textures.Get("Tiles/spike-left");
 
                 case TileType.SpikeRight:
-                    return textures.Get("Tiles/spike-right");
+                    return Textures.Get("Tiles/spike-right");
 
                 case TileType.Save:
-                    return textures.Get("Tiles/save");
+                    return Textures.Get("Tiles/save");
             }
 
             throw new NotImplementedException($"{Type} tile is not implemented");

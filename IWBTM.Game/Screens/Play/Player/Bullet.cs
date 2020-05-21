@@ -21,6 +21,9 @@ namespace IWBTM.Game.Screens.Play.Player
         private readonly bool right;
         private readonly Room room;
 
+        [Resolved]
+        private DrawableRoom drawableRoom { get; set; }
+
         public Bullet(Room room, bool right)
         {
             this.right = right;
@@ -53,8 +56,11 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
+            var xPos = (int)(Position.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH);
+            var yPos = (int)(Position.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT);
+
             // check solid tiles
-            var tile = room.GetTileAt((int)(Position.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(Position.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT));
+            var tile = room.GetTileAt(xPos, yPos);
             if (Room.TileIsSolid(tile))
             {
                 Expire();
@@ -63,6 +69,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (Room.TileIsSave(tile))
             {
+                ((SaveTile)drawableRoom.GetTileAt(xPos, yPos)).Activate();
                 OnSave?.Invoke();
                 Expire();
                 return;

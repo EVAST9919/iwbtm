@@ -19,12 +19,27 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
 
-        public readonly DefaultPlayer Player;
-        private readonly DeathOverlay deathOverlay;
+        public DefaultPlayer Player;
+        private DeathOverlay deathOverlay;
         private Track track;
+
+        private DependencyContainer dependencies;
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
+            => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+
+        private readonly Room room;
 
         public DefaultPlayfield(Room room)
         {
+            this.room = room;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
+        {
+            DrawableRoom drawableRoom;
+
             Size = BASE_SIZE;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
@@ -35,7 +50,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new DrawableRoom(room),
+                drawableRoom = new DrawableRoom(room),
                 Player = new DefaultPlayer(room)
                 {
                     OnDeath = onDeath,
@@ -43,12 +58,10 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 },
                 deathOverlay = new DeathOverlay()
             });
-        }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
             track = audio.Tracks.Get("Ghost Rule");
+
+            dependencies.Cache(drawableRoom);
         }
 
         protected override void LoadComplete()
