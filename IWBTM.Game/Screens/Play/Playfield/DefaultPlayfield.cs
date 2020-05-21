@@ -9,6 +9,7 @@ using osuTK.Input;
 using osuTK;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Player;
+using IWBTM.Game.Screens.Play.Death;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -56,9 +57,9 @@ namespace IWBTM.Game.Screens.Play.Playfield
             restart();
         }
 
-        private void onDeath()
+        private void onDeath(Vector2 position, Vector2 speed)
         {
-            deathOverlay.Play();
+            deathOverlay.Play(position, speed);
         }
 
         private void onRespawn()

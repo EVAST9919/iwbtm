@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 
-namespace IWBTM.Game.Screens.Play
+namespace IWBTM.Game.Screens.Play.Death
 {
     public class LetterboxOverlay : CompositeDrawable
     {

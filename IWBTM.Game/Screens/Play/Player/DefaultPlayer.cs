@@ -30,7 +30,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
         public readonly BindableBool ShowHitbox = new BindableBool();
 
-        public Action OnDeath;
+        public Action<Vector2, Vector2> OnDeath;
         public Action OnRespawn;
 
         private DrawableSample jump;
@@ -40,6 +40,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private int horizontalDirection;
         private int availableJumpCount = 2;
         private double verticalSpeed;
+        private double horizontalSpeed;
         private bool midAir;
 
         public readonly Container Player;
@@ -164,7 +165,7 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             died = true;
             Player.Hide();
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
         }
 
         protected override void OnKeyUp(KeyUpEvent e)
@@ -216,9 +217,12 @@ namespace IWBTM.Game.Screens.Play.Player
             else if (keys.IsPressed(Key.Left))
                 horizontalDirection = -1;
 
+            horizontalSpeed = 0;
+
             if (horizontalDirection != 0)
             {
                 rightwards = horizontalDirection > 0;
+                horizontalSpeed = rightwards ? 3 : -3;
                 updateVisual();
 
                 if (rightwards)
@@ -364,7 +368,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private void checkTopCollision()
         {
             var playerTopBorderPosition = (int)((Player.Y - PlayerSize().Y / 2 - 1) / Tile.SIZE);
-            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2) / Tile.SIZE);
             var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
 
             var leftTile = room.GetTileAt(playerLeftBorderPosition, playerTopBorderPosition);
@@ -380,7 +384,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private void checkBottomCollision()
         {
             var playerBottomBorderPosition = (int)((Player.Y + PlayerSize().Y / 2 + 1) / Tile.SIZE);
-            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2 + 1) / Tile.SIZE);
+            var playerLeftBorderPosition = (int)((Player.X - PlayerSize().X / 2) / Tile.SIZE);
             var playerRightBorderPosition = (int)((Player.X + PlayerSize().X / 2 - 1) / Tile.SIZE);
 
             var leftTile = room.GetTileAt(playerLeftBorderPosition, playerBottomBorderPosition);

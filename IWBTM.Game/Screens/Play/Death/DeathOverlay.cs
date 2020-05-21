@@ -8,8 +8,10 @@ using osu.Framework.Audio;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using osu.Framework.Utils;
+using IWBTM.Game.Helpers;
 
-namespace IWBTM.Game.Screens.Play
+namespace IWBTM.Game.Screens.Play.Death
 {
     public class DeathOverlay : CompositeDrawable
     {
@@ -18,6 +20,7 @@ namespace IWBTM.Game.Screens.Play
         private Sprite sprite;
         private LetterboxOverlay letterbox;
         private DrawableSample deathSample;
+        private Container<DeathParticle> particles;
 
         [BackgroundDependencyLoader]
         private void load(AudioManager audio, TextureStore textures)
@@ -26,6 +29,10 @@ namespace IWBTM.Game.Screens.Play
 
             AddRangeInternal(new Drawable[]
             {
+                particles = new Container<DeathParticle>
+                {
+                    RelativeSizeAxes = Axes.Both
+                },
                 tint = new Box
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -53,17 +60,31 @@ namespace IWBTM.Game.Screens.Play
             });
         }
 
-        public void Play()
+        public void Play(Vector2 position, Vector2 playerSpeed)
         {
             tint.FadeTo(0.6f, 260);
             blackFlash.FadeIn(0.8f).Then().FadeOut(180);
             sprite.Delay(200).FadeIn(600);
             letterbox.Delay(330).FadeIn(700);
             deathSample.Play();
+
+            var time = Clock.CurrentTime;
+
+            float[] xRandoms = MathExtensions.Get(time, 50, -5, 5);
+            float[] yRandoms = MathExtensions.Get(time * 2, 50, -2, 5);
+
+            for (int i = 0; i < 50; i++)
+            {
+                var speedVector = new Vector2(xRandoms[i] + playerSpeed.X, yRandoms[i]);
+                var particle = new DeathParticle(position, speedVector);
+                particles.Add(particle);
+            }
         }
 
         public void Restore()
         {
+            particles.Clear();
+
             tint.FadeOut();
 
             blackFlash.ClearTransforms();
