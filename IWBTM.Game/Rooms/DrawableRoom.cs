@@ -1,6 +1,5 @@
 ﻿using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
-using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
@@ -71,6 +70,24 @@ namespace IWBTM.Game.Rooms
 
             return null;
         }
+
+        public Tile GetTileAtPixel(Vector2 pixelPosition)
+        {
+            foreach(var child in Children)
+            {
+                var tilePosition = child.Position;
+
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + Tile.SIZE - 1)
+                {
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + Tile.SIZE - 1)
+                        return child;
+                }
+            }
+
+            return null;
+        }
+
+        public Vector2 GetPlayerSpawnPosition() => room.GetPlayerSpawnPosition();
 
         public static TileType GetTileType(char input)
         {

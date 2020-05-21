@@ -64,6 +64,39 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             throw new NotImplementedException($"{Type} tile is not implemented");
         }
+
+        public static bool IsSolid(TileType? type)
+        {
+            if (type == null)
+                return false;
+
+            if (type == TileType.PlatformCorner || type == TileType.PlatformMiddle || type == TileType.PlatformMiddleRotated)
+                return true;
+
+            return false;
+        }
+
+        public static bool IsSpike(TileType? type)
+        {
+            if (type == null)
+                return false;
+
+            if (type == TileType.SpikeBottom || type == TileType.SpikeTop || type == TileType.SpikeLeft || type == TileType.SpikeRight)
+                return true;
+
+            return false;
+        }
+
+        public static bool IsSave(TileType? type)
+        {
+            if (type == null)
+                return false;
+
+            if (type == TileType.Save)
+                return true;
+
+            return false;
+        }
     }
 
     public enum TileType

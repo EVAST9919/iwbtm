@@ -19,15 +19,13 @@ namespace IWBTM.Game.Screens.Play.Player
         private readonly Sprite sprite;
 
         private readonly bool right;
-        private readonly Room room;
 
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
 
-        public Bullet(Room room, bool right)
+        public Bullet(bool right)
         {
             this.right = right;
-            this.room = room;
 
             Size = new Vector2(3);
             Origin = Anchor.Centre;
@@ -56,20 +54,17 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            var xPos = (int)(Position.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH);
-            var yPos = (int)(Position.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT);
+            var tile = drawableRoom.GetTileAtPixel(Position);
 
-            // check solid tiles
-            var tile = room.GetTileAt(xPos, yPos);
-            if (Room.TileIsSolid(tile))
+            if (Tile.IsSolid(tile?.Type))
             {
                 Expire();
                 return;
             }
 
-            if (Room.TileIsSave(tile))
+            if (Tile.IsSave(tile?.Type))
             {
-                ((SaveTile)drawableRoom.GetTileAt(xPos, yPos)).Activate();
+                ((SaveTile)tile).Activate();
                 OnSave?.Invoke();
                 Expire();
                 return;

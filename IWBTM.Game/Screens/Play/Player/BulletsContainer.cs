@@ -1,5 +1,4 @@
-﻿using IWBTM.Game.Rooms;
-using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
@@ -10,18 +9,14 @@ namespace IWBTM.Game.Screens.Play.Player
     {
         public Action OnSave;
 
-        private readonly Room room;
-
-        public BulletsContainer(Room room)
+        public BulletsContainer()
         {
-            this.room = room;
-
             Size = DefaultPlayfield.BASE_SIZE;
         }
 
         public void GenerateBullet(Vector2 position, bool rightwards)
         {
-            AddInternal(new Bullet(room, rightwards)
+            AddInternal(new Bullet(rightwards)
             {
                 Position = position,
                 OnSave = OnSave

@@ -6,10 +6,10 @@ namespace IWBTM.Game.Helpers
 {
     public class CollisionHelper
     {
-        public static bool Collided(Vector2 position, Vector2 size, Vector2 tilePosition, char tile)
+        public static bool Collided(Vector2 position, Vector2 size, Tile tile)
         {
             var rectanglePoints = createRectanglePoints(position, size);
-            var trianglePoints = createTrianglePoints(tilePosition, tile);
+            var trianglePoints = createTrianglePoints(tile);
 
             if (lineCollision(rectanglePoints[0], rectanglePoints[1], trianglePoints[0], trianglePoints[1]))
                 return true;
@@ -53,36 +53,36 @@ namespace IWBTM.Game.Helpers
             return false;
         }
 
-        private static List<Vector2> createTrianglePoints(Vector2 tilePosition, char tile)
+        private static List<Vector2> createTrianglePoints(Tile tile)
         {
             var list = new List<Vector2>();
 
-            var cornerPosition = tilePosition * Tile.SIZE;
+            var cornerPosition = tile.Position;
 
-            switch (tile)
+            switch (tile.Type)
             {
-                case 'q': // bottom
+                case TileType.SpikeBottom:
                     list.Add(cornerPosition);
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2, cornerPosition.Y + Tile.SIZE));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2 - 0.5f, cornerPosition.Y + Tile.SIZE - 1));
                     break;
 
-                case 'w': // top
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE, cornerPosition.Y + Tile.SIZE));
+                case TileType.SpikeTop:
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2 - 0.5f, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE - 1));
                     break;
 
-                case 'e': // left
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE / 2));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE, cornerPosition.Y + Tile.SIZE));
+                case TileType.SpikeLeft:
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE / 2 - 0.5f));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE - 1));
                     break;
 
-                case 'r': // right
+                case TileType.SpikeRight:
                     list.Add(cornerPosition);
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE, cornerPosition.Y + Tile.SIZE / 2));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE / 2 - 0.5f));
                     break;
             }
 
@@ -91,12 +91,13 @@ namespace IWBTM.Game.Helpers
 
         private static List<Vector2> createRectanglePoints(Vector2 position, Vector2 size)
         {
-            var list = new List<Vector2>();
-
-            list.Add(new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f));
-            list.Add(new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f));
-            list.Add(new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f));
-            list.Add(new Vector2(position.X + size.X / 2f, position.Y + size.Y / 2f));
+            var list = new List<Vector2>
+            {
+                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f),
+                new Vector2(position.X + size.X / 2f - 1, position.Y - size.Y / 2f),
+                new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f - 1),
+                new Vector2(position.X + size.X / 2f - 1, position.Y + size.Y / 2f - 1)
+            };
 
             return list;
         }

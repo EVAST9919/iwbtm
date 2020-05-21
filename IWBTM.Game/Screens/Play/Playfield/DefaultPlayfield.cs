@@ -38,7 +38,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
         [BackgroundDependencyLoader]
         private void load(AudioManager audio)
         {
-            DrawableRoom drawableRoom;
+            DrawableRoom drawableRoom = new DrawableRoom(room);
+            dependencies.Cache(drawableRoom);
 
             Size = BASE_SIZE;
             Anchor = Anchor.Centre;
@@ -50,8 +51,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                drawableRoom = new DrawableRoom(room),
-                Player = new DefaultPlayer(room)
+                drawableRoom,
+                Player = new DefaultPlayer
                 {
                     OnDeath = onDeath,
                     OnRespawn = onRespawn
@@ -60,8 +61,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
             });
 
             track = audio.Tracks.Get("Ghost Rule");
-
-            dependencies.Cache(drawableRoom);
         }
 
         protected override void LoadComplete()
