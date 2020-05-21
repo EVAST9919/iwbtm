@@ -8,6 +8,7 @@ using System.Linq;
 using osuTK.Input;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -46,7 +47,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public Vector2 PlayerSpawnPosition() => objectsLayer.GetPlayerSpawnPosition();
 
-        private Tile tileToPlace;
+        private DrawableTile tileToPlace;
         private Vector2 mousePosition;
 
         protected override bool OnMouseMove(MouseMoveEvent e)
@@ -57,7 +58,7 @@ namespace IWBTM.Game.Screens.Edit
             mousePosition = e.MousePosition;
 
             if (!hoverLayer.Any())
-                hoverLayer.Child = tileToPlace = new Tile(Selected.Value)
+                hoverLayer.Child = tileToPlace = new DrawableTile(Selected.Value)
                 {
                     Alpha = 0.5f
                 };
@@ -113,7 +114,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public static Vector2 GetSnappedPosition(Vector2 input)
         {
-            return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT)) * Tile.SIZE;
+            return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT)) * DrawableTile.SIZE;
         }
     }
 }

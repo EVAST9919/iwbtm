@@ -8,12 +8,12 @@ using osu.Framework.Graphics;
 using osuTK;
 using System;
 using osu.Framework.Bindables;
-using IWBTM.Game.Rooms;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
@@ -73,7 +73,7 @@ namespace IWBTM.Game.Screens.Play.Player
                             Anchor = Anchor.BottomCentre,
                             Origin = Anchor.BottomCentre,
                             X = -1.5f,
-                            Size = new Vector2(Tile.SIZE)
+                            Size = new Vector2(DrawableTile.SIZE)
                         },
                         hitbox = new Container
                         {
@@ -121,8 +121,8 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (savedPosition == default)
             {
-                var position = drawableRoom.GetPlayerSpawnPosition();
-                Player.Position = new Vector2(position.X + 16, position.Y + Tile.SIZE - PlayerSize().Y / 2f);
+                var position = drawableRoom.Room.PlayerSpawnPosition;
+                Player.Position = new Vector2(position.X + 16, position.Y + DrawableTile.SIZE - PlayerSize().Y / 2f);
                 rightwards = true;
             }
             else
@@ -258,41 +258,41 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = Player.Y - PlayerSize().Y / 2;
             var playerBottomBorderPosition = Player.Y + PlayerSize().Y / 2 - 1;
 
-            var topLeftTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var topRightTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
-            var bottomLeftTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
-            var bottomRightTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
+            var topLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
+            var topRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
+            var bottomLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
+            var bottomRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
 
-            if (Tile.IsSpike(topLeftTile?.Type))
+            if (DrawableTile.IsSpike(topLeftDrawableTile?.Type))
             {
-                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), topLeftTile))
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), topLeftDrawableTile))
                 {
                     onDeath();
                     return;
                 }
             }
 
-            if (Tile.IsSpike(topRightTile?.Type))
+            if (DrawableTile.IsSpike(topRightDrawableTile?.Type))
             {
-                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), topRightTile))
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), topRightDrawableTile))
                 {
                     onDeath();
                     return;
                 }
             }
 
-            if (Tile.IsSpike(bottomLeftTile?.Type))
+            if (DrawableTile.IsSpike(bottomLeftDrawableTile?.Type))
             {
-                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), bottomLeftTile))
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), bottomLeftDrawableTile))
                 {
                     onDeath();
                     return;
                 }
             }
 
-            if (Tile.IsSpike(bottomRightTile?.Type))
+            if (DrawableTile.IsSpike(bottomRightDrawableTile?.Type))
             {
-                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), bottomRightTile))
+                if (CollisionHelper.Collided(PlayerPosition(), PlayerSize(), bottomRightDrawableTile))
                 {
                     onDeath();
                     return;
@@ -313,13 +313,13 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = Player.Y - PlayerSize().Y / 2;
             var playerMiddleBorderPosition = Player.Y + PlayerSize().Y / 2 - 1;
 
-            var topTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
-            var middleTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition));
+            var topDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
+            var middleDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition));
 
-            if (Tile.IsSolid(topTile?.Type) || Tile.IsSolid(middleTile?.Type))
+            if (DrawableTile.IsSolid(topDrawableTile?.Type) || DrawableTile.IsSolid(middleDrawableTile?.Type))
             {
-                var closestTilePosition = Math.Min(topTile?.X ?? double.MaxValue, middleTile?.X ?? double.MaxValue);
-                Player.X = (float)closestTilePosition - PlayerSize().X / 2;
+                var closestDrawableTilePosition = Math.Min(topDrawableTile?.X ?? double.MaxValue, middleDrawableTile?.X ?? double.MaxValue);
+                Player.X = (float)closestDrawableTilePosition - PlayerSize().X / 2;
             }
             else
             {
@@ -334,13 +334,13 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = Player.Y - PlayerSize().Y / 2;
             var playerMiddleBorderPosition = Player.Y + PlayerSize().Y / 2 - 1;
 
-            var topTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var middleTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition));
+            var topDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
+            var middleDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition));
 
-            if (Tile.IsSolid(topTile?.Type) || Tile.IsSolid(middleTile?.Type))
+            if (DrawableTile.IsSolid(topDrawableTile?.Type) || DrawableTile.IsSolid(middleDrawableTile?.Type))
             {
-                var closestTilePosition = Math.Max(topTile?.X ?? double.MinValue, middleTile?.X ?? double.MinValue);
-                Player.X = (float)closestTilePosition + Tile.SIZE + PlayerSize().X / 2;
+                var closestDrawableTilePosition = Math.Max(topDrawableTile?.X ?? double.MinValue, middleDrawableTile?.X ?? double.MinValue);
+                Player.X = (float)closestDrawableTilePosition + DrawableTile.SIZE + PlayerSize().X / 2;
             }
             else
             {
@@ -354,13 +354,13 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = Player.X - PlayerSize().X / 2;
             var playerRightBorderPosition = Player.X + PlayerSize().X / 2 - 1;
 
-            var leftTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var rightTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
+            var leftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
+            var rightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
 
-            if (Tile.IsSolid(leftTile?.Type) || Tile.IsSolid(rightTile?.Type))
+            if (DrawableTile.IsSolid(leftDrawableTile?.Type) || DrawableTile.IsSolid(rightDrawableTile?.Type))
             {
-                var closestTilePosition = Math.Max(leftTile?.Y ?? double.MinValue, rightTile?.Y ?? double.MinValue);
-                Player.Y = (float)closestTilePosition + Tile.SIZE + PlayerSize().Y / 2;
+                var closestDrawableTilePosition = Math.Max(leftDrawableTile?.Y ?? double.MinValue, rightDrawableTile?.Y ?? double.MinValue);
+                Player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + PlayerSize().Y / 2;
                 verticalSpeed = 0;
             }
         }
@@ -371,13 +371,13 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = Player.X - PlayerSize().X / 2;
             var playerRightBorderPosition = Player.X + PlayerSize().X / 2 - 1;
 
-            var leftTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
-            var rightTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
+            var leftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
+            var rightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
 
-            if (Tile.IsSolid(leftTile?.Type) || Tile.IsSolid(rightTile?.Type))
+            if (DrawableTile.IsSolid(leftDrawableTile?.Type) || DrawableTile.IsSolid(rightDrawableTile?.Type))
             {
-                var closestTilePosition = Math.Min(leftTile?.Y ?? double.MaxValue, rightTile?.Y ?? double.MaxValue);
-                Player.Y = (float)closestTilePosition - PlayerSize().Y / 2;
+                var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
+                Player.Y = (float)closestDrawableTilePosition - PlayerSize().Y / 2;
                 resetJumpLogic();
             }
             else

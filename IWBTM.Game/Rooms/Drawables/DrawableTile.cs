@@ -4,9 +4,9 @@ using osu.Framework.Allocation;
 using System;
 using osuTK;
 
-namespace IWBTM.Game.Screens.Play.Playfield
+namespace IWBTM.Game.Rooms.Drawables
 {
-    public class Tile : Sprite
+    public class DrawableTile : Sprite
     {
         public const int SIZE = 32;
 
@@ -18,7 +18,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
         public readonly TileType Type;
 
-        public Tile(TileType type)
+        public DrawableTile(TileType type)
         {
             Type = type;
             Size = new Vector2(SIZE);

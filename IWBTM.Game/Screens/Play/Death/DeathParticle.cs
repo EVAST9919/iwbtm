@@ -1,13 +1,12 @@
 ﻿using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
-using IWBTM.Game.Screens.Play.Playfield;
 using osuTK;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Utils;
-using osu.Framework.Graphics.Shapes;
 using System;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Death
 {
@@ -26,7 +25,7 @@ namespace IWBTM.Game.Screens.Play.Death
 
             Origin = Anchor.Centre;
             Position = position;
-            Size = new Vector2(Tile.SIZE);
+            Size = new Vector2(DrawableTile.SIZE);
         }
 
         private Sprite glow;

@@ -13,6 +13,7 @@ using IWBTM.Game.Overlays;
 using osu.Framework.Graphics.UserInterface;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Helpers;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens
 {

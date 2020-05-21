@@ -4,9 +4,9 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
-using IWBTM.Game.Rooms;
 using System;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
@@ -56,13 +56,13 @@ namespace IWBTM.Game.Screens.Play.Player
 
             var tile = drawableRoom.GetTileAtPixel(Position);
 
-            if (Tile.IsSolid(tile?.Type))
+            if (DrawableTile.IsSolid(tile?.Type))
             {
                 Expire();
                 return;
             }
 
-            if (Tile.IsSave(tile?.Type))
+            if (DrawableTile.IsSave(tile?.Type))
             {
                 ((SaveTile)tile).Activate();
                 OnSave?.Invoke();

@@ -10,6 +10,7 @@ using osuTK;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Death;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {

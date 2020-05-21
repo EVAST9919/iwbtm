@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics.Containers;
 using osuTK;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace IWBTM.Game.Screens.Edit
 {
-    public class ObjectsLayer : Container<Tile>
+    public class ObjectsLayer : Container<DrawableTile>
     {
         public ObjectsLayer()
         {
@@ -29,9 +30,9 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            Tile placed = null;
+            DrawableTile placed = null;
 
-            foreach (Tile child in Children)
+            foreach (var child in Children)
             {
                 if (child.Position == snappedPosition)
                 {
@@ -57,7 +58,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             var snappedPosition = BluePrint.GetSnappedPosition(position);
 
-            foreach (Tile child in Children)
+            foreach (var child in Children)
             {
                 if (child.Position == snappedPosition)
                 {
@@ -75,7 +76,7 @@ namespace IWBTM.Game.Screens.Edit
                     child.Expire();
             }
 
-            foreach (Tile child in Children)
+            foreach (var child in Children)
             {
                 if (child.Position == position)
                 {
@@ -97,7 +98,7 @@ namespace IWBTM.Game.Screens.Edit
 
                     if (!Room.TileIsEmpty(tile))
                     {
-                        addTile(DrawableRoom.GetTileType(tile), new Vector2(i * Tile.SIZE, j * Tile.SIZE));
+                        addTile(DrawableRoom.GetTileType(tile), new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE));
                     }
                 }
             }
@@ -107,7 +108,7 @@ namespace IWBTM.Game.Screens.Edit
 
         private void addTile(TileType tile, Vector2 position)
         {
-            Add(new Tile(tile)
+            Add(new DrawableTile(tile)
             {
                 Position = position
             });
@@ -121,11 +122,11 @@ namespace IWBTM.Game.Screens.Edit
             {
                 for (int i = 0; i < DefaultPlayfield.TILES_WIDTH; i++)
                 {
-                    Tile tile = null;
+                    DrawableTile tile = null;
 
-                    foreach (Tile child in Children)
+                    foreach (var child in Children)
                     {
-                        if (child.Position == new Vector2(i * Tile.SIZE, j * Tile.SIZE))
+                        if (child.Position == new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE))
                         {
                             tile = child;
                             break;
@@ -141,7 +142,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public Vector2 GetPlayerSpawnPosition()
         {
-            Tile player = null;
+            DrawableTile player = null;
 
             foreach (var child in Children)
             {

@@ -4,7 +4,7 @@ using osuTK;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using System;
-using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -38,7 +38,7 @@ namespace IWBTM.Game.Screens.Edit
             public ObjectSelectorTabItem(TileType value)
                 : base(value)
             {
-                Size = new Vector2(Tile.SIZE);
+                Size = new Vector2(DrawableTile.SIZE);
 
                 Children = new Drawable[]
                 {
@@ -47,7 +47,7 @@ namespace IWBTM.Game.Screens.Edit
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.White,
                     },
-                    new Tile(value)
+                    new DrawableTile(value)
                     {
                         Scale = new Vector2(0.8f),
                         Anchor = Anchor.Centre,

@@ -1,4 +1,4 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Rooms.Drawables;
 using osuTK;
 using System.Collections.Generic;
 
@@ -6,7 +6,7 @@ namespace IWBTM.Game.Helpers
 {
     public class CollisionHelper
     {
-        public static bool Collided(Vector2 position, Vector2 size, Tile tile)
+        public static bool Collided(Vector2 position, Vector2 size, DrawableTile tile)
         {
             var rectanglePoints = createRectanglePoints(position, size);
             var trianglePoints = createTrianglePoints(tile);
@@ -53,7 +53,7 @@ namespace IWBTM.Game.Helpers
             return false;
         }
 
-        private static List<Vector2> createTrianglePoints(Tile tile)
+        private static List<Vector2> createTrianglePoints(DrawableTile tile)
         {
             var list = new List<Vector2>();
 
@@ -63,26 +63,26 @@ namespace IWBTM.Game.Helpers
             {
                 case TileType.SpikeBottom:
                     list.Add(cornerPosition);
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2 - 0.5f, cornerPosition.Y + Tile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE - 1, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE / 2 - 0.5f, cornerPosition.Y + DrawableTile.SIZE - 1));
                     break;
 
                 case TileType.SpikeTop:
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE - 1));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE / 2 - 0.5f, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + DrawableTile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE / 2 - 0.5f, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE - 1, cornerPosition.Y + DrawableTile.SIZE - 1));
                     break;
 
                 case TileType.SpikeLeft:
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE / 2 - 0.5f));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + DrawableTile.SIZE / 2 - 0.5f));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE - 1, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE - 1, cornerPosition.Y + DrawableTile.SIZE - 1));
                     break;
 
                 case TileType.SpikeRight:
                     list.Add(cornerPosition);
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + Tile.SIZE - 1));
-                    list.Add(new Vector2(cornerPosition.X + Tile.SIZE - 1, cornerPosition.Y + Tile.SIZE / 2 - 0.5f));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + DrawableTile.SIZE - 1));
+                    list.Add(new Vector2(cornerPosition.X + DrawableTile.SIZE - 1, cornerPosition.Y + DrawableTile.SIZE / 2 - 0.5f));
                     break;
             }
 

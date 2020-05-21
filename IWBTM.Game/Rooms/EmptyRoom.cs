@@ -1,4 +1,4 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Rooms.Drawables;
 using osuTK;
 
 namespace IWBTM.Game.Rooms
@@ -6,7 +6,7 @@ namespace IWBTM.Game.Rooms
     public class EmptyRoom : Room
     {
         public EmptyRoom()
-            : base("Empty", layout, new Vector2(12 * Tile.SIZE, 17 * Tile.SIZE))
+            : base("Empty", layout, new Vector2(12 * DrawableTile.SIZE, 17 * DrawableTile.SIZE))
         {
         }
 

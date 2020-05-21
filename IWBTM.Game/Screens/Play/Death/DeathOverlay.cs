@@ -9,7 +9,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using IWBTM.Game.Helpers;
-using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Death
 {
@@ -37,7 +37,7 @@ namespace IWBTM.Game.Screens.Play.Death
                 },
                 circle = new Sprite
                 {
-                    Size = new Vector2(Tile.SIZE * 6),
+                    Size = new Vector2(DrawableTile.SIZE * 5),
                     Origin = Anchor.Centre,
                     Scale = Vector2.Zero,
                     Alpha = 0,

@@ -4,16 +4,17 @@ using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
 
-namespace IWBTM.Game.Rooms
+namespace IWBTM.Game.Rooms.Drawables
 {
-    public class DrawableRoom : Container<Tile>
+    public class DrawableRoom : Container<DrawableTile>
     {
-        private readonly Room room;
+        public Room Room { get; private set; }
+
         private readonly bool showPlayerSpawn;
 
         public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
-            this.room = room;
+            Room = room;
             this.showPlayerSpawn = showPlayerSpawn;
 
             Size = DefaultPlayfield.BASE_SIZE;
@@ -26,12 +27,12 @@ namespace IWBTM.Game.Rooms
             {
                 for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
                 {
-                    var tile = room.GetTileAt(i, j);
+                    var tile = Room.GetTileAt(i, j);
 
                     if (!Room.TileIsEmpty(tile))
                     {
                         var type = GetTileType(tile);
-                        var position = new Vector2(i * Tile.SIZE, j * Tile.SIZE);
+                        var position = new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE);
 
                         if (type == TileType.Save)
                         {
@@ -42,7 +43,7 @@ namespace IWBTM.Game.Rooms
                         }
                         else
                         {
-                            Add(new Tile(type)
+                            Add(new DrawableTile(type)
                             {
                                 Position = position
                             });
@@ -53,30 +54,28 @@ namespace IWBTM.Game.Rooms
 
             if (showPlayerSpawn)
             {
-                Add(new Tile(TileType.PlayerStart)
+                Add(new DrawableTile(TileType.PlayerStart)
                 {
-                    Position = room.PlayerSpawnPosition
+                    Position = Room.PlayerSpawnPosition
                 });
             }
         }
 
-        public Tile GetTileAtPixel(Vector2 pixelPosition)
+        public DrawableTile GetTileAtPixel(Vector2 pixelPosition)
         {
-            foreach(var child in Children)
+            foreach (var child in Children)
             {
                 var tilePosition = child.Position;
 
-                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + Tile.SIZE - 1)
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + DrawableTile.SIZE - 1)
                 {
-                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + Tile.SIZE - 1)
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + DrawableTile.SIZE - 1)
                         return child;
                 }
             }
 
             return null;
         }
-
-        public Vector2 GetPlayerSpawnPosition() => room.PlayerSpawnPosition;
 
         public static TileType GetTileType(char input)
         {

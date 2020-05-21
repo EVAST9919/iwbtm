@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -16,7 +17,7 @@ namespace IWBTM.Game.Screens.Edit
             {
                 AddInternal(new VerticalLine
                 {
-                    X = i * Tile.SIZE
+                    X = i * DrawableTile.SIZE
                 });
             }
 
@@ -24,7 +25,7 @@ namespace IWBTM.Game.Screens.Edit
             {
                 AddInternal(new HorizontalLine
                 {
-                    Y = i * Tile.SIZE
+                    Y = i * DrawableTile.SIZE
                 });
             }
         }

@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Bindables;
 using osu.Framework.Input.Events;
-using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Edit
 {

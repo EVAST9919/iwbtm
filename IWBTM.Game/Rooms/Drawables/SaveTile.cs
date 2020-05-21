@@ -1,6 +1,6 @@
-﻿namespace IWBTM.Game.Screens.Play.Playfield
+﻿namespace IWBTM.Game.Rooms.Drawables
 {
-    public class SaveTile : Tile
+    public class SaveTile : DrawableTile
     {
         public SaveTile()
             : base(TileType.Save)

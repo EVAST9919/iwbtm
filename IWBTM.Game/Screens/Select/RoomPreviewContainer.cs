@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
