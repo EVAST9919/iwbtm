@@ -8,8 +8,8 @@ using osu.Framework.Audio;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
-using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
+using IWBTM.Game.Screens.Play.Playfield;
 
 namespace IWBTM.Game.Screens.Play.Death
 {
@@ -21,6 +21,7 @@ namespace IWBTM.Game.Screens.Play.Death
         private LetterboxOverlay letterbox;
         private DrawableSample deathSample;
         private Container<DeathParticle> particles;
+        private Sprite circle;
 
         [BackgroundDependencyLoader]
         private void load(AudioManager audio, TextureStore textures)
@@ -32,6 +33,15 @@ namespace IWBTM.Game.Screens.Play.Death
                 particles = new Container<DeathParticle>
                 {
                     RelativeSizeAxes = Axes.Both
+                },
+                circle = new Sprite
+                {
+                    Size = new Vector2(Tile.SIZE * 6),
+                    Origin = Anchor.Centre,
+                    Scale = Vector2.Zero,
+                    Alpha = 0,
+                    AlwaysPresent = true,
+                    Texture = textures.Get("death-circle")
                 },
                 tint = new Box
                 {
@@ -53,7 +63,7 @@ namespace IWBTM.Game.Screens.Play.Death
                     Size = new Vector2(0.8f),
                     FillMode = FillMode.Fit,
                     Texture = textures.Get("game-over"),
-                    Alpha = 0
+                    Alpha = 0,
                 },
                 letterbox = new LetterboxOverlay(),
                 deathSample = new DrawableSample(audio.Samples.Get("death")),
@@ -79,11 +89,21 @@ namespace IWBTM.Game.Screens.Play.Death
                 var particle = new DeathParticle(position, speedVector);
                 particles.Add(particle);
             }
+
+            circle.Position = position;
+            circle.FadeIn().Delay(250).FadeOut(750, Easing.Out);
+            circle.Colour = Color4.White;
+            circle.FadeColour(Color4.Red, 1000, Easing.Out);
+            circle.ScaleTo(1, 1000, Easing.Out);
         }
 
         public void Restore()
         {
             particles.Clear();
+
+            circle.ClearTransforms();
+            circle.ScaleTo(0);
+            circle.FadeOut();
 
             tint.FadeOut();
 
