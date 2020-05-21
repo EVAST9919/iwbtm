@@ -1,34 +1,22 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
-using osuTK;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Rooms
 {
     public class BossRoom : Room
     {
         public BossRoom()
-            : base("Miku", layout, new Vector2(2 * DrawableTile.SIZE, 17 * DrawableTile.SIZE))
         {
+            Tiles = new List<Tile>
+            {
+                new Tile
+                {
+                    Type = TileType.PlayerStart,
+                    PositionX = 2 * DrawableTile.SIZE,
+                    PositionY = 17 * DrawableTile.SIZE
+                }
+            };
+            Name = "Miku";
         }
-
-        private static readonly string layout =
-            "+XXXXXXXXXXXXXXXXXXXXXX+" +
-            "-                      -" +
-            "-                      -" +
-            "-  +XXX+  +XXX+        -" +
-            "-                      -" +
-            "-                      -" +
-            "-  +XXX+               -" +
-            "-         +XXX+        -" +
-            "-                      -" +
-            "-  +XXX+               -" +
-            "-                      -" +
-            "-         +XXX+        -" +
-            "-  +XXX+               -" +
-            "-                      -" +
-            "-                      -" +
-            "-  +XXX+  +XXX+        -" +
-            "-                      -" +
-            "-                      -" +
-            "+XXXXXXXXXXXXXXXXXXXXXX+";
     }
 }

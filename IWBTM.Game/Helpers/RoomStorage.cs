@@ -1,5 +1,5 @@
 ﻿using IWBTM.Game.Rooms;
-using osuTK;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
@@ -18,11 +18,10 @@ namespace IWBTM.Game.Helpers
             {
                 using (StreamReader sr = File.OpenText(file))
                 {
-                    var layout = sr.ReadLine();
-                    var x = sr.ReadLine();
-                    var y = sr.ReadLine();
+                    var text = sr.ReadLine();
+                    sr.Close();
 
-                    rooms.Add(new Room(file.Substring(6), layout, new Vector2(float.Parse(x), float.Parse(y))));
+                    rooms.Add(JsonConvert.DeserializeObject<Room>(text));
                 }
             }
 
@@ -34,16 +33,23 @@ namespace IWBTM.Game.Helpers
             File.Delete($"Rooms/{name}");
         }
 
-        public static void CreateRoom(string filename, string layout, Vector2 playerPosition)
+        public static void CreateRoom(string filename, List<Tile> tiles)
         {
-            if (!Directory.Exists("Rooms"))
+            var file = new Room
+            {
+                Tiles = tiles,
+                Name = filename,
+            };
+
+            string jsonResult = JsonConvert.SerializeObject(file);
+
+            if (!Directory.Exists("ooms"))
                 Directory.CreateDirectory("Rooms");
 
             using (StreamWriter sw = File.CreateText($"Rooms/{filename}"))
             {
-                sw.WriteLine(layout);
-                sw.WriteLine(playerPosition.X.ToString());
-                sw.WriteLine(playerPosition.Y.ToString());
+                sw.WriteLine(jsonResult.ToString());
+                sw.Close();
             }
         }
     }

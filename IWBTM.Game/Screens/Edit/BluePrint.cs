@@ -9,6 +9,7 @@ using osuTK.Input;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -43,7 +44,15 @@ namespace IWBTM.Game.Screens.Edit
             }
         }
 
-        public string Layout() => objectsLayer.GetLayout();
+        public List<Tile> GetTiles()
+        {
+            var tiles = new List<Tile>();
+
+            foreach (var dt in objectsLayer.Children)
+                tiles.Add(dt.Tile);
+
+            return tiles;
+        }
 
         public Vector2 PlayerSpawnPosition() => objectsLayer.GetPlayerSpawnPosition();
 
@@ -58,7 +67,10 @@ namespace IWBTM.Game.Screens.Edit
             mousePosition = e.MousePosition;
 
             if (!hoverLayer.Any())
-                hoverLayer.Child = tileToPlace = new DrawableTile(Selected.Value)
+                hoverLayer.Child = tileToPlace = new DrawableTile(new Tile
+                {
+                    Type = Selected.Value
+                })
                 {
                     Alpha = 0.5f
                 };

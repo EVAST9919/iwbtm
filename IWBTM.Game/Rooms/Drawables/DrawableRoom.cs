@@ -1,5 +1,4 @@
 ﻿using IWBTM.Game.Screens.Play.Playfield;
-using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System;
@@ -10,54 +9,33 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         public Room Room { get; private set; }
 
-        private readonly bool showPlayerSpawn;
+        public Vector2 PlayerSpawnPosition { get; private set; }
 
         public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
             Room = room;
-            this.showPlayerSpawn = showPlayerSpawn;
 
             Size = DefaultPlayfield.BASE_SIZE;
-        }
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            for (int i = 0; i < DefaultPlayfield.TILES_WIDTH; i++)
+            foreach (var t in Room.Tiles)
             {
-                for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
+                if (t.Type == TileType.Save)
                 {
-                    var tile = Room.GetTileAt(i, j);
-
-                    if (!Room.TileIsEmpty(tile))
-                    {
-                        var type = GetTileType(tile);
-                        var position = new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE);
-
-                        if (type == TileType.Save)
-                        {
-                            Add(new SaveTile
-                            {
-                                Position = position
-                            });
-                        }
-                        else
-                        {
-                            Add(new DrawableTile(type)
-                            {
-                                Position = position
-                            });
-                        }
-                    }
+                    Add(new SaveTile(t));
+                    continue;
                 }
-            }
 
-            if (showPlayerSpawn)
-            {
-                Add(new DrawableTile(TileType.PlayerStart)
+                if (t.Type == TileType.PlayerStart)
                 {
-                    Position = Room.PlayerSpawnPosition
-                });
+                    PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
+
+                    if (showPlayerSpawn)
+                        Add(new DrawableTile(t));
+
+                    continue;
+                }
+
+                Add(new DrawableTile(t));
             }
         }
 

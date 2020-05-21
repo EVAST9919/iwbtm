@@ -16,12 +16,13 @@ namespace IWBTM.Game.Rooms.Drawables
         [Resolved]
         protected TextureStore Textures { get; private set; }
 
-        public readonly TileType Type;
+        public Tile Tile { get; private set; }
 
-        public DrawableTile(TileType type)
+        public DrawableTile(Tile tile)
         {
-            Type = type;
+            Tile = tile;
             Size = new Vector2(SIZE);
+            Position = new Vector2(tile.PositionX, tile.PositionY);
         }
 
         [BackgroundDependencyLoader]
@@ -30,9 +31,16 @@ namespace IWBTM.Game.Rooms.Drawables
             Texture = getTexture();
         }
 
+        public Tile ToTile() => new Tile
+        {
+            PositionX = (int)X,
+            PositionY = (int)Y,
+            Type = Tile.Type
+        };
+
         private Texture getTexture()
         {
-            switch (Type)
+            switch (Tile.Type)
             {
                 case TileType.PlatformCorner:
                     return pixelTextures.Get("Tiles/platform-corner");
@@ -62,7 +70,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     return Textures.Get("Tiles/save");
             }
 
-            throw new NotImplementedException($"{Type} tile is not implemented");
+            throw new NotImplementedException("Tile is not implemented");
         }
 
         public static bool IsSolid(TileType? type)

@@ -56,13 +56,13 @@ namespace IWBTM.Game.Screens.Play.Player
 
             var tile = drawableRoom.GetTileAtPixel(Position);
 
-            if (DrawableTile.IsSolid(tile?.Type))
+            if (DrawableTile.IsSolid(tile?.Tile.Type))
             {
                 Expire();
                 return;
             }
 
-            if (DrawableTile.IsSave(tile?.Type))
+            if (DrawableTile.IsSave(tile?.Tile.Type))
             {
                 ((SaveTile)tile).Activate();
                 OnSave?.Invoke();

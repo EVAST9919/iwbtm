@@ -59,7 +59,7 @@ namespace IWBTM.Game.Helpers
 
             var cornerPosition = tile.Position;
 
-            switch (tile.Type)
+            switch (tile.Tile.Type)
             {
                 case TileType.SpikeBottom:
                     list.Add(cornerPosition);

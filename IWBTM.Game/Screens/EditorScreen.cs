@@ -14,6 +14,7 @@ using osu.Framework.Graphics.UserInterface;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Rooms.Drawables;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -102,7 +103,11 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            this.Push(new TestGameplayScreen(new Room("", blueprint.Layout(), blueprint.PlayerSpawnPosition())));
+            this.Push(new TestGameplayScreen(new Room
+            {
+                Name = "",
+                Tiles = blueprint.GetTiles()
+            }));
         }
 
         private void save()
@@ -123,7 +128,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            RoomStorage.CreateRoom(name, blueprint.Layout(), playerPosition);
+            RoomStorage.CreateRoom(name, blueprint.GetTiles());
             notifications.Push("Room has been saved!", NotificationState.Good);
         }
 

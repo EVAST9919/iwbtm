@@ -1,34 +1,22 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
-using osuTK;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Rooms
 {
     public class EmptyRoom : Room
     {
         public EmptyRoom()
-            : base("Empty", layout, new Vector2(12 * DrawableTile.SIZE, 17 * DrawableTile.SIZE))
         {
+            Tiles = new List<Tile>
+            {
+                new Tile
+                {
+                    Type = TileType.PlayerStart,
+                    PositionX = 12 * DrawableTile.SIZE,
+                    PositionY = 17 * DrawableTile.SIZE
+                }
+            };
+            Name = "Empty";
         }
-
-        private static readonly string layout =
-            "+XXXXXXXXXXXXXXXXXXXXXX+" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "-                      -" +
-            "+XXXXXXXXXXXXXXXXXXXXXX+";
     }
 }

@@ -14,17 +14,17 @@ namespace IWBTM.Game.Screens.Edit
             Size = DefaultPlayfield.BASE_SIZE;
         }
 
-        public void TryPlace(TileType tile, Vector2 position)
+        public void TryPlace(TileType type, Vector2 position)
         {
             var snappedPosition = BluePrint.GetSnappedPosition(position);
 
             if (!this.Any())
             {
-                addTile(tile, snappedPosition);
+                addTile(type, snappedPosition);
                 return;
             }
 
-            if (tile == TileType.PlayerStart)
+            if (type == TileType.PlayerStart)
             {
                 tryPlacePlayerStart(snappedPosition);
                 return;
@@ -43,15 +43,15 @@ namespace IWBTM.Game.Screens.Edit
 
             if (placed == null)
             {
-                addTile(tile, snappedPosition);
+                addTile(type, snappedPosition);
                 return;
             }
 
-            if (placed.Type == tile)
+            if (placed.Tile.Type == type)
                 return;
 
             placed.Expire();
-            addTile(tile, snappedPosition);
+            addTile(type, snappedPosition);
         }
 
         public void TryRemove(Vector2 position)
@@ -72,7 +72,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             foreach (var child in Children)
             {
-                if (child.Type == TileType.PlayerStart)
+                if (child.Tile.Type == TileType.PlayerStart)
                     child.Expire();
             }
 
@@ -88,56 +88,22 @@ namespace IWBTM.Game.Screens.Edit
             addTile(TileType.PlayerStart, position);
         }
 
+        private void addTile(TileType type, Vector2 position)
+        {
+            var tile = new Tile
+            {
+                Type = type,
+                PositionX = (int)position.X,
+                PositionY = (int)position.Y
+            };
+
+            Add(new DrawableTile(tile));
+        }
+
         public void SetRoom(Room room)
         {
-            for (int i = 0; i < DefaultPlayfield.TILES_WIDTH; i++)
-            {
-                for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
-                {
-                    var tile = room.GetTileAt(i, j);
-
-                    if (!Room.TileIsEmpty(tile))
-                    {
-                        addTile(DrawableRoom.GetTileType(tile), new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE));
-                    }
-                }
-            }
-
-            addTile(TileType.PlayerStart, room.PlayerSpawnPosition);
-        }
-
-        private void addTile(TileType tile, Vector2 position)
-        {
-            Add(new DrawableTile(tile)
-            {
-                Position = position
-            });
-        }
-
-        public string GetLayout()
-        {
-            string s = string.Empty;
-
-            for (int j = 0; j < DefaultPlayfield.TILES_HEIGHT; j++)
-            {
-                for (int i = 0; i < DefaultPlayfield.TILES_WIDTH; i++)
-                {
-                    DrawableTile tile = null;
-
-                    foreach (var child in Children)
-                    {
-                        if (child.Position == new Vector2(i * DrawableTile.SIZE, j * DrawableTile.SIZE))
-                        {
-                            tile = child;
-                            break;
-                        }
-                    }
-
-                    s += getChar(tile?.Type);
-                }
-            }
-
-            return s;
+            foreach (var t in room.Tiles)
+                Add(new DrawableTile(t));
         }
 
         public Vector2 GetPlayerSpawnPosition()
@@ -146,7 +112,7 @@ namespace IWBTM.Game.Screens.Edit
 
             foreach (var child in Children)
             {
-                if (child.Type == TileType.PlayerStart)
+                if (child.Tile.Type == TileType.PlayerStart)
                 {
                     player = child;
                     break;
@@ -157,39 +123,6 @@ namespace IWBTM.Game.Screens.Edit
                 return new Vector2(-1);
 
             return BluePrint.GetSnappedPosition(player.Position);
-        }
-
-        private static char getChar(TileType? type)
-        {
-            switch (type)
-            {
-                case TileType.PlatformCorner:
-                    return '+';
-
-                case TileType.PlatformMiddle:
-                    return 'X';
-
-                case TileType.PlatformMiddleRotated:
-                    return '-';
-
-                case TileType.SpikeBottom:
-                    return 'q';
-
-                case TileType.SpikeTop:
-                    return 'w';
-
-                case TileType.SpikeLeft:
-                    return 'e';
-
-                case TileType.SpikeRight:
-                    return 'r';
-
-                case TileType.Save:
-                    return 's';
-
-                default:
-                    return ' ';
-            }
         }
     }
 }

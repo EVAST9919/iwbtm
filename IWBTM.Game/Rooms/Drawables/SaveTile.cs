@@ -2,8 +2,8 @@
 {
     public class SaveTile : DrawableTile
     {
-        public SaveTile()
-            : base(TileType.Save)
+        public SaveTile(Tile t)
+            : base(t)
         {
         }
 

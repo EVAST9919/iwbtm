@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using System;
 using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -47,7 +48,10 @@ namespace IWBTM.Game.Screens.Edit
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.White,
                     },
-                    new DrawableTile(value)
+                    new DrawableTile(new Tile
+                    {
+                        Type = value
+                    })
                     {
                         Scale = new Vector2(0.8f),
                         Anchor = Anchor.Centre,
