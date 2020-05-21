@@ -102,7 +102,7 @@ namespace IWBTM.Game.Screens.Edit
                 }
             }
 
-            addTile(TileType.PlayerStart, room.GetPlayerSpawnPosition());
+            addTile(TileType.PlayerStart, room.PlayerSpawnPosition);
         }
 
         private void addTile(TileType tile, Vector2 position)

@@ -27,6 +27,7 @@ namespace IWBTM.Game.Screens.Play.Death
         private void load(AudioManager audio, TextureStore textures)
         {
             RelativeSizeAxes = Axes.Both;
+            Masking = true;
 
             AddRangeInternal(new Drawable[]
             {

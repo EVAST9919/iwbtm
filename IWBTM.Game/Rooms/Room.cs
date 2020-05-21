@@ -9,14 +9,15 @@ namespace IWBTM.Game.Rooms
     {
         public string Name { get; private set; }
 
+        public Vector2 PlayerSpawnPosition { get; private set; }
+
         private readonly string layout;
-        private readonly Vector2 playerSpawnPosition;
 
         public Room(string name, string layout, Vector2 playerSpawnPosition)
         {
             Name = name;
+            PlayerSpawnPosition = playerSpawnPosition;
             this.layout = layout;
-            this.playerSpawnPosition = playerSpawnPosition;
 
             if (layout.Length != DefaultPlayfield.TILES_HEIGHT * DefaultPlayfield.TILES_WIDTH)
                 throw new IndexOutOfRangeException("Playfield size is incorrect");
@@ -31,7 +32,5 @@ namespace IWBTM.Game.Rooms
         }
 
         public static bool TileIsEmpty(char c) => c == ' ';
-
-        public Vector2 GetPlayerSpawnPosition() => playerSpawnPosition;
     }
 }

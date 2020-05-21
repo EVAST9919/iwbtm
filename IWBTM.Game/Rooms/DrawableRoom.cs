@@ -55,7 +55,7 @@ namespace IWBTM.Game.Rooms
             {
                 Add(new Tile(TileType.PlayerStart)
                 {
-                    Position = room.GetPlayerSpawnPosition()
+                    Position = room.PlayerSpawnPosition
                 });
             }
         }
@@ -76,7 +76,7 @@ namespace IWBTM.Game.Rooms
             return null;
         }
 
-        public Vector2 GetPlayerSpawnPosition() => room.GetPlayerSpawnPosition();
+        public Vector2 GetPlayerSpawnPosition() => room.PlayerSpawnPosition;
 
         public static TileType GetTileType(char input)
         {
