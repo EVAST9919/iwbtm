@@ -60,17 +60,6 @@ namespace IWBTM.Game.Rooms
             }
         }
 
-        public Tile GetTileAt(int x, int y)
-        {
-            foreach (var child in Children)
-            {
-                if (child.Position == new Vector2(x * Tile.SIZE, y * Tile.SIZE))
-                    return child;
-            }
-
-            return null;
-        }
-
         public Tile GetTileAtPixel(Vector2 pixelPosition)
         {
             foreach(var child in Children)
