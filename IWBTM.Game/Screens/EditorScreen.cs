@@ -1,20 +1,15 @@
 ﻿using IWBTM.Game.Screens.Edit;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
-using osuTK.Graphics;
 using osu.Framework.Screens;
 using osu.Framework.Allocation;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Overlays;
-using osu.Framework.Graphics.UserInterface;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Rooms.Drawables;
-using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -24,13 +19,12 @@ namespace IWBTM.Game.Screens
 
         private SpriteText selectedText;
         private BluePrint blueprint;
-        private EditorTextbox textbox;
 
         private NotificationOverlay notifications;
 
         public EditorScreen(Room room = null)
         {
-            ObjectSelector selector;
+            ToolBar toolbar;
 
             AddRangeInternal(new Drawable[]
             {
@@ -43,43 +37,20 @@ namespace IWBTM.Game.Screens
                     Scale = new Vector2(0.9f),
                     Child = blueprint = new BluePrint(room)
                 },
-                selector = new ObjectSelector
+                toolbar = new ToolBar
                 {
                     Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight
-                },
-                new Container
-                {
-                    Anchor = Anchor.BottomRight,
-                    Origin = Anchor.BottomRight,
-                    Margin = new MarginPadding(50),
-                    AutoSizeAxes = Axes.Both,
-                    Child = new FillFlowContainer
-                    {
-                        AutoSizeAxes = Axes.Both,
-                        Direction = FillDirection.Vertical,
-                        Spacing = new Vector2(10),
-                        Children = new Drawable[]
-                        {
-                            textbox = new EditorTextbox(),
-                            new EditorButon("Test")
-                            {
-                                Action = test
-                            },
-                            new EditorButon("Save")
-                            {
-                                Action = save
-                            }
-                        }
-                    }
+                    Origin = Anchor.TopRight,
+                    OnTest = test,
+                    OnSave = save
                 }
             });
 
-            selectedObject.BindTo(selector.Selected);
-            blueprint.Selected.BindTo(selector.Selected);
+            selectedObject.BindTo(toolbar.Selected);
+            blueprint.Selected.BindTo(toolbar.Selected);
 
             if (room != null)
-                textbox.Text = room.Name;
+                toolbar.SetRoomName(room.Name);
         }
 
         [BackgroundDependencyLoader]
@@ -110,7 +81,7 @@ namespace IWBTM.Game.Screens
             }));
         }
 
-        private void save()
+        private void save(string name)
         {
             var playerPosition = blueprint.PlayerSpawnPosition();
 
@@ -120,8 +91,6 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            var name = textbox.Text;
-
             if (string.IsNullOrEmpty(name))
             {
                 notifications.Push("Set room name", NotificationState.Bad);
@@ -130,38 +99,6 @@ namespace IWBTM.Game.Screens
 
             RoomStorage.CreateRoom(name, blueprint.GetTiles());
             notifications.Push("Room has been saved!", NotificationState.Good);
-        }
-
-        private class EditorTextbox : BasicTextBox
-        {
-            public EditorTextbox()
-            {
-                Height = 30;
-                Width = 100;
-            }
-        }
-
-        private class EditorButon : ClickableContainer
-        {
-            public EditorButon(string text)
-            {
-                Size = new Vector2(100, 50);
-
-                AddRangeInternal(new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both
-                    },
-                    new SpriteText
-                    {
-                        Text = text,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Color4.Black
-                    }
-                });
-            }
         }
     }
 }
