@@ -44,6 +44,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private double verticalSpeed;
         private double horizontalSpeed;
         private bool midAir;
+        private bool rightwards = true;
 
         public readonly Container Player;
         private readonly BulletsContainer bulletsContainer;
@@ -59,7 +60,7 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 bulletsContainer = new BulletsContainer
                 {
-                    OnSave = () => savedPosition = (PlayerPosition(), Rightwards())
+                    OnSave = () => savedPosition = (PlayerPosition(), rightwards)
                 },
                 Player = new Container
                 {
@@ -111,8 +112,6 @@ namespace IWBTM.Game.Screens.Play.Player
         public Vector2 PlayerPosition() => Player.Position;
 
         public Vector2 PlayerSize() => Player.Size;
-
-        public PlayerState GetCurrentState() => state.Value;
 
         public void SetSavedPosition()
         {
@@ -182,10 +181,6 @@ namespace IWBTM.Game.Screens.Play.Player
 
             base.OnKeyUp(e);
         }
-
-        private bool rightwards = true;
-
-        public bool Rightwards() => rightwards;
 
         protected override void Update()
         {
