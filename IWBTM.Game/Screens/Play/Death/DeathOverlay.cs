@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Rooms.Drawables;
+using System;
 
 namespace IWBTM.Game.Screens.Play.Death
 {
@@ -79,14 +80,11 @@ namespace IWBTM.Game.Screens.Play.Death
             letterbox.Delay(330).FadeIn(700);
             deathSample.Play();
 
-            var time = Clock.CurrentTime;
-
-            float[] xRandoms = MathExtensions.Get(time, 50, -5, 5);
-            float[] yRandoms = MathExtensions.Get(time * 2, 50, -2, 5);
+            var rand = new Random((int)DateTime.Now.Ticks);
 
             for (int i = 0; i < 50; i++)
             {
-                var speedVector = new Vector2(xRandoms[i] + playerSpeed.X, yRandoms[i]);
+                var speedVector = new Vector2(MathExtensions.Map((float)rand.NextDouble(), 0, 1, -7, 7) + playerSpeed.X, MathExtensions.Map((float)rand.NextDouble(), 0, 1, -5, 5));
                 var particle = new DeathParticle(position, speedVector);
                 particles.Add(particle);
             }
