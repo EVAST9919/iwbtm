@@ -106,7 +106,7 @@ namespace IWBTM.Game.Screens.Play.Death
             circle.ScaleTo(0);
             circle.FadeOut();
 
-            tint.FadeOut();
+            tint.FadeOut(50);
 
             blackFlash.ClearTransforms();
             blackFlash.FadeOut();
@@ -115,7 +115,7 @@ namespace IWBTM.Game.Screens.Play.Death
             sprite.FadeOut();
 
             letterbox.ClearTransforms();
-            letterbox.FadeOut();
+            letterbox.FadeOut(50);
 
             deathSample.Stop();
         }

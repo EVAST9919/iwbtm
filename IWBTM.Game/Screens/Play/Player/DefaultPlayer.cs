@@ -34,7 +34,6 @@ namespace IWBTM.Game.Screens.Play.Player
         private DrawableRoom drawableRoom { get; set; }
 
         public Action<Vector2, Vector2> OnDeath;
-        public Action OnRespawn;
 
         private DrawableSample jump;
         private DrawableSample doubleJump;
@@ -117,8 +116,6 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public void SetSavedPosition()
         {
-            OnRespawn?.Invoke();
-
             if (savedPosition == default)
             {
                 var position = drawableRoom.PlayerSpawnPosition;

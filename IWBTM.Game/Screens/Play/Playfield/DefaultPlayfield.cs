@@ -11,6 +11,7 @@ using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Rooms.Drawables;
+using osu.Framework.Graphics.Audio;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -23,6 +24,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
         private Track track;
+        private DrawableSample roomEntering;
 
         private DependencyContainer dependencies;
 
@@ -55,10 +57,10 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 drawableRoom,
                 Player = new DefaultPlayer
                 {
-                    OnDeath = onDeath,
-                    OnRespawn = onRespawn
+                    OnDeath = onDeath
                 },
-                deathOverlay = new DeathOverlay()
+                deathOverlay = new DeathOverlay(),
+                roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
             track = audio.Tracks.Get("Ghost Rule");
@@ -73,11 +75,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
         private void onDeath(Vector2 position, Vector2 speed)
         {
             deathOverlay.Play(position, speed);
-        }
-
-        private void onRespawn()
-        {
-            deathOverlay.Restore();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -99,6 +96,9 @@ namespace IWBTM.Game.Screens.Play.Playfield
         {
             //track.Restart();
             Player.SetSavedPosition();
+            deathOverlay.Restore();
+            roomEntering.Stop();
+            roomEntering.Play();
         }
     }
 }
