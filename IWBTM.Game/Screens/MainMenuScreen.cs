@@ -75,19 +75,19 @@ namespace IWBTM.Game.Screens
         public override void OnEntering(IScreen last)
         {
             base.OnEntering(last);
-            track.Start();
+            //track.Start();
         }
 
         public override void OnSuspending(IScreen next)
         {
             base.OnSuspending(next);
-            track.Stop();
+            //track.Stop();
         }
 
         public override void OnResuming(IScreen last)
         {
             base.OnResuming(last);
-            track.Start();
+            //track.Start();
         }
 
         private class Button : ClickableContainer
