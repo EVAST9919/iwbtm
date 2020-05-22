@@ -16,6 +16,7 @@ namespace IWBTM.Game.Screens.Edit
     public class BluePrint : CompositeDrawable
     {
         public readonly Bindable<TileType> Selected = new Bindable<TileType>();
+        public readonly Bindable<int> SnapValue = new Bindable<int>();
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
@@ -24,6 +25,8 @@ namespace IWBTM.Game.Screens.Edit
         {
             Size = DefaultPlayfield.BASE_SIZE;
 
+            Grid grid;
+
             AddRangeInternal(new Drawable[]
             {
                 new Box
@@ -31,7 +34,7 @@ namespace IWBTM.Game.Screens.Edit
                     RelativeSizeAxes = Axes.Both
                 },
                 objectsLayer = new ObjectsLayer(),
-                new Grid(),
+                grid = new Grid(),
                 hoverLayer = new Container
                 {
                     RelativeSizeAxes = Axes.Both
@@ -42,6 +45,9 @@ namespace IWBTM.Game.Screens.Edit
             {
                 objectsLayer.SetRoom(room);
             }
+
+            grid.Current.BindTo(SnapValue);
+            objectsLayer.SnapValue.BindTo(SnapValue);
         }
 
         public List<Tile> GetTiles()
@@ -67,15 +73,12 @@ namespace IWBTM.Game.Screens.Edit
             mousePosition = e.MousePosition;
 
             if (!hoverLayer.Any())
-                hoverLayer.Child = tileToPlace = new DrawableTile(new Tile
-                {
-                    Type = Selected.Value
-                })
+                hoverLayer.Child = tileToPlace = new DrawableTile(new Tile { Type = Selected.Value })
                 {
                     Alpha = 0.5f
                 };
 
-            tileToPlace.Position = GetSnappedPosition(mousePosition);
+            tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
 
             var buttons = e.CurrentState.Mouse.Buttons;
 
@@ -124,9 +127,9 @@ namespace IWBTM.Game.Screens.Edit
             return base.OnMouseDown(e);
         }
 
-        public static Vector2 GetSnappedPosition(Vector2 input)
+        public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)
         {
-            return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * DefaultPlayfield.TILES_WIDTH), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * DefaultPlayfield.TILES_HEIGHT)) * DrawableTile.SIZE;
+            return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * (DefaultPlayfield.TILES_WIDTH * DrawableTile.SIZE / snapValue)), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * (DefaultPlayfield.TILES_HEIGHT * DrawableTile.SIZE / snapValue))) * snapValue;
         }
     }
 }

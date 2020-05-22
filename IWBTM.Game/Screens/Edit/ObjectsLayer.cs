@@ -1,6 +1,7 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace IWBTM.Game.Screens.Edit
 {
     public class ObjectsLayer : Container<DrawableTile>
     {
+        public readonly Bindable<int> SnapValue = new Bindable<int>();
+
         public ObjectsLayer()
         {
             Size = DefaultPlayfield.BASE_SIZE;
@@ -16,7 +19,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public void TryPlace(TileType type, Vector2 position)
         {
-            var snappedPosition = BluePrint.GetSnappedPosition(position);
+            var snappedPosition = BluePrint.GetSnappedPosition(position, SnapValue.Value);
 
             if (!this.Any())
             {
@@ -56,14 +59,12 @@ namespace IWBTM.Game.Screens.Edit
 
         public void TryRemove(Vector2 position)
         {
-            var snappedPosition = BluePrint.GetSnappedPosition(position);
-
             foreach (var child in Children)
             {
-                if (child.Position == snappedPosition)
+                if (position.X >= child.X && position.X <= child.X + DrawableTile.SIZE - 1)
                 {
-                    child.Expire();
-                    break;
+                    if (position.Y >= child.Y && position.Y <= child.Y + DrawableTile.SIZE - 1)
+                        child.Expire();
                 }
             }
         }
@@ -122,7 +123,7 @@ namespace IWBTM.Game.Screens.Edit
             if (player == null)
                 return new Vector2(-1);
 
-            return BluePrint.GetSnappedPosition(player.Position);
+            return BluePrint.GetSnappedPosition(player.Position, SnapValue.Value);
         }
     }
 }

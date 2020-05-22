@@ -14,12 +14,14 @@ namespace IWBTM.Game.Screens.Edit
 {
     public class ToolBar : CompositeDrawable
     {
-        public Bindable<TileType> Selected => control.Current;
+        public Bindable<TileType> Selected => selector.Current;
+        public Bindable<int> SnapValue => snapControl.Current;
 
         public Action OnTest;
         public Action<string> OnSave;
 
-        private readonly ObjectSelectorTabControl control;
+        private readonly ObjectSelectorTabControl selector;
+        private readonly GridSnapTabControl snapControl;
         private readonly EditorTextbox textbox;
 
         public ToolBar()
@@ -55,12 +57,47 @@ namespace IWBTM.Game.Screens.Edit
                             {
                                 RelativeSizeAxes = Axes.Both,
                                 Padding = new MarginPadding(5),
-                                Child = control = new ObjectSelectorTabControl()
+                                Child = new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Vertical,
+                                    Spacing = new Vector2(0, 5),
+                                    Children = new Drawable[]
+                                    {
+                                        new SpriteText
+                                        {
+                                            Text = "Object selector",
+                                            Colour = Color4.Black
+                                        },
+                                        selector = new ObjectSelectorTabControl()
+                                    }
+                                }
                             }
                         },
                         new Drawable[]
                         {
-                            Empty()
+                            new Container
+                            {
+                                RelativeSizeAxes = Axes.Both,
+                                Padding = new MarginPadding(5),
+                                Child = new FillFlowContainer
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    AutoSizeAxes = Axes.Y,
+                                    Direction = FillDirection.Vertical,
+                                    Spacing = new Vector2(0, 5),
+                                    Children = new Drawable[]
+                                    {
+                                        new SpriteText
+                                        {
+                                            Text = "Snap distance",
+                                            Colour = Color4.Black
+                                        },
+                                        snapControl = new GridSnapTabControl()
+                                    }
+                                }
+                            }
                         },
                         new Drawable[]
                         {

@@ -17,8 +17,8 @@ namespace IWBTM.Game.Screens
     {
         private readonly Bindable<TileType> selectedObject = new Bindable<TileType>();
 
-        private SpriteText selectedText;
-        private BluePrint blueprint;
+        private readonly SpriteText selectedItemText;
+        private readonly BluePrint blueprint;
 
         private NotificationOverlay notifications;
 
@@ -28,7 +28,7 @@ namespace IWBTM.Game.Screens
 
             AddRangeInternal(new Drawable[]
             {
-                selectedText = new SpriteText
+                selectedItemText = new SpriteText
                 {
                     Margin = new MarginPadding(10),
                 },
@@ -48,6 +48,7 @@ namespace IWBTM.Game.Screens
 
             selectedObject.BindTo(toolbar.Selected);
             blueprint.Selected.BindTo(toolbar.Selected);
+            blueprint.SnapValue.BindTo(toolbar.SnapValue);
 
             if (room != null)
                 toolbar.SetRoomName(room.Name);
@@ -63,7 +64,7 @@ namespace IWBTM.Game.Screens
         {
             base.LoadComplete();
 
-            selectedObject.BindValueChanged(newSelected => selectedText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
+            selectedObject.BindValueChanged(newSelected => selectedItemText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
         }
 
         private void test()
