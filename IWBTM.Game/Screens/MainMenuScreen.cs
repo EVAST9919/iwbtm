@@ -1,4 +1,7 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Track;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -12,6 +15,8 @@ namespace IWBTM.Game.Screens
 {
     public class MainMenuScreen : Screen
     {
+        private Track track;
+
         public MainMenuScreen()
         {
             AddInternal(new SpriteText
@@ -44,6 +49,14 @@ namespace IWBTM.Game.Screens
             });
         }
 
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
+        {
+            audio.VolumeTrack.Value = 0.3f;
+            track = audio.Tracks.Get("main menu");
+            track.Looping = true;
+        }
+
         protected override bool OnKeyDown(KeyDownEvent e)
         {
             if (!e.Repeat)
@@ -57,6 +70,24 @@ namespace IWBTM.Game.Screens
             };
 
             return base.OnKeyDown(e);
+        }
+
+        public override void OnEntering(IScreen last)
+        {
+            base.OnEntering(last);
+            track.Start();
+        }
+
+        public override void OnSuspending(IScreen next)
+        {
+            base.OnSuspending(next);
+            track.Stop();
+        }
+
+        public override void OnResuming(IScreen last)
+        {
+            base.OnResuming(last);
+            track.Start();
         }
 
         private class Button : ClickableContainer
