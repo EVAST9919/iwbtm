@@ -137,8 +137,20 @@ namespace IWBTM.Game.Screens.Play.Player
             updateVisual();
         }
 
+        private bool died;
+
+        private void onDeath()
+        {
+            died = true;
+            Player.Hide();
+            OnDeath?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
+        }
+
         protected override bool OnKeyDown(KeyDownEvent e)
         {
+            if (died)
+                return false;
+
             if (!e.Repeat)
             {
                 switch (e.Key)
@@ -156,17 +168,11 @@ namespace IWBTM.Game.Screens.Play.Player
             return base.OnKeyDown(e);
         }
 
-        private bool died;
-
-        private void onDeath()
-        {
-            died = true;
-            Player.Hide();
-            OnDeath?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
-        }
-
         protected override void OnKeyUp(KeyUpEvent e)
         {
+            if (died)
+                return;
+
             switch (e.Key)
             {
                 case Key.ShiftLeft:
@@ -396,9 +402,6 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void onJumpPressed()
         {
-            if (died)
-                return;
-
             if (availableJumpCount == 0)
                 return;
 
