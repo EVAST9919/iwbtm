@@ -27,15 +27,9 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            if (type == TileType.PlayerStart)
+            if (type == TileType.PlayerStart || type == TileType.Warp)
             {
-                tryPlacePlayerStart(snappedPosition);
-                return;
-            }
-
-            if (type == TileType.Warp)
-            {
-                tryPlaceWarp(snappedPosition);
+                addUniqueTile(snappedPosition, type);
                 return;
             }
 
@@ -75,11 +69,11 @@ namespace IWBTM.Game.Screens.Edit
             }
         }
 
-        private void tryPlacePlayerStart(Vector2 position)
+        private void addUniqueTile(Vector2 position, TileType type)
         {
             foreach (var child in Children)
             {
-                if (child.Tile.Type == TileType.PlayerStart)
+                if (child.Tile.Type == type)
                     child.Expire();
             }
 
@@ -92,27 +86,7 @@ namespace IWBTM.Game.Screens.Edit
                 }
             }
 
-            addTile(TileType.PlayerStart, position);
-        }
-
-        private void tryPlaceWarp(Vector2 position)
-        {
-            foreach (var child in Children)
-            {
-                if (child.Tile.Type == TileType.Warp)
-                    child.Expire();
-            }
-
-            foreach (var child in Children)
-            {
-                if (child.Position == position)
-                {
-                    child.Expire();
-                    break;
-                }
-            }
-
-            addTile(TileType.Warp, position);
+            addTile(type, position);
         }
 
         private void addTile(TileType type, Vector2 position)
