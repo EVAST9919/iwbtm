@@ -1,4 +1,5 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Play.Player;
 using osuTK;
 using System.Collections.Generic;
 
@@ -6,9 +7,9 @@ namespace IWBTM.Game.Helpers
 {
     public class CollisionHelper
     {
-        public static bool Collided(Vector2 position, Vector2 size, DrawableTile tile)
+        public static bool Collided(Vector2 position, DrawableTile tile)
         {
-            var rectanglePoints = createRectanglePoints(position, size);
+            var rectanglePoints = createRectanglePoints(position);
             var trianglePoints = createTrianglePoints(tile);
 
             if (lineCollision(rectanglePoints[0], rectanglePoints[1], trianglePoints[0], trianglePoints[1]))
@@ -94,8 +95,10 @@ namespace IWBTM.Game.Helpers
             return list;
         }
 
-        private static List<Vector2> createRectanglePoints(Vector2 position, Vector2 size)
+        private static List<Vector2> createRectanglePoints(Vector2 position)
         {
+            var size = DefaultPlayer.SIZE;
+
             var list = new List<Vector2>
             {
                 new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f),
@@ -107,26 +110,16 @@ namespace IWBTM.Game.Helpers
             return list;
         }
 
-        private static bool lineCollision(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2)
+        private static bool lineCollision(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
-            Vector2 b = Vector2.Subtract(a2, a1);
-            Vector2 d = Vector2.Subtract(b2, b1);
-            float bDotDPerp = b.X * d.Y - b.Y * d.X;
+            float uA = ((d.X - c.X) * (a.Y - c.Y) - (d.Y - c.Y) * (a.X - c.X)) / ((d.Y - c.Y) * (b.X - a.X) - (d.X - c.X) * (b.Y - a.Y));
+            float uB = ((b.X - a.X) * (a.Y - c.Y) - (b.Y - a.Y) * (a.X - c.X)) / ((d.Y - c.Y) * (b.X - a.X) - (d.X - c.X) * (b.Y - a.Y));
 
-            // if b dot d == 0, it means the lines are parallel so have infinite intersection points
-            if (bDotDPerp == 0)
-                return false;
+            // if uA and uB are between 0-1, lines are colliding
+            if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1)
+                return true;
 
-            Vector2 c = Vector2.Subtract(b1, a1);
-            float t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
-            if (t < 0 || t > 1)
-                return false;
-
-            float u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
-            if (u < 0 || u > 1)
-                return false;
-
-            return true;
+            return false;
         }
     }
 }
