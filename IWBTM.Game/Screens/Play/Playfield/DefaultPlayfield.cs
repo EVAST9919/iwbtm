@@ -25,7 +25,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
 
-        public Action Completed;
+        public Action<int> Completed;
 
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
@@ -108,7 +108,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
         private void onCompletion()
         {
-            Completed?.Invoke();
+            Completed?.Invoke(deathCount.Value);
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)

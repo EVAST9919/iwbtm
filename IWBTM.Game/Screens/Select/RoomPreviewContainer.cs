@@ -19,7 +19,7 @@ namespace IWBTM.Game.Screens.Select
             AddInternal(roomPreview = new PlayfieldAdjustmentContainer());
         }
 
-        public void Preview(Room room)
+        public void Preview(Room room, bool showPlayerSpawn = true)
         {
             roomPreview.Children = new Drawable[]
             {
@@ -27,7 +27,7 @@ namespace IWBTM.Game.Screens.Select
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new DrawableRoom(room, true)
+                new DrawableRoom(room, showPlayerSpawn)
             };
         }
     }

@@ -8,20 +8,26 @@ namespace IWBTM.Game.Screens
     {
         protected readonly DefaultPlayfield Playfield;
 
+        private readonly Room room;
+
         public GameplayScreen(Room room)
         {
+            this.room = room;
+
+            ValidForResume = false;
+
             AddInternal(new PlayfieldAdjustmentContainer
             {
                 Child = Playfield = new DefaultPlayfield(room)
                 {
-                    Completed = onCompletion
+                    Completed = OnCompletion
                 }
             });
         }
 
-        private void onCompletion()
+        protected virtual void OnCompletion(int deathCount)
         {
-            this.Exit();
+            this.Push(new ResultsScreen(deathCount, room));
         }
     }
 }

@@ -4,6 +4,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Screens;
 using osuTK;
 
 namespace IWBTM.Game.Screens
@@ -58,6 +59,11 @@ namespace IWBTM.Game.Screens
                 xPosition.Text = $"X: {playerPosition.X}";
                 yPosition.Text = $"Y: {playerPosition.Y}";
             }
+        }
+
+        protected override void OnCompletion(int deathCount)
+        {
+            this.Exit();
         }
     }
 }
