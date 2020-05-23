@@ -72,6 +72,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.Save:
                     return Textures.Get("Tiles/save");
+
+                case TileType.Warp:
+                    return Textures.Get("Tiles/warp");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -125,6 +128,17 @@ namespace IWBTM.Game.Rooms.Drawables
 
             return false;
         }
+
+        public static bool IsWarp(TileType? type)
+        {
+            if (type == null)
+                return false;
+
+            if (type == TileType.Warp)
+                return true;
+
+            return false;
+        }
     }
 
     public enum TileType
@@ -142,5 +156,6 @@ namespace IWBTM.Game.Rooms.Drawables
         SmallSpikeBottom,
         SmallSpikeLeft,
         SmallSpikeRight,
+        Warp
     }
 }

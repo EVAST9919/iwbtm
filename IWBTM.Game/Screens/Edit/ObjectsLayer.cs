@@ -33,6 +33,12 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
+            if (type == TileType.Warp)
+            {
+                tryPlaceWarp(snappedPosition);
+                return;
+            }
+
             DrawableTile placed = null;
 
             foreach (var child in Children)
@@ -87,6 +93,26 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             addTile(TileType.PlayerStart, position);
+        }
+
+        private void tryPlaceWarp(Vector2 position)
+        {
+            foreach (var child in Children)
+            {
+                if (child.Tile.Type == TileType.Warp)
+                    child.Expire();
+            }
+
+            foreach (var child in Children)
+            {
+                if (child.Position == position)
+                {
+                    child.Expire();
+                    break;
+                }
+            }
+
+            addTile(TileType.Warp, position);
         }
 
         private void addTile(TileType type, Vector2 position)
