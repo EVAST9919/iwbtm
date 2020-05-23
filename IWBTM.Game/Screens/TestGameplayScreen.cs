@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 using osuTK;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -61,7 +62,7 @@ namespace IWBTM.Game.Screens
             }
         }
 
-        protected override void OnCompletion(int deathCount)
+        protected override void OnCompletion(List<Vector2> deathSpots)
         {
             this.Exit();
         }

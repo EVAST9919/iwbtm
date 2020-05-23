@@ -16,6 +16,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Bindables;
 using osuTK.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -25,7 +26,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
 
-        public Action<int> Completed;
+        public Action<List<Vector2>> Completed;
 
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
@@ -33,6 +34,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
         private DrawableSample roomEntering;
         private SpriteText deathCountText;
         private readonly Bindable<int> deathCount = new Bindable<int>();
+
+        private readonly List<Vector2> deathSpots = new List<Vector2>();
 
         private DependencyContainer dependencies;
 
@@ -104,11 +107,12 @@ namespace IWBTM.Game.Screens.Play.Playfield
         {
             deathOverlay.Play(position, speed);
             deathCount.Value++;
+            deathSpots.Add(position);
         }
 
         private void onCompletion()
         {
-            Completed?.Invoke(deathCount.Value);
+            Completed?.Invoke(deathSpots);
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)

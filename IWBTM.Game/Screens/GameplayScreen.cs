@@ -1,6 +1,8 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Screens;
+using osuTK;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -25,9 +27,9 @@ namespace IWBTM.Game.Screens
             });
         }
 
-        protected virtual void OnCompletion(int deathCount)
+        protected virtual void OnCompletion(List<Vector2> deathSpots)
         {
-            this.Push(new ResultsScreen(deathCount, room));
+            this.Push(new ResultsScreen(deathSpots, room));
         }
     }
 }

@@ -4,12 +4,13 @@ using osu.Framework.Graphics;
 using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
     public class ResultsScreen : GameScreen
     {
-        public ResultsScreen(int deathCount, Room room)
+        public ResultsScreen(List<Vector2> deathSpots, Room room)
         {
             RoomPreviewContainer preview;
 
@@ -36,7 +37,7 @@ namespace IWBTM.Game.Screens
                         {
                             new SpriteText
                             {
-                                Text = $"Deaths: {deathCount}",
+                                Text = $"Deaths: {deathSpots.Count}",
                                 Font = FontUsage.Default.With(size: 40)
                             }
                         }
@@ -44,7 +45,7 @@ namespace IWBTM.Game.Screens
                 }
             });
 
-            preview.Preview(room, false);
+            preview.Preview(room, false, deathSpots);
         }
     }
 }
