@@ -309,6 +309,9 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkCompletion()
         {
+            if (died)
+                return;
+
             var tile = drawableRoom.GetTileAtPixel(PlayerPosition());
 
             if (DrawableTile.IsWarp(tile?.Tile.Type))
@@ -456,6 +459,9 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void updatePlayerState()
         {
+            if (died)
+                return;
+
             if (verticalSpeed < 0)
             {
                 state.Value = PlayerState.Fall;
