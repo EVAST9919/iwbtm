@@ -15,6 +15,7 @@ using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Bindables;
 using osuTK.Graphics;
+using System;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -23,6 +24,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public static readonly Vector2 BASE_SIZE = new Vector2(768, 608);
         public static readonly int TILES_WIDTH = 24;
         public static readonly int TILES_HEIGHT = 19;
+
+        public Action Completed;
 
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
@@ -62,7 +65,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 drawableRoom,
                 Player = new DefaultPlayer
                 {
-                    OnDeath = onDeath
+                    Died = onDeath,
+                    Completed = onCompletion
                 },
                 new FillFlowContainer
                 {
@@ -100,6 +104,11 @@ namespace IWBTM.Game.Screens.Play.Playfield
         {
             deathOverlay.Play(position, speed);
             deathCount.Value++;
+        }
+
+        private void onCompletion()
+        {
+            Completed?.Invoke();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)

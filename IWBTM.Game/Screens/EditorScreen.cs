@@ -69,9 +69,9 @@ namespace IWBTM.Game.Screens
 
         private void test()
         {
-            if (blueprint.PlayerSpawnPosition() == new Vector2(-1))
+            if (!blueprint.SpawnDefined())
             {
-                notifications.Push("Set player spawn position", NotificationState.Bad);
+                notifications.Push("Player spawn is not defined", NotificationState.Bad);
                 return;
             }
 
@@ -84,11 +84,15 @@ namespace IWBTM.Game.Screens
 
         private void save(string name)
         {
-            var playerPosition = blueprint.PlayerSpawnPosition();
-
-            if (playerPosition == new Vector2(-1))
+            if (!blueprint.SpawnDefined())
             {
-                notifications.Push("Set player spawn position", NotificationState.Bad);
+                notifications.Push("Player spawn is not defined", NotificationState.Bad);
+                return;
+            }
+
+            if (!blueprint.EndDefined())
+            {
+                notifications.Push("Room end is not defined", NotificationState.Bad);
                 return;
             }
 

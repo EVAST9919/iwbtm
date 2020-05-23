@@ -33,7 +33,11 @@ namespace IWBTM.Game.Screens.Play.Player
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
 
-        public Action<Vector2, Vector2> OnDeath;
+        public Action<Vector2, Vector2> Died;
+        public Action Completed;
+
+        private bool died;
+        private bool completed;
 
         private DrawableSample jump;
         private DrawableSample doubleJump;
@@ -136,18 +140,22 @@ namespace IWBTM.Game.Screens.Play.Player
             updateVisual();
         }
 
-        private bool died;
-
         private void onDeath()
         {
             died = true;
             Player.Hide();
-            OnDeath?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
+            Died?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
+        }
+
+        private void onCompletion()
+        {
+            completed = true;
+            Completed?.Invoke();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            if (died)
+            if (died || completed)
                 return false;
 
             if (!e.Repeat)
@@ -169,7 +177,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         protected override void OnKeyUp(KeyUpEvent e)
         {
-            if (died)
+            if (died || completed)
                 return;
 
             switch (e.Key)
@@ -186,7 +194,7 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             base.Update();
 
-            if (died)
+            if (died || completed)
                 return;
 
             checkBorders();
@@ -239,6 +247,7 @@ namespace IWBTM.Game.Screens.Play.Player
             }
 
             checkSpikes();
+            checkCompletion();
             updatePlayerState();
         }
 
@@ -295,6 +304,43 @@ namespace IWBTM.Game.Screens.Play.Player
                     onDeath();
                     return;
                 }
+            }
+        }
+
+        private void checkCompletion()
+        {
+            var playerLeftBorderPosition = Player.X - PlayerSize().X / 2;
+            var playerRightBorderPosition = Player.X + PlayerSize().X / 2 - 1;
+            var playerTopBorderPosition = Player.Y - PlayerSize().Y / 2;
+            var playerBottomBorderPosition = Player.Y + PlayerSize().Y / 2 - 1;
+
+            var topLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
+            var topRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
+            var bottomLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
+            var bottomRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
+
+            if (DrawableTile.IsWarp(topLeftDrawableTile?.Tile.Type))
+            {
+                onCompletion();
+                return;
+            }
+
+            if (DrawableTile.IsWarp(topRightDrawableTile?.Tile.Type))
+            {
+                onCompletion();
+                return;
+            }
+
+            if (DrawableTile.IsWarp(bottomLeftDrawableTile?.Tile.Type))
+            {
+                onCompletion();
+                return;
+            }
+
+            if (DrawableTile.IsWarp(bottomRightDrawableTile?.Tile.Type))
+            {
+                onCompletion();
+                return;
             }
         }
 

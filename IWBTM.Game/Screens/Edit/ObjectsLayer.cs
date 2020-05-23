@@ -107,23 +107,26 @@ namespace IWBTM.Game.Screens.Edit
                 Add(new DrawableTile(t));
         }
 
-        public Vector2 GetPlayerSpawnPosition()
+        public bool SpawnDefined()
         {
-            DrawableTile player = null;
-
             foreach (var child in Children)
             {
                 if (child.Tile.Type == TileType.PlayerStart)
-                {
-                    player = child;
-                    break;
-                }
+                    return true;
             }
 
-            if (player == null)
-                return new Vector2(-1);
+            return false;
+        }
 
-            return BluePrint.GetSnappedPosition(player.Position, SnapValue.Value);
+        public bool EndDefined()
+        {
+            foreach (var child in Children)
+            {
+                if (child.Tile.Type == TileType.Warp)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

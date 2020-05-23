@@ -60,7 +60,9 @@ namespace IWBTM.Game.Screens.Edit
             return tiles;
         }
 
-        public Vector2 PlayerSpawnPosition() => objectsLayer.GetPlayerSpawnPosition();
+        public bool SpawnDefined() => objectsLayer.SpawnDefined();
+
+        public bool EndDefined() => objectsLayer.EndDefined();
 
         private DrawableTile tileToPlace;
         private Vector2 mousePosition;
