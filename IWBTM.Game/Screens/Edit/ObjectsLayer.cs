@@ -61,9 +61,9 @@ namespace IWBTM.Game.Screens.Edit
         {
             foreach (var child in Children)
             {
-                if (position.X >= child.X && position.X <= child.X + DrawableTile.SIZE - 1)
+                if (position.X >= child.X && position.X <= child.X + child.Size.X - 1)
                 {
-                    if (position.Y >= child.Y && position.Y <= child.Y + DrawableTile.SIZE - 1)
+                    if (position.Y >= child.Y && position.Y <= child.Y + child.Size.Y - 1)
                         child.Expire();
                 }
             }

@@ -43,10 +43,11 @@ namespace IWBTM.Game.Rooms.Drawables
             foreach (var child in Children)
             {
                 var tilePosition = child.Position;
+                var tileSize = child.Size;
 
-                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + DrawableTile.SIZE - 1)
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + tileSize.X - 1)
                 {
-                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + DrawableTile.SIZE - 1)
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + tileSize.Y - 1)
                         return child;
                 }
             }

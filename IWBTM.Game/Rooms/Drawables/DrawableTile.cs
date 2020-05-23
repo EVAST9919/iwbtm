@@ -21,7 +21,7 @@ namespace IWBTM.Game.Rooms.Drawables
         public DrawableTile(Tile tile)
         {
             Tile = tile;
-            Size = new Vector2(SIZE);
+            Size = new Vector2(getSize(tile.Type));
             Position = new Vector2(tile.PositionX, tile.PositionY);
         }
 
@@ -54,15 +54,19 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.PlayerStart:
                     return Textures.Get("Tiles/player-start");
 
+                case TileType.SmallSpikeBottom:
                 case TileType.SpikeBottom:
                     return Textures.Get("Tiles/spike-bottom");
 
+                case TileType.SmallSpikeTop:
                 case TileType.SpikeTop:
                     return Textures.Get("Tiles/spike-top");
 
+                case TileType.SmallSpikeLeft:
                 case TileType.SpikeLeft:
                     return Textures.Get("Tiles/spike-left");
 
+                case TileType.SmallSpikeRight:
                 case TileType.SpikeRight:
                     return Textures.Get("Tiles/spike-right");
 
@@ -71,6 +75,21 @@ namespace IWBTM.Game.Rooms.Drawables
             }
 
             throw new NotImplementedException("Tile is not implemented");
+        }
+
+        private int getSize(TileType type)
+        {
+            switch (type)
+            {
+                case TileType.SmallSpikeBottom:
+                case TileType.SmallSpikeTop:
+                case TileType.SmallSpikeLeft:
+                case TileType.SmallSpikeRight:
+                    return SIZE / 2;
+
+                default:
+                    return SIZE;
+            }
         }
 
         public static bool IsSolid(TileType? type)
@@ -89,7 +108,8 @@ namespace IWBTM.Game.Rooms.Drawables
             if (type == null)
                 return false;
 
-            if (type == TileType.SpikeBottom || type == TileType.SpikeTop || type == TileType.SpikeLeft || type == TileType.SpikeRight)
+            if (type == TileType.SpikeBottom || type == TileType.SpikeTop || type == TileType.SpikeLeft || type == TileType.SpikeRight
+                || type == TileType.SmallSpikeBottom || type == TileType.SmallSpikeTop || type == TileType.SmallSpikeLeft || type == TileType.SmallSpikeRight)
                 return true;
 
             return false;
@@ -117,6 +137,10 @@ namespace IWBTM.Game.Rooms.Drawables
         SpikeBottom,
         SpikeLeft,
         SpikeRight,
-        Save
+        Save,
+        SmallSpikeTop,
+        SmallSpikeBottom,
+        SmallSpikeLeft,
+        SmallSpikeRight,
     }
 }
