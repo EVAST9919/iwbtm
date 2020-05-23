@@ -309,39 +309,10 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkCompletion()
         {
-            var playerLeftBorderPosition = Player.X - PlayerSize().X / 2;
-            var playerRightBorderPosition = Player.X + PlayerSize().X / 2 - 1;
-            var playerTopBorderPosition = Player.Y - PlayerSize().Y / 2;
-            var playerBottomBorderPosition = Player.Y + PlayerSize().Y / 2 - 1;
+            var tile = drawableRoom.GetTileAtPixel(PlayerPosition());
 
-            var topLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var topRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
-            var bottomLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
-            var bottomRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
-
-            if (DrawableTile.IsWarp(topLeftDrawableTile?.Tile.Type))
-            {
+            if (DrawableTile.IsWarp(tile?.Tile.Type))
                 onCompletion();
-                return;
-            }
-
-            if (DrawableTile.IsWarp(topRightDrawableTile?.Tile.Type))
-            {
-                onCompletion();
-                return;
-            }
-
-            if (DrawableTile.IsWarp(bottomLeftDrawableTile?.Tile.Type))
-            {
-                onCompletion();
-                return;
-            }
-
-            if (DrawableTile.IsWarp(bottomRightDrawableTile?.Tile.Type))
-            {
-                onCompletion();
-                return;
-            }
         }
 
         private void updateVisual()
