@@ -129,7 +129,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
             verticalSpeed = 0;
             midAir = true;
-            availableJumpCount = 2;
+            availableJumpCount = 1;
 
             died = false;
             Player.Show();
