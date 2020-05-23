@@ -44,7 +44,7 @@ namespace IWBTM.Game.Screens
                 }
             });
 
-            preview.Preview(room);
+            preview.Preview(room, false);
         }
     }
 }
