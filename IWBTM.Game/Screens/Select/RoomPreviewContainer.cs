@@ -37,12 +37,20 @@ namespace IWBTM.Game.Screens.Select
             {
                 foreach(var spot in deathSpots)
                 {
-                    roomPreview.Add(new Circle
+                    roomPreview.Add(new Container
                     {
                         Origin = Anchor.Centre,
-                        Size = new Vector2(5),
+                        Size = new Vector2(11, 21),
                         Position = spot,
-                        Colour = Color4.Red
+                        Masking = true,
+                        BorderColour = Color4.Red,
+                        BorderThickness = 2,
+                        Child = new Box
+                        {
+                            RelativeSizeAxes = Axes.Both,
+                            Colour = Color4.Red,
+                            Alpha = 0.5f
+                        }
                     });
                 }
             }
