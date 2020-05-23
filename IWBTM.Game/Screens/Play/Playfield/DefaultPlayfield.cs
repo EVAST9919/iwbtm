@@ -12,6 +12,9 @@ using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Rooms.Drawables;
 using osu.Framework.Graphics.Audio;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Bindables;
+using osuTK.Graphics;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -25,6 +28,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
         private DeathOverlay deathOverlay;
         private Track track;
         private DrawableSample roomEntering;
+        private SpriteText deathCountText;
+        private readonly Bindable<int> deathCount = new Bindable<int>();
 
         private DependencyContainer dependencies;
 
@@ -59,6 +64,23 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 {
                     OnDeath = onDeath
                 },
+                new FillFlowContainer
+                {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding(32 + 5),
+                    AutoSizeAxes = Axes.Both,
+                    Direction = FillDirection.Vertical,
+                    Spacing = new Vector2(0, 5),
+                    Children = new Drawable[]
+                    {
+                        deathCountText = new SpriteText
+                        {
+                            Colour = Color4.Black,
+                            Font = FontUsage.Default.With(size: 14)
+                        }
+                    }
+                },
                 deathOverlay = new DeathOverlay(),
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
@@ -69,12 +91,15 @@ namespace IWBTM.Game.Screens.Play.Playfield
         protected override void LoadComplete()
         {
             base.LoadComplete();
+
+            deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
         }
 
         private void onDeath(Vector2 position, Vector2 speed)
         {
             deathOverlay.Play(position, speed);
+            deathCount.Value++;
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
