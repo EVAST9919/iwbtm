@@ -23,6 +23,7 @@ namespace IWBTM.Game.Screens.Play.Death
         private DrawableSample deathSample;
         private Container<DeathParticle> particles;
         private Sprite circle;
+        private Box continueLayer;
 
         [BackgroundDependencyLoader]
         private void load(AudioManager audio, TextureStore textures)
@@ -67,6 +68,12 @@ namespace IWBTM.Game.Screens.Play.Death
                     Texture = textures.Get("game-over"),
                     Alpha = 0,
                 },
+                continueLayer = new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Alpha = 0,
+                    Colour = Color4.Black
+                },
                 letterbox = new LetterboxOverlay(),
                 deathSample = new DrawableSample(audio.Samples.Get("death")),
             });
@@ -104,7 +111,7 @@ namespace IWBTM.Game.Screens.Play.Death
             circle.ScaleTo(0);
             circle.FadeOut();
 
-            tint.FadeOut(50);
+            tint.FadeOut();
 
             blackFlash.ClearTransforms();
             blackFlash.FadeOut();
@@ -113,9 +120,11 @@ namespace IWBTM.Game.Screens.Play.Death
             sprite.FadeOut();
 
             letterbox.ClearTransforms();
-            letterbox.FadeOut(50);
+            letterbox.FadeOut();
 
             deathSample.Stop();
+
+            continueLayer.FadeOutFromOne(100);
         }
     }
 }
