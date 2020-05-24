@@ -53,7 +53,6 @@ namespace IWBTM.Game.Screens.Edit
             if (placed.Tile.Type == type)
                 return;
 
-            placed.Expire();
             addTile(type, snappedPosition);
         }
 
