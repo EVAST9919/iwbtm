@@ -43,7 +43,7 @@ namespace IWBTM.Game.Helpers
 
             string jsonResult = JsonConvert.SerializeObject(file);
 
-            if (!Directory.Exists("ooms"))
+            if (!Directory.Exists("Rooms"))
                 Directory.CreateDirectory("Rooms");
 
             using (StreamWriter sw = File.CreateText($"Rooms/{filename}"))
