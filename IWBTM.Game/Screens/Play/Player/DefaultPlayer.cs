@@ -260,49 +260,15 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkSpikes()
         {
-            var playerLeftBorderPosition = Player.X - SIZE.X / 2;
-            var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
-            var playerTopBorderPosition = Player.Y - SIZE.Y / 2;
-            var playerBottomBorderPosition = Player.Y + SIZE.Y / 2 - 1;
-
-            var topLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var topRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
-            var bottomLeftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
-            var bottomRightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
-
-            if (DrawableTile.IsSpike(topLeftDrawableTile?.Tile.Type))
+            foreach (var t in drawableRoom.Children)
             {
-                if (CollisionHelper.Collided(PlayerPosition(), topLeftDrawableTile))
+                if (DrawableTile.IsSpike(t.Tile.Type))
                 {
-                    onDeath();
-                    return;
-                }
-            }
-
-            if (DrawableTile.IsSpike(topRightDrawableTile?.Tile.Type))
-            {
-                if (CollisionHelper.Collided(PlayerPosition(), topRightDrawableTile))
-                {
-                    onDeath();
-                    return;
-                }
-            }
-
-            if (DrawableTile.IsSpike(bottomLeftDrawableTile?.Tile.Type))
-            {
-                if (CollisionHelper.Collided(PlayerPosition(), bottomLeftDrawableTile))
-                {
-                    onDeath();
-                    return;
-                }
-            }
-
-            if (DrawableTile.IsSpike(bottomRightDrawableTile?.Tile.Type))
-            {
-                if (CollisionHelper.Collided(PlayerPosition(), bottomRightDrawableTile))
-                {
-                    onDeath();
-                    return;
+                    if (CollisionHelper.Collided(PlayerPosition(), t))
+                    {
+                        onDeath();
+                        return;
+                    }
                 }
             }
         }
