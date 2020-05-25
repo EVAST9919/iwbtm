@@ -1,20 +1,22 @@
-﻿using osu.Framework.Allocation;
+﻿using IWBTM.Game.Overlays;
+using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
-using osuTK.Input;
 
 namespace IWBTM.Game.Screens
 {
-    public class MainMenuScreen : Screen
+    public class MainMenuScreen : GameScreen
     {
+        [Resolved]
+        private ConfirmationOverlay confirmationOverlay { get; set; }
+
         private Track track;
 
         public MainMenuScreen()
@@ -57,19 +59,9 @@ namespace IWBTM.Game.Screens
             track.Looping = true;
         }
 
-        protected override bool OnKeyDown(KeyDownEvent e)
+        protected override void OnExit()
         {
-            if (!e.Repeat)
-            {
-                switch (e.Key)
-                {
-                    case Key.Escape:
-                        Game.Exit();
-                        return true;
-                }
-            };
-
-            return base.OnKeyDown(e);
+            confirmationOverlay.Push("Are you sure you want to exit?", () => Game.Exit());
         }
 
         public override void OnEntering(IScreen last)

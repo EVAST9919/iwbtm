@@ -20,7 +20,11 @@ namespace IWBTM.Game.Screens
         private readonly SpriteText selectedItemText;
         private readonly BluePrint blueprint;
 
-        private NotificationOverlay notifications;
+        [Resolved]
+        private NotificationOverlay notifications { get; set; }
+
+        [Resolved]
+        private ConfirmationOverlay confirmationOverlay { get; set; }
 
         public EditorScreen(Room room = null)
         {
@@ -52,12 +56,6 @@ namespace IWBTM.Game.Screens
 
             if (room != null)
                 toolbar.SetRoomName(room.Name);
-        }
-
-        [BackgroundDependencyLoader]
-        private void load(NotificationOverlay notifications)
-        {
-            this.notifications = notifications;
         }
 
         protected override void LoadComplete()
@@ -104,6 +102,11 @@ namespace IWBTM.Game.Screens
 
             RoomStorage.CreateRoom(name, blueprint.GetTiles());
             notifications.Push("Room has been saved!", NotificationState.Good);
+        }
+
+        protected override void OnExit()
+        {
+            confirmationOverlay.Push("Are you sure you want to exit?", () => base.OnExit());
         }
     }
 }

@@ -13,12 +13,17 @@ namespace IWBTM.Game.Screens
                 switch (e.Key)
                 {
                     case Key.Escape:
-                        this.Exit();
+                        OnExit();
                         return true;
                 }
             };
 
             return base.OnKeyDown(e);
+        }
+
+        protected virtual void OnExit()
+        {
+            this.Exit();
         }
     }
 }

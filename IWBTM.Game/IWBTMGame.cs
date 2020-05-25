@@ -20,6 +20,9 @@ namespace IWBTM.Game
             NotificationOverlay notifications;
             dependencies.Cache(notifications = new NotificationOverlay());
 
+            ConfirmationOverlay confirmationOverlay;
+            dependencies.Cache(confirmationOverlay = new ConfirmationOverlay());
+
             ScreenStack screens = new ScreenStack();
             screens.Push(new MainMenuScreen());
 
@@ -30,6 +33,7 @@ namespace IWBTM.Game
                 {
                     screens,
                     notifications,
+                    confirmationOverlay
                 }
             });
         }
