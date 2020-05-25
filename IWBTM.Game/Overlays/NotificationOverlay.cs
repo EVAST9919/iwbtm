@@ -10,6 +10,8 @@ namespace IWBTM.Game.Overlays
     {
         private readonly FillFlowContainer<Notification> flow;
 
+        private int runningDepth;
+
         public NotificationOverlay()
         {
             RelativeSizeAxes = Axes.X;
@@ -26,8 +28,9 @@ namespace IWBTM.Game.Overlays
 
         public void Push(string text, NotificationState state)
         {
+            runningDepth--;
             var notification = new Notification(text, state);
-            flow.Add(notification);
+            flow.Insert(runningDepth, notification);
             notification.Delay(1500).FadeOut(500, Easing.OutQuint).Expire();
         }
 
@@ -37,6 +40,7 @@ namespace IWBTM.Game.Overlays
             {
                 RelativeSizeAxes = Axes.X;
                 Height = 30;
+                Y = -30;
                 Anchor = Anchor.TopCentre;
                 Origin = Anchor.TopCentre;
                 AddRangeInternal(new Drawable[]
@@ -53,6 +57,13 @@ namespace IWBTM.Game.Overlays
                         Text = text
                     }
                 });
+            }
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+
+                this.MoveToY(0, 200, Easing.OutQuint);
             }
         }
     }
