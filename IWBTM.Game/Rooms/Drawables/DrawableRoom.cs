@@ -6,35 +6,34 @@ namespace IWBTM.Game.Rooms.Drawables
 {
     public class DrawableRoom : Container<DrawableTile>
     {
-        public Room Room { get; private set; }
-
         public Vector2 PlayerSpawnPosition { get; private set; }
 
         public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
-            Room = room;
-
             Size = DefaultPlayfield.BASE_SIZE;
 
-            foreach (var t in Room.Tiles)
+            if (room != null)
             {
-                if (t.Type == TileType.Save)
+                foreach (var t in room.Tiles)
                 {
-                    Add(new SaveTile(t));
-                    continue;
+                    if (t.Type == TileType.Save)
+                    {
+                        Add(new SaveTile(t));
+                        continue;
+                    }
+
+                    if (t.Type == TileType.PlayerStart)
+                    {
+                        PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
+
+                        if (showPlayerSpawn)
+                            Add(new DrawableTile(t));
+
+                        continue;
+                    }
+
+                    Add(new DrawableTile(t));
                 }
-
-                if (t.Type == TileType.PlayerStart)
-                {
-                    PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
-
-                    if (showPlayerSpawn)
-                        Add(new DrawableTile(t));
-
-                    continue;
-                }
-
-                Add(new DrawableTile(t));
             }
         }
 

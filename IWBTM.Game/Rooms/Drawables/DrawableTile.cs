@@ -112,6 +112,9 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.Save:
                     return TileGroup.Save;
 
+                case TileType.PlayerStart:
+                    return TileGroup.Start;
+
                 case TileType.Warp:
                     return TileGroup.Warp;
 
@@ -159,6 +162,7 @@ namespace IWBTM.Game.Rooms.Drawables
         Spike,
         Warp,
         Save,
+        Start,
         Ungrouped
     }
 }

@@ -1,20 +1,18 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
-using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Bindables;
-using osu.Framework.Graphics.Containers;
 using osuTK;
 using System.Linq;
 
 namespace IWBTM.Game.Screens.Edit
 {
-    public class ObjectsLayer : Container<DrawableTile>
+    public class ObjectsLayer : DrawableRoom
     {
         public readonly Bindable<int> SnapValue = new Bindable<int>();
 
-        public ObjectsLayer()
+        public ObjectsLayer(Room room)
+            : base(room, true)
         {
-            Size = DefaultPlayfield.BASE_SIZE;
         }
 
         public void TryPlace(TileType type, Vector2 position)
@@ -100,17 +98,11 @@ namespace IWBTM.Game.Screens.Edit
             Add(new DrawableTile(tile));
         }
 
-        public void SetRoom(Room room)
-        {
-            foreach (var t in room.Tiles)
-                Add(new DrawableTile(t));
-        }
-
         public bool SpawnDefined()
         {
             foreach (var child in Children)
             {
-                if (child.Tile.Type == TileType.PlayerStart)
+                if (DrawableTile.IsGroup(child, TileGroup.Start))
                     return true;
             }
 
@@ -121,7 +113,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             foreach (var child in Children)
             {
-                if (child.Tile.Type == TileType.Warp)
+                if (DrawableTile.IsGroup(child, TileGroup.Warp))
                     return true;
             }
 

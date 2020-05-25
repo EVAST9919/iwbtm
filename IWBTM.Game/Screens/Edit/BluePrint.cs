@@ -33,18 +33,13 @@ namespace IWBTM.Game.Screens.Edit
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                objectsLayer = new ObjectsLayer(),
+                objectsLayer = new ObjectsLayer(room),
                 grid = new Grid(),
                 hoverLayer = new Container
                 {
                     RelativeSizeAxes = Axes.Both
                 },
             });
-
-            if (room != null)
-            {
-                objectsLayer.SetRoom(room);
-            }
 
             grid.Current.BindTo(SnapValue);
             objectsLayer.SnapValue.BindTo(SnapValue);
