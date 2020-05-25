@@ -106,7 +106,7 @@ namespace IWBTM.Game.Screens
 
         protected override void OnExit()
         {
-            confirmationOverlay.Push("Are you sure you want to exit?", () => base.OnExit());
+            confirmationOverlay.Push("Are you sure you want to exit? All unsaved progress will be lost.", () => base.OnExit());
         }
     }
 }

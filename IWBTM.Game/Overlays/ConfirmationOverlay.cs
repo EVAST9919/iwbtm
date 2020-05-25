@@ -12,7 +12,7 @@ using osuTK.Input;
 
 namespace IWBTM.Game.Overlays
 {
-    public class ConfirmationOverlay : CompositeDrawable
+    public class ConfirmationOverlay : OverlayContainer
     {
         private ConfirmationWindow currentWindow;
 
@@ -21,7 +21,7 @@ namespace IWBTM.Game.Overlays
         public ConfirmationOverlay()
         {
             RelativeSizeAxes = Axes.Both;
-            AddInternal(dim = new Box
+            Add(dim = new Box
             {
                 RelativeSizeAxes = Axes.Both,
                 Alpha = 0,
@@ -38,18 +38,19 @@ namespace IWBTM.Game.Overlays
             {
                 onConfirm?.Invoke();
                 currentWindow = null;
-                dim.FadeOut();
+                Hide();
             },
             () =>
             {
                 currentWindow = null;
-                dim.FadeOut();
+                Hide();
             });
 
-            dim.FadeTo(0.5f);
-            AddInternal(window);
+            Add(window);
 
             currentWindow = window;
+
+            Show();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -70,9 +71,19 @@ namespace IWBTM.Game.Overlays
             return base.OnKeyDown(e);
         }
 
+        protected override void PopIn()
+        {
+            dim.FadeTo(0.5f);
+        }
+
+        protected override void PopOut()
+        {
+            dim.FadeOut();
+        }
+
         private class ConfirmationWindow : CompositeDrawable
         {
-            private Action confirm;
+            private readonly Action confirm;
 
             public ConfirmationWindow(string text, Action onConfirm, Action onDecline)
             {
