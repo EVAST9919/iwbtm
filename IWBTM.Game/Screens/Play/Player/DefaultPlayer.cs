@@ -264,10 +264,13 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 if (DrawableTile.IsSpike(t.Tile.Type))
                 {
-                    if (CollisionHelper.Collided(PlayerPosition(), t))
+                    if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
                     {
-                        onDeath();
-                        return;
+                        if (CollisionHelper.Collided(PlayerPosition(), t))
+                        {
+                            onDeath();
+                            return;
+                        }
                     }
                 }
             }
