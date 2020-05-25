@@ -47,22 +47,21 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             base.Update();
 
-            // check borders
             if (Position.X <= 0 || Position.X >= DefaultPlayfield.BASE_SIZE.X)
             {
                 Expire();
                 return;
             }
 
-            var tile = drawableRoom.GetTileAtPixel(Position);
-
-            if (DrawableTile.IsSolid(tile?.Tile.Type))
+            if (drawableRoom.HasTileAt(Position, TileGroup.Solid))
             {
                 Expire();
                 return;
             }
 
-            if (DrawableTile.IsSave(tile?.Tile.Type))
+            var tile = drawableRoom.GetTileAt(Position, TileGroup.Save);
+
+            if (tile != null)
             {
                 ((SaveTile)tile).Activate();
                 OnSave?.Invoke();

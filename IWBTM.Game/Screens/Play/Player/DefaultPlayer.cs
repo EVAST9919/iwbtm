@@ -262,9 +262,9 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             foreach (var t in drawableRoom.Children)
             {
-                if (DrawableTile.IsSpike(t.Tile.Type))
+                if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
                 {
-                    if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
+                    if (DrawableTile.IsGroup(t, TileGroup.Spike))
                     {
                         if (CollisionHelper.Collided(PlayerPosition(), t))
                         {
@@ -281,9 +281,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (died)
                 return;
 
-            var tile = drawableRoom.GetTileAtPixel(PlayerPosition());
-
-            if (DrawableTile.IsWarp(tile?.Tile.Type))
+            if (drawableRoom.HasTileAt(PlayerPosition(), TileGroup.Warp))
                 onCompletion();
         }
 
@@ -300,18 +298,16 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = Player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = Player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
-            var middleDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition));
+            var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
 
-            if (DrawableTile.IsSolid(topDrawableTile?.Tile.Type) || DrawableTile.IsSolid(middleDrawableTile?.Tile.Type))
+            if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(topDrawableTile?.X ?? double.MaxValue, middleDrawableTile?.X ?? double.MaxValue);
                 Player.X = (float)closestDrawableTilePosition - SIZE.X / 2;
             }
             else
-            {
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
-            }
         }
 
         private void checkLeftCollision(double elapsedFrameTime)
@@ -321,18 +317,16 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = Player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = Player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var middleDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition));
+            var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
 
-            if (DrawableTile.IsSolid(topDrawableTile?.Tile.Type) || DrawableTile.IsSolid(middleDrawableTile?.Tile.Type))
+            if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(topDrawableTile?.X ?? double.MinValue, middleDrawableTile?.X ?? double.MinValue);
                 Player.X = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.X / 2;
             }
             else
-            {
                 Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
-            }
         }
 
         private void checkTopCollision()
@@ -341,10 +335,10 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = Player.X - SIZE.X / 2;
             var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition));
-            var rightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition));
+            var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
 
-            if (DrawableTile.IsSolid(leftDrawableTile?.Tile.Type) || DrawableTile.IsSolid(rightDrawableTile?.Tile.Type))
+            if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(leftDrawableTile?.Y ?? double.MinValue, rightDrawableTile?.Y ?? double.MinValue);
                 Player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.Y / 2;
@@ -358,13 +352,14 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = Player.X - SIZE.X / 2;
             var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition));
-            var rightDrawableTile = drawableRoom.GetTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition));
+            var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
+            var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
 
-            if (DrawableTile.IsSolid(leftDrawableTile?.Tile.Type) || DrawableTile.IsSolid(rightDrawableTile?.Tile.Type))
+            if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
                 Player.Y = (float)closestDrawableTilePosition - SIZE.Y / 2;
+
                 resetJumpLogic();
             }
             else

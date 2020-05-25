@@ -95,49 +95,43 @@ namespace IWBTM.Game.Rooms.Drawables
             }
         }
 
-        public static bool IsSolid(TileType? type)
+        public static bool IsGroup(DrawableTile tile, TileGroup group)
         {
-            if (type == null)
-                return false;
+            var type = tile?.Tile.Type ?? null;
 
-            if (type == TileType.PlatformCorner || type == TileType.PlatformMiddle || type == TileType.PlatformMiddleRotated)
+            if (getGroup(type) == group)
                 return true;
 
             return false;
         }
 
-        public static bool IsSpike(TileType? type)
+        private static TileGroup getGroup(TileType? type)
         {
-            if (type == null)
-                return false;
+            switch(type)
+            {
+                case TileType.Save:
+                    return TileGroup.Save;
 
-            if (type == TileType.SpikeBottom || type == TileType.SpikeTop || type == TileType.SpikeLeft || type == TileType.SpikeRight
-                || type == TileType.SmallSpikeBottom || type == TileType.SmallSpikeTop || type == TileType.SmallSpikeLeft || type == TileType.SmallSpikeRight)
-                return true;
+                case TileType.Warp:
+                    return TileGroup.Warp;
 
-            return false;
-        }
+                case TileType.PlatformCorner:
+                case TileType.PlatformMiddle:
+                case TileType.PlatformMiddleRotated:
+                    return TileGroup.Solid;
 
-        public static bool IsSave(TileType? type)
-        {
-            if (type == null)
-                return false;
+                case TileType.SmallSpikeBottom:
+                case TileType.SmallSpikeLeft:
+                case TileType.SmallSpikeRight:
+                case TileType.SmallSpikeTop:
+                case TileType.SpikeBottom:
+                case TileType.SpikeLeft:
+                case TileType.SpikeRight:
+                case TileType.SpikeTop:
+                    return TileGroup.Spike;
+            }
 
-            if (type == TileType.Save)
-                return true;
-
-            return false;
-        }
-
-        public static bool IsWarp(TileType? type)
-        {
-            if (type == null)
-                return false;
-
-            if (type == TileType.Warp)
-                return true;
-
-            return false;
+            return TileGroup.Ungrouped;
         }
     }
 
@@ -157,5 +151,14 @@ namespace IWBTM.Game.Rooms.Drawables
         SmallSpikeLeft,
         SmallSpikeRight,
         Warp
+    }
+
+    public enum TileGroup
+    {
+        Solid,
+        Spike,
+        Warp,
+        Save,
+        Ungrouped
     }
 }

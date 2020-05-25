@@ -38,7 +38,9 @@ namespace IWBTM.Game.Rooms.Drawables
             }
         }
 
-        public DrawableTile GetTileAtPixel(Vector2 pixelPosition)
+        public bool HasTileAt(Vector2 pixelPosition, TileGroup group) => GetTileAt(pixelPosition, group) != null;
+
+        public DrawableTile GetTileAt(Vector2 pixelPosition, TileGroup group)
         {
             foreach (var child in Children)
             {
@@ -48,7 +50,10 @@ namespace IWBTM.Game.Rooms.Drawables
                 if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + tileSize.X - 1)
                 {
                     if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + tileSize.Y - 1)
-                        return child;
+                    {
+                        if (DrawableTile.IsGroup(child, group))
+                            return child;
+                    }
                 }
             }
 

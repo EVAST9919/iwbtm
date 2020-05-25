@@ -101,8 +101,8 @@ namespace IWBTM.Game.Helpers
 
             var list = new List<Vector2>
             {
-                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f),
-                new Vector2(position.X + size.X / 2f - 1, position.Y - size.Y / 2f),
+                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f + 1),
+                new Vector2(position.X + size.X / 2f - 1, position.Y - size.Y / 2f + 1),
                 new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f - 1),
                 new Vector2(position.X + size.X / 2f - 1, position.Y + size.Y / 2f - 1)
             };
