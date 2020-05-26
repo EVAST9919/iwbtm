@@ -67,19 +67,19 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeBottom:
                     list.Add(cornerPosition);
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + size.X / 2 - 0.5f, cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2, cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeTop:
                 case TileType.SmallSpikeTop:
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X / 2 - 0.5f, cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2, cornerPosition.Y));
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeLeft:
                 case TileType.SmallSpikeLeft:
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y / 2 - 0.5f));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + (size.Y - 1) / 2));
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y));
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
                     break;
@@ -88,7 +88,7 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeRight:
                     list.Add(cornerPosition);
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y / 2 - 0.5f));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + (size.Y - 1) / 2));
                     break;
             }
 
