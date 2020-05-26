@@ -64,6 +64,10 @@ namespace IWBTM.Game.Overlays
                         case Key.Enter:
                             currentWindow.ForceConfirm();
                             return true;
+
+                        case Key.Escape:
+                            currentWindow.ForceDecline();
+                            return true;
                     }
                 };
             }
@@ -84,12 +88,19 @@ namespace IWBTM.Game.Overlays
         private class ConfirmationWindow : CompositeDrawable
         {
             private readonly Action confirm;
+            private readonly Action decline;
 
             public ConfirmationWindow(string text, Action onConfirm, Action onDecline)
             {
                 confirm = () =>
                 {
                     onConfirm?.Invoke();
+                    Expire();
+                };
+
+                decline = () =>
+                {
+                    onDecline?.Invoke();
                     Expire();
                 };
 
@@ -136,11 +147,7 @@ namespace IWBTM.Game.Overlays
                                 Children = new[]
                                 {
                                     new Button("yes", confirm),
-                                    new Button("no", () =>
-                                    {
-                                        onDecline?.Invoke();
-                                        Expire();
-                                    })
+                                    new Button("no", decline)
                                 }
                             }
                         }
@@ -148,10 +155,9 @@ namespace IWBTM.Game.Overlays
                 });
             }
 
-            public void ForceConfirm()
-            {
-                confirm?.Invoke();
-            }
+            public void ForceConfirm() => confirm?.Invoke();
+
+            public void ForceDecline() => decline?.Invoke();
 
             private class Button : ClickableContainer
             {
