@@ -29,7 +29,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private const double gravity = 0.45; // 0.4 is legacy, but this one matches better for some reason
         private const double max_vertical_speed = 9;
 
-        private readonly Bindable<PlayerState> state = new Bindable<PlayerState>(PlayerState.Idle);
+        public readonly Bindable<PlayerState> State = new Bindable<PlayerState>(PlayerState.Idle);
         public readonly BindableBool ShowHitbox = new BindableBool();
 
         [Resolved]
@@ -45,7 +45,6 @@ namespace IWBTM.Game.Screens.Play.Player
         private DrawableSample doubleJump;
         private DrawableSample shoot;
 
-        private int horizontalDirection;
         private int availableJumpCount = 2;
         private double verticalSpeed;
         private double horizontalSpeed;
@@ -111,7 +110,7 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             base.LoadComplete();
 
-            state.BindValueChanged(onStateChanged, true);
+            State.BindValueChanged(onStateChanged, true);
             ShowHitbox.BindValueChanged(value => hitbox.Alpha = value.NewValue ? 1 : 0, true);
         }
 
@@ -213,21 +212,18 @@ namespace IWBTM.Game.Screens.Play.Player
             else
                 checkTopCollision();
 
-            horizontalDirection = 0;
+            horizontalSpeed = 0;
 
             var keys = GetContainingInputManager().CurrentState.Keyboard.Keys;
 
             if (keys.IsPressed(Key.Right))
-                horizontalDirection = 1;
+                horizontalSpeed = 3;
             else if (keys.IsPressed(Key.Left))
-                horizontalDirection = -1;
+                horizontalSpeed = -3;
 
-            horizontalSpeed = 0;
-
-            if (horizontalDirection != 0)
+            if (horizontalSpeed != 0)
             {
-                rightwards = horizontalDirection > 0;
-                horizontalSpeed = rightwards ? 3 : -3;
+                rightwards = horizontalSpeed > 0;
                 updateVisual();
 
                 if (rightwards)
@@ -428,23 +424,23 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (verticalSpeed < 0)
             {
-                state.Value = PlayerState.Fall;
+                State.Value = PlayerState.Fall;
                 return;
             }
 
             if (verticalSpeed > 0)
             {
-                state.Value = PlayerState.Jump;
+                State.Value = PlayerState.Jump;
                 return;
             }
 
-            if (horizontalDirection != 0)
+            if (horizontalSpeed != 0)
             {
-                state.Value = PlayerState.Run;
+                State.Value = PlayerState.Run;
                 return;
             }
 
-            state.Value = PlayerState.Idle;
+            State.Value = PlayerState.Idle;
         }
     }
 }
