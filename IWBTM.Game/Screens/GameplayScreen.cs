@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Playfield;
+using osu.Framework.Graphics;
 using osu.Framework.Screens;
 using osuTK;
 using System.Collections.Generic;
@@ -20,10 +21,7 @@ namespace IWBTM.Game.Screens
 
             AddInternal(new PlayfieldAdjustmentContainer
             {
-                Child = Playfield = new DefaultPlayfield(room)
-                {
-                    Completed = OnCompletion
-                }
+                Child = Playfield = CreatePlayfield(room).With(p => p.Completed = OnCompletion)
             });
         }
 
@@ -31,5 +29,7 @@ namespace IWBTM.Game.Screens
         {
             this.Push(new ResultsScreen(deathSpots, room));
         }
+
+        protected virtual DefaultPlayfield CreatePlayfield(Room room) => new DefaultPlayfield(room);
     }
 }

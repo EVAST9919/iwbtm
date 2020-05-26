@@ -1,4 +1,6 @@
 ﻿using IWBTM.Game.Rooms;
+using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.Screens.Test;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -37,7 +39,12 @@ namespace IWBTM.Game.Screens
                         new BasicCheckbox
                         {
                             LabelText = "Show hitbox",
-                            Current = Playfield.Player.ShowHitbox
+                            Current = getPlayfield().Player.ShowHitbox
+                        },
+                        new BasicCheckbox
+                        {
+                            LabelText = "Show death spots",
+                            Current = getPlayfield().ShowDeath
                         },
                         xPosition = new SpriteText(),
                         yPosition = new SpriteText(),
@@ -52,7 +59,7 @@ namespace IWBTM.Game.Screens
         {
             base.Update();
 
-            var playerPosition = Playfield.Player.PlayerPosition();
+            var playerPosition = getPlayfield().Player.PlayerPosition();
 
             if (playerPosition != lastPlayerPosition)
             {
@@ -61,6 +68,10 @@ namespace IWBTM.Game.Screens
                 yPosition.Text = $"Y: {playerPosition.Y}";
             }
         }
+
+        protected override DefaultPlayfield CreatePlayfield(Room room) => new TestPlayfield(room);
+
+        private TestPlayfield getPlayfield() => (TestPlayfield)Playfield;
 
         protected override void OnCompletion(List<Vector2> deathSpots)
         {

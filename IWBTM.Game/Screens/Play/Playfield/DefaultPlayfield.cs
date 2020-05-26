@@ -66,6 +66,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                     RelativeSizeAxes = Axes.Both
                 },
                 drawableRoom,
+                CreateLayerBehindPlayer(),
                 Player = new DefaultPlayer
                 {
                     Died = onDeath,
@@ -102,6 +103,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
         }
+
+        protected virtual Drawable CreateLayerBehindPlayer() => Empty();
 
         private void onDeath(Vector2 position, Vector2 speed)
         {
