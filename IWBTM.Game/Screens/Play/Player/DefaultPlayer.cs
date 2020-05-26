@@ -348,7 +348,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkBottomCollision()
         {
-            var playerBottomBorderPosition = Player.Y + SIZE.Y / 2;
+            var playerBottomBorderPosition = Player.Y + SIZE.Y / 2 + 1;
             var playerLeftBorderPosition = Player.X - SIZE.X / 2;
             var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
 
@@ -358,7 +358,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
-                Player.Y = (float)closestDrawableTilePosition - SIZE.Y / 2;
+                Player.Y = (int)closestDrawableTilePosition - SIZE.Y / 2;
 
                 resetJumpLogic();
             }
