@@ -300,7 +300,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(topDrawableTile?.X ?? double.MaxValue, middleDrawableTile?.X ?? double.MaxValue);
-                Player.X = (float)closestDrawableTilePosition - SIZE.X / 2;
+                Player.X = (int)closestDrawableTilePosition - SIZE.X / 2;
             }
             else
                 Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
