@@ -93,7 +93,13 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
-            track = audio.Tracks.Get("Ghost Rule");
+            if (!string.IsNullOrEmpty(room.Music))
+            {
+                if (room.Music != "none")
+                {
+                    track = audio.Tracks.Get($"{room.Music}");
+                }
+            }
         }
 
         protected override void LoadComplete()
@@ -102,12 +108,14 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
+            track?.Restart();
         }
 
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();
 
         private void onDeath(Vector2 position, Vector2 speed)
         {
+            track?.Stop();
             deathOverlay.Play(position, speed);
             deathCount.Value++;
             deathSpots.Add(position);
@@ -116,6 +124,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         private void onCompletion()
         {
             Completed?.Invoke(deathSpots);
+            track?.Stop();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -135,11 +144,17 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
         private void restart()
         {
-            //track.Restart();
             Player.SetSavedPosition();
             deathOverlay.Restore();
             roomEntering.Stop();
             roomEntering.Play();
+            track?.Start();
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            track?.Stop();
+            base.Dispose(isDisposing);
         }
     }
 }

@@ -33,12 +33,13 @@ namespace IWBTM.Game.Helpers
             File.Delete($"Rooms/{name}");
         }
 
-        public static void CreateRoom(string filename, List<Tile> tiles)
+        public static void CreateRoom(string filename, string music, List<Tile> tiles)
         {
             var file = new Room
             {
                 Tiles = tiles,
                 Name = filename,
+                Music = music
             };
 
             string jsonResult = JsonConvert.SerializeObject(file);

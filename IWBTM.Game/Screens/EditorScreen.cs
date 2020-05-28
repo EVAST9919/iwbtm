@@ -41,7 +41,7 @@ namespace IWBTM.Game.Screens
                     Scale = new Vector2(0.9f),
                     Child = blueprint = new BluePrint(room)
                 },
-                toolbar = new ToolBar
+                toolbar = new ToolBar(room)
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -53,9 +53,6 @@ namespace IWBTM.Game.Screens
             selectedObject.BindTo(toolbar.Selected);
             blueprint.Selected.BindTo(toolbar.Selected);
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
-
-            if (room != null)
-                toolbar.SetRoomName(room.Name);
         }
 
         protected override void LoadComplete()
@@ -65,7 +62,7 @@ namespace IWBTM.Game.Screens
             selectedObject.BindValueChanged(newSelected => selectedItemText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
         }
 
-        private void test()
+        private void test(string music)
         {
             if (!blueprint.SpawnDefined())
             {
@@ -76,11 +73,12 @@ namespace IWBTM.Game.Screens
             this.Push(new TestGameplayScreen(new Room
             {
                 Name = "",
+                Music = music,
                 Tiles = blueprint.GetTiles()
             }));
         }
 
-        private void save(string name)
+        private void save(string name, string music)
         {
             if (!blueprint.SpawnDefined())
             {
@@ -100,7 +98,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            RoomStorage.CreateRoom(name, blueprint.GetTiles());
+            RoomStorage.CreateRoom(name, music, blueprint.GetTiles());
             notifications.Push("Room has been saved!", NotificationState.Good);
         }
 

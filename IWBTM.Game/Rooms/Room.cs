@@ -6,6 +6,8 @@ namespace IWBTM.Game.Rooms
     {
         public string Name { get; set; }
 
+        public string Music { get; set; }
+
         public List<Tile> Tiles { get; set; }
     }
 }

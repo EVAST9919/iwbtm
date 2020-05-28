@@ -9,6 +9,7 @@ using osuTK;
 using System;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
+using IWBTM.Game.Rooms;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -16,15 +17,17 @@ namespace IWBTM.Game.Screens.Edit
     {
         public Bindable<TileType> Selected => selector.Current;
         public Bindable<int> SnapValue => snapControl.Current;
+        public Bindable<string> SelectedMusic => musicSelector.Current;
 
-        public Action OnTest;
-        public Action<string> OnSave;
+        public Action<string> OnTest;
+        public Action<string, string> OnSave;
 
         private readonly ObjectSelectorTabControl selector;
         private readonly GridSnapTabControl snapControl;
         private readonly EditorTextbox textbox;
+        private readonly MusicSelector musicSelector;
 
-        public ToolBar()
+        public ToolBar(Room room)
         {
             Width = 200;
             RelativeSizeAxes = Axes.Y;
@@ -111,13 +114,20 @@ namespace IWBTM.Game.Screens.Edit
                                 Children = new Drawable[]
                                 {
                                     textbox = new EditorTextbox(),
+                                    new Container
+                                    {
+                                        Depth = -float.MaxValue,
+                                        RelativeSizeAxes = Axes.X,
+                                        Height = 30,
+                                        Child = musicSelector = new MusicSelector(room)
+                                    },
                                     new EditorButon("Test")
                                     {
-                                        Action = () => OnTest?.Invoke()
+                                        Action = () => OnTest?.Invoke(musicSelector.Current.Value)
                                     },
                                     new EditorButon("Save")
                                     {
-                                        Action = () => OnSave?.Invoke(textbox.Text)
+                                        Action = () => OnSave?.Invoke(textbox.Current.Value, musicSelector.Current.Value)
                                     }
                                 }
                             }
@@ -125,9 +135,12 @@ namespace IWBTM.Game.Screens.Edit
                     }
                 },
             });
-        }
 
-        public void SetRoomName(string name) => textbox.Text = name;
+            if (room != null)
+            {
+                textbox.Text = room.Name;
+            }
+        }
 
         protected override bool OnHover(HoverEvent e) => true;
 
