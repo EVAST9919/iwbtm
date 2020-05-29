@@ -85,7 +85,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     return Textures.Get("Tiles/warp");
 
                 case TileType.Cherry:
-                    return Textures.Get("Tiles/cherry");
+                    return Textures.Get("Tiles/cherry-1");
             }
 
             throw new NotImplementedException("Tile is not implemented");

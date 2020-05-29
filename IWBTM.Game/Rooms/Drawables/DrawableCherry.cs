@@ -1,7 +1,6 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
 using osuTK;
 using osuTK.Graphics;
 
@@ -36,10 +35,25 @@ namespace IWBTM.Game.Rooms.Drawables
         }
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures)
+        private void load()
         {
-            overlay.Texture = textures.Get("Tiles/cherry-overlay");
-            branch.Texture = textures.Get("Tiles/cherry-branch");
+            overlay.Texture = Textures.Get("Tiles/cherry-overlay");
+            branch.Texture = Textures.Get("Tiles/cherry-branch-1");
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            Scheduler.AddDelayed(updateFrame, 200, true);
+        }
+
+        private bool secondFrame;
+
+        private void updateFrame()
+        {
+            secondFrame = !secondFrame;
+            MainSprite.Texture = Textures.Get($"Tiles/cherry-{(secondFrame ? 2 : 1)}");
+            branch.Texture = Textures.Get($"Tiles/cherry-branch-{(secondFrame ? 2 : 1)}");
         }
     }
 }
