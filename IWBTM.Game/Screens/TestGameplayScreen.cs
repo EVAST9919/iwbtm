@@ -39,7 +39,7 @@ namespace IWBTM.Game.Screens
                         new BasicCheckbox
                         {
                             LabelText = "Show hitbox",
-                            Current = getPlayfield().Player.ShowHitbox
+                            Current = getPlayfield().ShowHitbox
                         },
                         new BasicCheckbox
                         {

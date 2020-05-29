@@ -14,10 +14,11 @@ using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Test;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
-    public class DefaultPlayer : CompositeDrawable
+    public class DefaultPlayer : CompositeDrawable, IHasHitbox
     {
         public static Vector2 SIZE = new Vector2(11, 21);
 
@@ -30,7 +31,6 @@ namespace IWBTM.Game.Screens.Play.Player
         private const double max_vertical_speed = 9;
 
         public readonly Bindable<PlayerState> State = new Bindable<PlayerState>(PlayerState.Idle);
-        public readonly BindableBool ShowHitbox = new BindableBool();
 
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
@@ -82,11 +82,12 @@ namespace IWBTM.Game.Screens.Play.Player
                         },
                         hitbox = new Container
                         {
+                            Alpha = 0,
                             RelativeSizeAxes = Axes.Both,
                             Child = new Box
                             {
                                 RelativeSizeAxes = Axes.Both,
-                                Colour = Color4.Red,
+                                Colour = Color4.DeepPink,
                                 Alpha = 0.5f,
                             }
                         }
@@ -111,7 +112,6 @@ namespace IWBTM.Game.Screens.Play.Player
             base.LoadComplete();
 
             State.BindValueChanged(onStateChanged, true);
-            ShowHitbox.BindValueChanged(value => hitbox.Alpha = value.NewValue ? 1 : 0, true);
         }
 
         public Vector2 PlayerPosition() => Player.Position;
@@ -463,6 +463,11 @@ namespace IWBTM.Game.Screens.Play.Player
             }
 
             State.Value = PlayerState.Idle;
+        }
+
+        public void Toggle(bool show)
+        {
+            hitbox.Alpha = show ? 1 : 0;
         }
     }
 }

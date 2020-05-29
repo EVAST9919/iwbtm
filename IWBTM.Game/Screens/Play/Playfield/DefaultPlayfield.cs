@@ -43,6 +43,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
             => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
         private readonly Room room;
+        protected DrawableRoom DrawableRoom;
 
         public DefaultPlayfield(Room room)
         {
@@ -52,8 +53,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
         [BackgroundDependencyLoader]
         private void load(AudioManager audio)
         {
-            DrawableRoom drawableRoom = new DrawableRoom(room);
-            dependencies.Cache(drawableRoom);
+            DrawableRoom = new DrawableRoom(room);
+            dependencies.Cache(DrawableRoom);
 
             Size = BASE_SIZE;
             Anchor = Anchor.Centre;
@@ -65,7 +66,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                drawableRoom,
+                DrawableRoom,
                 CreateLayerBehindPlayer(),
                 Player = new DefaultPlayer
                 {
