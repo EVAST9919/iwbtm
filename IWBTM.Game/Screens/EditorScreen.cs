@@ -1,15 +1,15 @@
-﻿using IWBTM.Game.Screens.Edit;
+﻿using IWBTM.Game.Helpers;
+using IWBTM.Game.Overlays;
+using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Edit;
+using IWBTM.Game.Screens.Play.Playfield;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
-using osuTK;
 using osu.Framework.Screens;
-using osu.Framework.Allocation;
-using IWBTM.Game.Rooms;
-using IWBTM.Game.Overlays;
-using IWBTM.Game.Screens.Play.Playfield;
-using IWBTM.Game.Helpers;
-using IWBTM.Game.Rooms.Drawables;
+using osuTK;
 
 namespace IWBTM.Game.Screens
 {
@@ -26,7 +26,7 @@ namespace IWBTM.Game.Screens
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
 
-        public EditorScreen(Room room = null)
+        public EditorScreen(Room room = null, string name = "")
         {
             ToolBar toolbar;
 
@@ -41,7 +41,7 @@ namespace IWBTM.Game.Screens
                     Scale = new Vector2(0.9f),
                     Child = blueprint = new BluePrint(room)
                 },
-                toolbar = new ToolBar(room)
+                toolbar = new ToolBar(room, name)
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -72,7 +72,6 @@ namespace IWBTM.Game.Screens
 
             this.Push(new TestGameplayScreen(new Room
             {
-                Name = "",
                 Music = music,
                 Tiles = blueprint.GetTiles()
             }));

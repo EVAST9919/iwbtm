@@ -16,7 +16,7 @@ namespace IWBTM.Game.Screens.Select
     {
         public readonly Bindable<Room> Current = new Bindable<Room>();
 
-        public Action<Room> OnEdit;
+        public Action<CarouselRoomItem> OnEdit;
 
         [Resolved]
         private NotificationOverlay notifications { get; set; }
@@ -60,7 +60,7 @@ namespace IWBTM.Game.Screens.Select
 
         private void deleteRequested(CarouselRoomItem item)
         {
-            var name = item.Room.Name;
+            var name = item.RoomName;
 
             RoomStorage.DeleteRoom(name);
             notifications.Push($"{name} room has been deleted!", NotificationState.Good);
@@ -70,7 +70,7 @@ namespace IWBTM.Game.Screens.Select
 
         private void editRequested(CarouselRoomItem item)
         {
-            OnEdit?.Invoke(item.Room);
+            OnEdit?.Invoke(item);
         }
 
         private void onSelection(CarouselRoomItem item)

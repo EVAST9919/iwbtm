@@ -18,6 +18,7 @@ namespace IWBTM.Game.Screens.Select
         public Action<CarouselRoomItem> OnEdit;
 
         public Room Room { get; private set; }
+        public string RoomName { get; private set; }
 
         public MenuItem[] ContextMenuItems => new[]
         {
@@ -25,9 +26,10 @@ namespace IWBTM.Game.Screens.Select
             new MenuItem("Edit", () => OnEdit?.Invoke(this)),
         };
 
-        public CarouselRoomItem(Room room)
+        public CarouselRoomItem((Room, string) room)
         {
-            Room = room;
+            Room = room.Item1;
+            RoomName = room.Item2;
 
             RelativeSizeAxes = Axes.X;
             Height = 50;
@@ -44,7 +46,7 @@ namespace IWBTM.Game.Screens.Select
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Text = room.Name,
+                    Text = room.Item2,
                     Colour = Color4.Black
                 }
             });

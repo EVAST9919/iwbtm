@@ -55,9 +55,9 @@ namespace IWBTM.Game.Screens
             selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue));
         }
 
-        private void editRequested(Room room)
+        private void editRequested(CarouselRoomItem room)
         {
-            this.Push(new EditorScreen(room));
+            this.Push(new EditorScreen(room.Room, room.RoomName));
         }
 
         public override void OnEntering(IScreen last)

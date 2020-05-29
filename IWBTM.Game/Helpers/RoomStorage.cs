@@ -7,9 +7,9 @@ namespace IWBTM.Game.Helpers
 {
     public class RoomStorage
     {
-        public static List<Room> GetRooms()
+        public static List<(Room, string)> GetRooms()
         {
-            List<Room> rooms = new List<Room>();
+            List<(Room, string)> rooms = new List<(Room, string)>();
 
             if (!Directory.Exists("Rooms"))
                 Directory.CreateDirectory("Rooms");
@@ -21,7 +21,10 @@ namespace IWBTM.Game.Helpers
                     var text = sr.ReadLine();
                     sr.Close();
 
-                    rooms.Add(JsonConvert.DeserializeObject<Room>(text));
+                    var room = JsonConvert.DeserializeObject<Room>(text);
+                    var name = file.Substring(6);
+
+                    rooms.Add((room, name));
                 }
             }
 
@@ -38,7 +41,6 @@ namespace IWBTM.Game.Helpers
             var file = new Room
             {
                 Tiles = tiles,
-                Name = filename,
                 Music = music
             };
 

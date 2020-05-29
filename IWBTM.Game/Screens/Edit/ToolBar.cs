@@ -1,15 +1,15 @@
-﻿using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shapes;
-using osuTK.Graphics;
-using osu.Framework.Bindables;
-using osu.Framework.Input.Events;
+﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
-using osuTK;
-using System;
+using osu.Framework.Bindables;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
-using IWBTM.Game.Rooms;
+using osu.Framework.Input.Events;
+using osuTK;
+using osuTK.Graphics;
+using System;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -27,7 +27,7 @@ namespace IWBTM.Game.Screens.Edit
         private readonly EditorTextbox textbox;
         private readonly MusicSelector musicSelector;
 
-        public ToolBar(Room room)
+        public ToolBar(Room room, string name)
         {
             Width = 200;
             RelativeSizeAxes = Axes.Y;
@@ -136,9 +136,9 @@ namespace IWBTM.Game.Screens.Edit
                 },
             });
 
-            if (room != null)
+            if (!string.IsNullOrEmpty(name))
             {
-                textbox.Text = room.Name;
+                textbox.Text = name;
             }
         }
 
