@@ -95,7 +95,10 @@ namespace IWBTM.Game.Screens.Edit
                 PositionY = (int)position.Y
             };
 
-            Add(new DrawableTile(tile));
+            if (tile.Type == TileType.Cherry)
+                Add(new DrawableCherry(tile));
+            else
+                Add(new DrawableTile(tile));
         }
 
         public bool SpawnDefined()

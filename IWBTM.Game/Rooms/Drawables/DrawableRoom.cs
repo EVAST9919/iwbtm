@@ -22,6 +22,12 @@ namespace IWBTM.Game.Rooms.Drawables
                         continue;
                     }
 
+                    if (t.Type == TileType.Cherry)
+                    {
+                        Add(new DrawableCherry(t));
+                        continue;
+                    }
+
                     if (t.Type == TileType.PlayerStart)
                     {
                         PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);

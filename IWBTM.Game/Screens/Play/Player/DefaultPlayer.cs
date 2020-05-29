@@ -243,6 +243,7 @@ namespace IWBTM.Game.Screens.Play.Player
             }
 
             checkSpikes();
+            checkCherries();
             checkCompletion();
             updatePlayerState();
         }
@@ -279,6 +280,27 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (drawableRoom.HasTileAt(PlayerPosition(), TileGroup.Warp))
                 onCompletion();
+        }
+
+        private void checkCherries()
+        {
+            if (died)
+                return;
+
+            foreach (var t in drawableRoom.Children)
+            {
+                if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
+                {
+                    if (DrawableTile.IsGroup(t, TileGroup.Cherry))
+                    {
+                        if (CollisionHelper.CollidedWithCherry(PlayerPosition(), t))
+                        {
+                            onDeath();
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         private void updateVisual()

@@ -1,6 +1,7 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Player;
 using osuTK;
+using System;
 using System.Collections.Generic;
 
 namespace IWBTM.Game.Helpers
@@ -25,6 +26,21 @@ namespace IWBTM.Game.Helpers
             }
 
             return false;
+        }
+
+        public static bool CollidedWithCherry(Vector2 playerPosition, DrawableTile tile)
+        {
+            var radius = tile.Size.X / 2;
+            var circlePosition = new Vector2(tile.Position.X + radius, tile.Position.Y + radius);
+
+            var adjustedX = playerPosition.X - DefaultPlayer.SIZE.X / 2;
+            var adjustedY = playerPosition.Y - DefaultPlayer.SIZE.Y / 2;
+
+            var adjustedPlayerPosition = new Vector2(adjustedX, adjustedY);
+
+            var deltaX = circlePosition.X - Math.Max(adjustedPlayerPosition.X, Math.Min(circlePosition.X, adjustedPlayerPosition.X + DefaultPlayer.SIZE.X));
+            var deltaY = circlePosition.Y - Math.Max(adjustedPlayerPosition.Y, Math.Min(circlePosition.Y, adjustedPlayerPosition.Y + DefaultPlayer.SIZE.Y));
+            return MathExtensions.Pow(deltaX) + MathExtensions.Pow(deltaY) < MathExtensions.Pow(radius);
         }
 
         private static List<Vector2> createTrianglePoints(DrawableTile tile)

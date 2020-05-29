@@ -3,10 +3,12 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.Allocation;
 using System;
 using osuTK;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
-    public class DrawableTile : Sprite
+    public class DrawableTile : CompositeDrawable
     {
         public const int SIZE = 32;
 
@@ -18,17 +20,23 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public Tile Tile { get; private set; }
 
+        protected readonly Sprite MainSprite;
+
         public DrawableTile(Tile tile)
         {
             Tile = tile;
             Size = new Vector2(getSize(tile.Type));
             Position = new Vector2(tile.PositionX, tile.PositionY);
+            AddInternal(MainSprite = new Sprite
+            {
+                RelativeSizeAxes = Axes.Both
+            });
         }
 
         [BackgroundDependencyLoader]
         private void load()
         {
-            Texture = getTexture();
+            MainSprite.Texture = getTexture();
         }
 
         public Tile ToTile() => new Tile
@@ -75,6 +83,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.Warp:
                     return Textures.Get("Tiles/warp");
+
+                case TileType.Cherry:
+                    return Textures.Get("Tiles/cherry");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -88,6 +99,7 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SmallSpikeTop:
                 case TileType.SmallSpikeLeft:
                 case TileType.SmallSpikeRight:
+                case TileType.Cherry:
                     return SIZE / 2;
 
                 default:
@@ -123,6 +135,9 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.PlatformMiddleRotated:
                     return TileGroup.Solid;
 
+                case TileType.Cherry:
+                    return TileGroup.Cherry;
+
                 case TileType.SmallSpikeBottom:
                 case TileType.SmallSpikeLeft:
                 case TileType.SmallSpikeRight:
@@ -153,7 +168,8 @@ namespace IWBTM.Game.Rooms.Drawables
         SmallSpikeBottom,
         SmallSpikeLeft,
         SmallSpikeRight,
-        Warp
+        Warp,
+        Cherry
     }
 
     public enum TileGroup
@@ -163,6 +179,7 @@ namespace IWBTM.Game.Rooms.Drawables
         Warp,
         Save,
         Start,
+        Cherry,
         Ungrouped
     }
 }

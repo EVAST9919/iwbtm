@@ -70,10 +70,10 @@ namespace IWBTM.Game.Screens.Edit
             mousePosition = e.MousePosition;
 
             if (!hoverLayer.Any())
-                hoverLayer.Child = tileToPlace = new DrawableTile(new Tile { Type = Selected.Value })
+                hoverLayer.Child = tileToPlace = createTile(new Tile { Type = Selected.Value }).With(t =>
                 {
-                    Alpha = 0.5f
-                };
+                    t.Alpha = 0.5f;
+                });
 
             tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
 
@@ -127,6 +127,14 @@ namespace IWBTM.Game.Screens.Edit
         public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)
         {
             return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * (DefaultPlayfield.TILES_WIDTH * DrawableTile.SIZE / snapValue)), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * (DefaultPlayfield.TILES_HEIGHT * DrawableTile.SIZE / snapValue))) * snapValue;
+        }
+
+        private static DrawableTile createTile(Tile tile)
+        {
+            if (tile.Type == TileType.Cherry)
+                return new DrawableCherry(tile);
+
+            return new DrawableTile(tile);
         }
     }
 }

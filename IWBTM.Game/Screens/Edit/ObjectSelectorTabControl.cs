@@ -48,15 +48,12 @@ namespace IWBTM.Game.Screens.Edit
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.White,
                     },
-                    new DrawableTile(new Tile
+                    createTile(new Tile { Type = value }).With(t =>
                     {
-                        Type = value
+                        t.Scale = new Vector2(0.8f);
+                        t.Anchor = Anchor.Centre;
+                        t.Origin = Anchor.Centre;
                     })
-                    {
-                        Scale = new Vector2(0.8f),
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                    }
                 };
             }
 
@@ -68,6 +65,14 @@ namespace IWBTM.Game.Screens.Edit
             protected override void OnDeactivated()
             {
                 background.Colour = Color4.White;
+            }
+
+            private static DrawableTile createTile(Tile tile)
+            {
+                if (tile.Type == TileType.Cherry)
+                    return new DrawableCherry(tile);
+
+                return new DrawableTile(tile);
             }
         }
     }
