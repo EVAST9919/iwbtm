@@ -1,6 +1,6 @@
-﻿using osu.Framework.Graphics.UserInterface;
+﻿using IWBTM.Game.Rooms;
 using osu.Framework.Graphics;
-using IWBTM.Game.Rooms;
+using osu.Framework.Graphics.UserInterface;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -16,6 +16,8 @@ namespace IWBTM.Game.Screens.Edit
 
             AddDropdownItem("none");
             AddDropdownItem("room-1");
+            AddDropdownItem("room-2");
+            AddDropdownItem("room-3");
         }
 
         protected override void LoadComplete()
