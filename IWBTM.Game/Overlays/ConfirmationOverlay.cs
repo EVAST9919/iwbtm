@@ -9,6 +9,7 @@ using osu.Framework.Graphics.Effects;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Input.Events;
 using osuTK.Input;
+using IWBTM.Game.UserInterface;
 
 namespace IWBTM.Game.Overlays
 {
@@ -137,7 +138,7 @@ namespace IWBTM.Game.Overlays
                                 Text = text,
                                 Colour = Color4.Black
                             },
-                            new FillFlowContainer<Button>
+                            new FillFlowContainer<WhiteButton>
                             {
                                 Anchor = Anchor.BottomCentre,
                                 Origin = Anchor.BottomCentre,
@@ -146,8 +147,8 @@ namespace IWBTM.Game.Overlays
                                 Spacing = new Vector2(50, 0),
                                 Children = new[]
                                 {
-                                    new Button("yes", confirm),
-                                    new Button("no", decline)
+                                    new WhiteButton("yes", confirm),
+                                    new WhiteButton("no", decline)
                                 }
                             }
                         }
@@ -158,37 +159,6 @@ namespace IWBTM.Game.Overlays
             public void ForceConfirm() => confirm?.Invoke();
 
             public void ForceDecline() => decline?.Invoke();
-
-            private class Button : ClickableContainer
-            {
-                public Button(string text, Action action)
-                {
-                    Size = new Vector2(120, 40);
-                    Masking = true;
-                    EdgeEffect = new EdgeEffectParameters
-                    {
-                        Type = EdgeEffectType.Shadow,
-                        Offset = new Vector2(0f, 1f),
-                        Radius = 3f,
-                        Colour = Color4.Black.Opacity(0.25f),
-                    };
-                    Children = new Drawable[]
-                    {
-                        new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                        },
-                        new SpriteText
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Text = text,
-                            Colour = Color4.Black
-                        }
-                    };
-                    Action = () => action?.Invoke();
-                }
-            }
         }
     }
 }

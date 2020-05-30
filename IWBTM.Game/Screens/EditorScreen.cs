@@ -26,8 +26,14 @@ namespace IWBTM.Game.Screens
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
 
-        public EditorScreen(Room room = null, string name = "")
+        private readonly Room room;
+        private readonly string name;
+
+        public EditorScreen(Room room, string name)
         {
+            this.room = room;
+            this.name = name;
+
             ToolBar toolbar;
 
             AddRangeInternal(new Drawable[]
@@ -41,7 +47,7 @@ namespace IWBTM.Game.Screens
                     Scale = new Vector2(0.9f),
                     Child = blueprint = new BluePrint(room)
                 },
-                toolbar = new ToolBar(room, name)
+                toolbar = new ToolBar()
                 {
                     Anchor = Anchor.TopRight,
                     Origin = Anchor.TopRight,
@@ -62,7 +68,7 @@ namespace IWBTM.Game.Screens
             selectedObject.BindValueChanged(newSelected => selectedItemText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
         }
 
-        private void test(string music)
+        private void test()
         {
             if (!blueprint.SpawnDefined())
             {
@@ -72,12 +78,13 @@ namespace IWBTM.Game.Screens
 
             this.Push(new TestGameplayScreen(new Room
             {
-                Music = music,
+                Music = room.Music,
+                CustomAudio = room.CustomAudio,
                 Tiles = blueprint.GetTiles()
-            }, ""));
+            }, name));
         }
 
-        private void save(string name, string music)
+        private void save()
         {
             if (!blueprint.SpawnDefined())
             {
@@ -91,13 +98,7 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            if (string.IsNullOrEmpty(name))
-            {
-                notifications.Push("Set room name", NotificationState.Bad);
-                return;
-            }
-
-            RoomStorage.CreateRoom(name, music, blueprint.GetTiles());
+            RoomStorage.UpdateRoomTiles(room, name, blueprint.GetTiles());
             notifications.Push("Room has been saved!", NotificationState.Good);
         }
 

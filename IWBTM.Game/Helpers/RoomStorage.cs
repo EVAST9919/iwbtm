@@ -44,25 +44,68 @@ namespace IWBTM.Game.Helpers
             return rooms;
         }
 
+        public static bool RoomExists(string name)
+        {
+            if (!Directory.Exists("Rooms"))
+            {
+                Directory.CreateDirectory("Rooms");
+                return false;
+            }
+
+            var directories = Directory.GetDirectories("Rooms");
+
+            if (directories.Length == 0)
+                return false;
+
+            foreach (var dir in directories)
+            {
+                if (dir.Substring(6).ToLower() == name.ToLower())
+                    return true;
+            }
+
+            return false;
+        }
+
         public static void DeleteRoom(string name)
         {
             Directory.Delete($"Rooms/{name}", true);
         }
 
-        public static void CreateRoom(string name, string music, List<Tile> tiles)
+        public static void CreateRoomDirectory(string name)
+        {
+            Directory.CreateDirectory($"Rooms/{name}");
+        }
+
+        public static Room CreateEmptyRoom(string name, bool customAudio, string musicName)
         {
             var file = new Room
             {
-                Tiles = tiles,
-                Music = music
+                Music = musicName,
+                CustomAudio = customAudio,
+                Tiles = new List<Tile>()
             };
 
             string jsonResult = JsonConvert.SerializeObject(file);
 
-            if (!Directory.Exists("Rooms"))
-                Directory.CreateDirectory("Rooms");
+            using (StreamWriter sw = File.CreateText($"Rooms/{name}/room"))
+            {
+                sw.WriteLine(jsonResult.ToString());
+                sw.Close();
+            }
 
-            Directory.CreateDirectory($"Rooms/{name}");
+            return file;
+        }
+
+        public static void UpdateRoomTiles(Room room, string name, List<Tile> tiles)
+        {
+            var file = new Room
+            {
+                CustomAudio = room.CustomAudio,
+                Music = room.Music,
+                Tiles = tiles
+            };
+
+            string jsonResult = JsonConvert.SerializeObject(file);
 
             using (StreamWriter sw = File.CreateText($"Rooms/{name}/room"))
             {

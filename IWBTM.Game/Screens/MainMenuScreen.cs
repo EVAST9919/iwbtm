@@ -45,7 +45,7 @@ namespace IWBTM.Game.Screens
                     },
                     new Button("Create")
                     {
-                        Action = () => this.Push(new EditorScreen())
+                        Action = () => this.Push(new CreationScreen())
                     }
                 }
             });
