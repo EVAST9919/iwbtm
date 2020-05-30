@@ -110,7 +110,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
-            track?.Restart();
         }
 
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();
