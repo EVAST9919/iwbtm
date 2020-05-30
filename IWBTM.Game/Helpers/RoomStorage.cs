@@ -66,6 +66,8 @@ namespace IWBTM.Game.Helpers
             return false;
         }
 
+        public static bool RoomHasCustomAudio(string name) => File.Exists($"Rooms/{name}/audio.mp3");
+
         public static void DeleteRoom(string name)
         {
             Directory.Delete($"Rooms/{name}", true);
@@ -76,12 +78,11 @@ namespace IWBTM.Game.Helpers
             Directory.CreateDirectory($"Rooms/{name}");
         }
 
-        public static Room CreateEmptyRoom(string name, bool customAudio, string musicName)
+        public static Room CreateEmptyRoom(string name, string musicName)
         {
             var file = new Room
             {
                 Music = musicName,
-                CustomAudio = customAudio,
                 Tiles = new List<Tile>()
             };
 
@@ -100,7 +101,6 @@ namespace IWBTM.Game.Helpers
         {
             var file = new Room
             {
-                CustomAudio = room.CustomAudio,
                 Music = room.Music,
                 Tiles = tiles
             };

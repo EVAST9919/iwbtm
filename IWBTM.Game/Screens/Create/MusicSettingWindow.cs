@@ -5,21 +5,14 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Sprites;
 using osuTK.Graphics;
 using System;
-using osu.Framework.Bindables;
 using IWBTM.Game.UserInterface;
-using IWBTM.Game.Overlays;
-using osu.Framework.Allocation;
 
 namespace IWBTM.Game.Screens.Create
 {
     public class MusicSettingWindow : CreationWindow
     {
-        public Action<(bool, string)> OnCommit;
+        public Action<string> OnCommit;
 
-        [Resolved]
-        private NotificationOverlay notifications { get; set; }
-
-        private readonly BasicCheckbox customMusic;
         private readonly MusicSelector musicSelector;
 
         public MusicSettingWindow()
@@ -43,14 +36,8 @@ namespace IWBTM.Game.Screens.Create
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
-                            Text = "Set the room music",
+                            Text = "Set default room audio",
                             Colour = Color4.Black
-                        },
-                        customMusic = new BasicCheckbox
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            LabelText = "Custom music",
                         },
                         new Container
                         {
@@ -71,29 +58,9 @@ namespace IWBTM.Game.Screens.Create
             });
         }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            customMusic.Current.BindValueChanged(onCustomMusicChanged, true);
-        }
-
-        private void onCustomMusicChanged(ValueChangedEvent<bool> custom)
-        {
-            musicSelector.Alpha = custom.NewValue ? 0 : 1;
-        }
-
         private void onPressed()
         {
-            var custom = customMusic.Current.Value;
-
-            if (custom)
-            {
-                notifications.Push("Custom music is not supported for now", NotificationState.Bad);
-                return;
-            }
-
-            OnCommit?.Invoke((custom, musicSelector.Current.Value));
+            OnCommit?.Invoke(musicSelector.Current.Value);
         }
 
         private class MusicSelector : BasicDropdown<string>

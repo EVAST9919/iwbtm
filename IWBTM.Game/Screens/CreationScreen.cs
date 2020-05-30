@@ -41,10 +41,10 @@ namespace IWBTM.Game.Screens
             musicWindow.Show();
         }
 
-        private void onMusicCommit((bool custom, string name) value)
+        private void onMusicCommit(string name)
         {
             RoomStorage.CreateRoomDirectory(roomName);
-            var room = RoomStorage.CreateEmptyRoom(roomName, value.custom, value.name);
+            var room = RoomStorage.CreateEmptyRoom(roomName, name);
             this.Push(new EditorScreen(room, roomName));
         }
 

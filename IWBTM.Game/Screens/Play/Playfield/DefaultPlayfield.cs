@@ -17,6 +17,7 @@ using osu.Framework.Bindables;
 using osuTK.Graphics;
 using System;
 using System.Collections.Generic;
+using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -96,18 +97,18 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
-            if (!string.IsNullOrEmpty(room.Music))
+            if (RoomStorage.RoomHasCustomAudio(name))
             {
-                if (room.CustomAudio)
-                {
-                    track = levelAudio.Tracks.Get(name);
-                    track.Looping = true;
-                }
-                else
+                track = levelAudio.Tracks.Get(name);
+                track.Looping = true;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(room.Music))
                 {
                     if (room.Music != "none")
                     {
-                        track = room.CustomAudio ? levelAudio.Tracks.Get($"{room.Music}") : audio.Tracks.Get($"{room.Music}");
+                        track = audio.Tracks.Get($"{room.Music}");
                         track.Looping = true;
                     }
                 }

@@ -79,7 +79,6 @@ namespace IWBTM.Game.Screens
             this.Push(new TestGameplayScreen(new Room
             {
                 Music = room.Music,
-                CustomAudio = room.CustomAudio,
                 Tiles = blueprint.GetTiles()
             }, name));
         }
