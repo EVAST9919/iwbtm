@@ -99,6 +99,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 if (room.Music != "none")
                 {
                     track = audio.Tracks.Get($"{room.Music}");
+                    track.Looping = true;
                 }
             }
         }
