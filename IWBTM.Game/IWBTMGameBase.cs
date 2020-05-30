@@ -12,6 +12,7 @@ namespace IWBTM.Game
     {
         private TextureStore textures;
         private PixelTextureStore pixelTextures;
+        private LevelAudioManager levelAudioManager;
 
         private DependencyContainer dependencies;
 
@@ -27,6 +28,12 @@ namespace IWBTM.Game
             pixelTextures = new PixelTextureStore(Textures);
             dependencies.Cache(textures);
             dependencies.Cache(pixelTextures);
+
+            var tracks = new ResourceStore<byte[]>();
+            tracks.AddStore(new LevelAudioStore());
+
+            levelAudioManager = new LevelAudioManager(Host.AudioThread, tracks, new ResourceStore<byte[]>()) { EventScheduler = Scheduler };
+            dependencies.Cache(levelAudioManager);
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)

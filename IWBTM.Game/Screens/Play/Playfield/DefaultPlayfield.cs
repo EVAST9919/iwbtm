@@ -31,6 +31,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
         private Track track;
+        private Track testTrack;
         private DrawableSample roomEntering;
         private SpriteText deathCountText;
         private readonly Bindable<int> deathCount = new Bindable<int>();
@@ -51,7 +52,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         }
 
         [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
+        private void load(AudioManager audio, LevelAudioManager levelAudio)
         {
             DrawableRoom = new DrawableRoom(room);
             dependencies.Cache(DrawableRoom);
@@ -94,6 +95,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
+            //testTrack = levelAudio.Tracks.Get("main menu");
+
             if (!string.IsNullOrEmpty(room.Music))
             {
                 if (room.Music != "none")
@@ -110,6 +113,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
+            //testTrack.Start();
         }
 
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();
