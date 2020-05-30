@@ -1,6 +1,5 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
-using IWBTM.Game.Rooms;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -14,7 +13,7 @@ namespace IWBTM.Game.Screens.Select
 {
     public class Carousel : CompositeDrawable
     {
-        public readonly Bindable<Room> Current = new Bindable<Room>();
+        public readonly Bindable<CarouselRoomItem> Current = new Bindable<CarouselRoomItem>();
 
         public Action<CarouselRoomItem> OnEdit;
 
@@ -75,7 +74,7 @@ namespace IWBTM.Game.Screens.Select
 
         private void onSelection(CarouselRoomItem item)
         {
-            Current.Value = item.Room;
+            Current.Value = item;
 
             flow.Children.ForEach(i =>
             {

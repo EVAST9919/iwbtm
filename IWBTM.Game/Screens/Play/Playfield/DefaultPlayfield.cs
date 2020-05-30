@@ -31,7 +31,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
         private Track track;
-        private Track testTrack;
         private DrawableSample roomEntering;
         private SpriteText deathCountText;
         private readonly Bindable<int> deathCount = new Bindable<int>();
@@ -44,11 +43,13 @@ namespace IWBTM.Game.Screens.Play.Playfield
             => dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
 
         private readonly Room room;
+        private readonly string name;
         protected DrawableRoom DrawableRoom;
 
-        public DefaultPlayfield(Room room)
+        public DefaultPlayfield(Room room, string name)
         {
             this.room = room;
+            this.name = name;
         }
 
         [BackgroundDependencyLoader]
@@ -95,14 +96,20 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
-            //testTrack = levelAudio.Tracks.Get("main menu");
-
             if (!string.IsNullOrEmpty(room.Music))
             {
-                if (room.Music != "none")
+                if (room.CustomAudio)
                 {
-                    track = audio.Tracks.Get($"{room.Music}");
+                    track = levelAudio.Tracks.Get(name);
                     track.Looping = true;
+                }
+                else
+                {
+                    if (room.Music != "none")
+                    {
+                        track = room.CustomAudio ? levelAudio.Tracks.Get($"{room.Music}") : audio.Tracks.Get($"{room.Music}");
+                        track.Looping = true;
+                    }
                 }
             }
         }
@@ -113,7 +120,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
-            //testTrack.Start();
         }
 
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();

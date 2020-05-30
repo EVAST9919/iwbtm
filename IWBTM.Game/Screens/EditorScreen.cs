@@ -74,7 +74,7 @@ namespace IWBTM.Game.Screens
             {
                 Music = music,
                 Tiles = blueprint.GetTiles()
-            }));
+            }, ""));
         }
 
         private void save(string name, string music)

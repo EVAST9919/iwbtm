@@ -17,8 +17,8 @@ namespace IWBTM.Game.Screens
         private SpriteText xPosition;
         private SpriteText yPosition;
 
-        public TestGameplayScreen(Room room)
-            : base(room)
+        public TestGameplayScreen(Room room, string name)
+            : base(room, name)
         {
         }
 
@@ -69,7 +69,7 @@ namespace IWBTM.Game.Screens
             }
         }
 
-        protected override DefaultPlayfield CreatePlayfield(Room room) => new TestPlayfield(room);
+        protected override DefaultPlayfield CreatePlayfield(Room room, string name) => new TestPlayfield(room, name);
 
         private TestPlayfield getPlayfield() => (TestPlayfield)Playfield;
 

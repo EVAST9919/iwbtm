@@ -13,7 +13,7 @@ namespace IWBTM.Game.Screens
 
         private readonly Room room;
 
-        public GameplayScreen(Room room)
+        public GameplayScreen(Room room, string name)
         {
             this.room = room;
 
@@ -21,7 +21,7 @@ namespace IWBTM.Game.Screens
 
             AddInternal(new PlayfieldAdjustmentContainer
             {
-                Child = Playfield = CreatePlayfield(room).With(p => p.Completed = OnCompletion)
+                Child = Playfield = CreatePlayfield(room, name).With(p => p.Completed = OnCompletion)
             });
         }
 
@@ -30,6 +30,6 @@ namespace IWBTM.Game.Screens
             this.Push(new ResultsScreen(deathSpots, room));
         }
 
-        protected virtual DefaultPlayfield CreatePlayfield(Room room) => new DefaultPlayfield(room);
+        protected virtual DefaultPlayfield CreatePlayfield(Room room, string name) => new DefaultPlayfield(room, name);
     }
 }
