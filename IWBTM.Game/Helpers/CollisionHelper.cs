@@ -15,7 +15,7 @@ namespace IWBTM.Game.Helpers
 
             foreach (var t in trianglePoints)
             {
-                if (pointInPlayer(t, position))
+                if (pointInPlayer(t, rectanglePoints))
                     return true;
             }
 
@@ -56,28 +56,28 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeBottom:
                     list.Add(cornerPosition);
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2, cornerPosition.Y + size.Y - 2));
+                    list.Add(new Vector2(cornerPosition.X + ((size.X - 1) / 2f), cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeTop:
                 case TileType.SmallSpikeTop:
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 2));
-                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 2));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + ((size.X - 1) / 2f), cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeLeft:
                 case TileType.SmallSpikeLeft:
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + (size.Y - 1) / 2));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + (size.Y - 1) / 2f));
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 2));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeRight:
                 case TileType.SmallSpikeRight:
                     list.Add(cornerPosition);
-                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 2));
-                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + (size.Y - 1) / 2));
+                    list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + ((size.Y - 1) / 2f)));
                     break;
             }
 
@@ -90,8 +90,8 @@ namespace IWBTM.Game.Helpers
 
             var list = new List<Vector2>
             {
-                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f + 1),
-                new Vector2(position.X + size.X / 2f - 1, position.Y - size.Y / 2f + 1),
+                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f),
+                new Vector2(position.X + size.X / 2f - 1, position.Y - size.Y / 2f),
                 new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f - 1),
                 new Vector2(position.X + size.X / 2f - 1, position.Y + size.Y / 2f - 1)
             };
@@ -99,11 +99,11 @@ namespace IWBTM.Game.Helpers
             return list;
         }
 
-        private static bool pointInPlayer(Vector2 point, Vector2 playerPosition)
+        private static bool pointInPlayer(Vector2 point, List<Vector2> playerPoints)
         {
-            if (point.X > playerPosition.X - (DefaultPlayer.SIZE.X / 2) && point.X < playerPosition.X + (DefaultPlayer.SIZE.X / 2) - 1)
+            if (point.X >= playerPoints[0].X && point.X < playerPoints[1].X)
             {
-                if (point.Y > playerPosition.Y - (DefaultPlayer.SIZE.Y / 2) && point.Y < playerPosition.Y + (DefaultPlayer.SIZE.Y / 2) - 1)
+                if (point.Y >= playerPoints[0].Y && point.Y < playerPoints[3].Y)
                     return true;
             }
 
