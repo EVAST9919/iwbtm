@@ -376,7 +376,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
-                Player.Y = (int)closestDrawableTilePosition - SIZE.Y / 2;
+                Player.Y = (int)Math.Round(closestDrawableTilePosition) - SIZE.Y / 2;
 
                 resetJumpLogic();
             }

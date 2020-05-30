@@ -52,9 +52,9 @@ namespace IWBTM.Game.Rooms.Drawables
                 var tilePosition = child.Position;
                 var tileSize = child.Size;
 
-                if (pixelPosition.X >= tilePosition.X && pixelPosition.X <= tilePosition.X + tileSize.X - 1)
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X < tilePosition.X + tileSize.X)
                 {
-                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y <= tilePosition.Y + tileSize.Y - 1)
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y < tilePosition.Y + tileSize.Y)
                     {
                         if (DrawableTile.IsGroup(child, group))
                             return child;
