@@ -12,17 +12,30 @@ namespace IWBTM.Game.Helpers
             List<(Room, string)> rooms = new List<(Room, string)>();
 
             if (!Directory.Exists("Rooms"))
-                Directory.CreateDirectory("Rooms");
-
-            foreach (var file in Directory.GetFiles("Rooms"))
             {
+                Directory.CreateDirectory("Rooms");
+                return null;
+            }
+
+            var directories = Directory.GetDirectories("Rooms/");
+
+            if (directories.Length == 0)
+                return null;
+
+            foreach (var dir in directories)
+            {
+                var file = $"{dir}/room";
+
+                if (!File.Exists(file))
+                    continue;
+
                 using (StreamReader sr = File.OpenText(file))
                 {
                     var text = sr.ReadLine();
                     sr.Close();
 
                     var room = JsonConvert.DeserializeObject<Room>(text);
-                    var name = file.Substring(6);
+                    var name = file.Substring(6, dir.Substring(6).Length);
 
                     rooms.Add((room, name));
                 }
@@ -33,10 +46,10 @@ namespace IWBTM.Game.Helpers
 
         public static void DeleteRoom(string name)
         {
-            File.Delete($"Rooms/{name}");
+            Directory.Delete($"Rooms/{name}", true);
         }
 
-        public static void CreateRoom(string filename, string music, List<Tile> tiles)
+        public static void CreateRoom(string name, string music, List<Tile> tiles)
         {
             var file = new Room
             {
@@ -49,7 +62,9 @@ namespace IWBTM.Game.Helpers
             if (!Directory.Exists("Rooms"))
                 Directory.CreateDirectory("Rooms");
 
-            using (StreamWriter sw = File.CreateText($"Rooms/{filename}"))
+            Directory.CreateDirectory($"Rooms/{name}");
+
+            using (StreamWriter sw = File.CreateText($"Rooms/{name}/room"))
             {
                 sw.WriteLine(jsonResult.ToString());
                 sw.Close();
