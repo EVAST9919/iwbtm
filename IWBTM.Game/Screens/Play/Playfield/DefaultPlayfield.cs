@@ -156,7 +156,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
         private void restart()
         {
-            Player.SetSavedPosition();
+            Player.Revive();
             deathOverlay.Restore();
             roomEntering.Stop();
             roomEntering.Play();

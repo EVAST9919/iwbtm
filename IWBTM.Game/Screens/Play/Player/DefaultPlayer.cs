@@ -116,7 +116,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public Vector2 PlayerPosition() => Player.Position;
 
-        public void SetSavedPosition()
+        public void Revive()
         {
             if (savedPosition == default)
             {
