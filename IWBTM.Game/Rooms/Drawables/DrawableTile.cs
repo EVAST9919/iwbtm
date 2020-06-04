@@ -99,8 +99,10 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SmallSpikeTop:
                 case TileType.SmallSpikeLeft:
                 case TileType.SmallSpikeRight:
-                case TileType.Cherry:
                     return SIZE / 2;
+
+                case TileType.Cherry:
+                    return 21;
 
                 default:
                     return SIZE;
@@ -119,7 +121,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         private static TileGroup getGroup(TileType? type)
         {
-            switch(type)
+            switch (type)
             {
                 case TileType.Save:
                     return TileGroup.Save;
