@@ -135,8 +135,8 @@ namespace IWBTM.Game.Screens.Play.Player
             availableJumpCount = 1;
 
             died = false;
+            updateAnimationDirection();
             Player.Show();
-            updateVisual();
         }
 
         private void onDeath()
@@ -224,7 +224,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (horizontalSpeed != 0)
             {
                 rightwards = horizontalSpeed > 0;
-                updateVisual();
+                updateAnimationDirection();
 
                 if (rightwards)
                     checkRightCollision(elapsedFrameTime);
@@ -303,7 +303,7 @@ namespace IWBTM.Game.Screens.Play.Player
             }
         }
 
-        private void updateVisual()
+        private void updateAnimationDirection()
         {
             animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
             animationContainer.X = rightwards ? -1.5f : 1.5f;
