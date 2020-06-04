@@ -24,8 +24,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public ToolBar()
         {
-            Width = 200;
-            RelativeSizeAxes = Axes.Y;
+            RelativeSizeAxes = Axes.Both;
 
             AddRangeInternal(new Drawable[]
             {
@@ -129,8 +128,6 @@ namespace IWBTM.Game.Screens.Edit
                 },
             });
         }
-
-        protected override bool OnHover(HoverEvent e) => true;
 
         private class EditorButon : ClickableContainer
         {

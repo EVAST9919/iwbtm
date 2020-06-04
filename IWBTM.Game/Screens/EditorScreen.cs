@@ -7,6 +7,7 @@ using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
@@ -42,18 +43,35 @@ namespace IWBTM.Game.Screens
                 {
                     Margin = new MarginPadding(10),
                 },
-                new PlayfieldAdjustmentContainer
+                new GridContainer
                 {
-                    Scale = new Vector2(0.9f),
-                    Child = blueprint = new BluePrint(room)
+                    RelativeSizeAxes = Axes.Both,
+                    ColumnDimensions = new[]
+                    {
+                        new Dimension(),
+                        new Dimension(GridSizeMode.Absolute, 200)
+                    },
+                    RowDimensions = new[]
+                    {
+                        new Dimension()
+                    },
+                    Content = new[]
+                    {
+                        new Drawable[]
+                        {
+                            new PlayfieldAdjustmentContainer
+                            {
+                                Scale = new Vector2(0.9f),
+                                Child = blueprint = new BluePrint(room)
+                            },
+                            toolbar = new ToolBar()
+                            {
+                                OnTest = test,
+                                OnSave = save
+                            }
+                        }
+                    }
                 },
-                toolbar = new ToolBar()
-                {
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
-                    OnTest = test,
-                    OnSave = save
-                }
             });
 
             selectedObject.BindTo(toolbar.Selected);
