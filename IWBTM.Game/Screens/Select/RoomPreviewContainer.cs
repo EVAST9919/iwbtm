@@ -1,6 +1,7 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -12,9 +13,10 @@ namespace IWBTM.Game.Screens.Select
 {
     public class RoomPreviewContainer : CompositeDrawable
     {
-        private readonly PlayfieldAdjustmentContainer roomPreview;
+        private PlayfieldAdjustmentContainer roomPreview;
 
-        public RoomPreviewContainer()
+        [BackgroundDependencyLoader]
+        private void load()
         {
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);
@@ -35,7 +37,7 @@ namespace IWBTM.Game.Screens.Select
 
             if (deathSpots != null)
             {
-                foreach(var spot in deathSpots)
+                foreach (var spot in deathSpots)
                 {
                     roomPreview.Add(new Container
                     {

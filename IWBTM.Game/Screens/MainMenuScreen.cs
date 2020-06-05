@@ -12,14 +12,17 @@ using System;
 
 namespace IWBTM.Game.Screens
 {
-    public class MainMenuScreen : GameScreen
+    public class MainMenuScreen : IWannaScreen
     {
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
 
         private Track track;
 
-        public MainMenuScreen()
+        private Screen selectScreen;
+
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
         {
             AddRangeInternal(new Drawable[]
             {
@@ -40,7 +43,7 @@ namespace IWBTM.Game.Screens
                     Spacing = new Vector2(40, 0),
                     Children = new[]
                     {
-                        new Button("Play", () => this.Push(new SelectScreen())),
+                        new Button("Play", () => this.Push(consumeSelect())),
                         new Button("Create", () => this.Push(new CreationScreen()))
                     }
                 },
@@ -52,14 +55,25 @@ namespace IWBTM.Game.Screens
                     Margin = new MarginPadding(10)
                 }
             });
-        }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
             audio.VolumeTrack.Value = 0.3f;
             track = audio.Tracks.Get("main menu");
             track.Looping = true;
+
+            preloadSelectScreen();
+        }
+
+        private void preloadSelectScreen()
+        {
+            if (selectScreen == null)
+                LoadComponentAsync(selectScreen = new SelectScreen());
+        }
+
+        private Screen consumeSelect()
+        {
+            var s = selectScreen;
+            selectScreen = null;
+            return s;
         }
 
         protected override void OnExit()
@@ -82,6 +96,8 @@ namespace IWBTM.Game.Screens
         public override void OnResuming(IScreen last)
         {
             base.OnResuming(last);
+
+            preloadSelectScreen();
             //track.Start();
         }
 

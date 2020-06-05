@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Screens.Select;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -11,17 +12,17 @@ using System;
 
 namespace IWBTM.Game.Screens
 {
-    public class SelectScreen : GameScreen
+    public class SelectScreen : IWannaScreen
     {
-        private readonly RoomPreviewContainer preview;
-
         private readonly Bindable<CarouselItem> selectedRoom = new Bindable<CarouselItem>();
 
-        private readonly Carousel carousel;
+        private Carousel carousel;
+        private RoomPreviewContainer preview;
 
-        private readonly Action onEnterPressed;
+        private Action onEnterPressed;
 
-        public SelectScreen()
+        [BackgroundDependencyLoader]
+        private void load()
         {
             onEnterPressed = () =>
             {
@@ -57,23 +58,14 @@ namespace IWBTM.Game.Screens
             });
 
             selectedRoom.BindTo(carousel.Current);
-        }
-
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
             selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Room));
+
+            carousel.UpdateItems();
         }
 
         private void editRequested(CarouselItem room)
         {
             this.Push(new EditorScreen(room.Room, room.RoomName));
-        }
-
-        public override void OnEntering(IScreen last)
-        {
-            base.OnEntering(last);
-            carousel.UpdateItems();
         }
 
         public override void OnResuming(IScreen last)

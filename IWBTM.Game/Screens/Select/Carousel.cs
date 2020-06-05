@@ -20,9 +20,10 @@ namespace IWBTM.Game.Screens.Select
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
-        private readonly FillFlowContainer<CarouselItem> flow;
+        private FillFlowContainer<CarouselItem> flow;
 
-        public Carousel()
+        [BackgroundDependencyLoader]
+        private void load()
         {
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);

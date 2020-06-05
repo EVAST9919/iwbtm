@@ -7,7 +7,7 @@ using osu.Framework.Screens;
 
 namespace IWBTM.Game.Screens
 {
-    public class CreationScreen : GameScreen
+    public class CreationScreen : IWannaScreen
     {
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }

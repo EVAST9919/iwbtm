@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
-    public class ResultsScreen : GameScreen
+    public class ResultsScreen : IWannaScreen
     {
         public ResultsScreen(List<Vector2> deathSpots, Room room)
         {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
-    public class GameplayScreen : GameScreen
+    public class GameplayScreen : IWannaScreen
     {
         protected readonly DefaultPlayfield Playfield;
 

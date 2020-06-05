@@ -14,7 +14,7 @@ using osuTK;
 
 namespace IWBTM.Game.Screens
 {
-    public class EditorScreen : GameScreen
+    public class EditorScreen : IWannaScreen
     {
         private readonly Bindable<TileType> selectedObject = new Bindable<TileType>();
 
