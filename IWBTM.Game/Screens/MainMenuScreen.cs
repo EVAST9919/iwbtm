@@ -1,14 +1,14 @@
 ﻿using IWBTM.Game.Overlays;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
-using osuTK.Graphics;
+using System;
 
 namespace IWBTM.Game.Screens
 {
@@ -27,8 +27,8 @@ namespace IWBTM.Game.Screens
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Text = "IWBTM",
-                    Font = FontUsage.Default.With(size: 30),
+                    Text = "I Wanna Be The Mapper",
+                    Font = FontUsage.Default.With(size: 50),
                     Y = -100
                 },
                 new FillFlowContainer<Button>
@@ -37,17 +37,11 @@ namespace IWBTM.Game.Screens
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Direction = FillDirection.Horizontal,
-                    Spacing = new Vector2(5, 0),
+                    Spacing = new Vector2(40, 0),
                     Children = new[]
                     {
-                        new Button("Play")
-                        {
-                            Action = () => this.Push(new SelectScreen())
-                        },
-                        new Button("Create")
-                        {
-                            Action = () => this.Push(new CreationScreen())
-                        }
+                        new Button("Play", () => this.Push(new SelectScreen())),
+                        new Button("Create", () => this.Push(new CreationScreen()))
                     }
                 },
                 new SpriteText
@@ -91,26 +85,12 @@ namespace IWBTM.Game.Screens
             //track.Start();
         }
 
-        private class Button : ClickableContainer
+        private class Button : IWannaButton
         {
-            public Button(string text)
+            public Button(string text, Action action)
+                : base(text, action)
             {
                 Size = new Vector2(100);
-
-                AddRangeInternal(new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both
-                    },
-                    new SpriteText
-                    {
-                        Text = text,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Color4.Black
-                    }
-                });
             }
         }
     }
