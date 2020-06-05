@@ -83,7 +83,7 @@ namespace IWBTM.Game.Overlays
 
         protected override void PopOut()
         {
-            dim.FadeOut();
+            dim.FadeOut(200, Easing.Out);
         }
 
         private class ConfirmationWindow : CompositeDrawable
