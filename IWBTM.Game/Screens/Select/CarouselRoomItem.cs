@@ -35,7 +35,7 @@ namespace IWBTM.Game.Screens.Select
             Height = 50;
             Masking = true;
             BorderColour = Color4.Red;
-            CornerRadius = 7;
+            CornerRadius = 5;
             AddRangeInternal(new Drawable[]
             {
                 new Box

@@ -113,14 +113,15 @@ namespace IWBTM.Game.Overlays
                 EdgeEffect = new EdgeEffectParameters
                 {
                     Type = EdgeEffectType.Shadow,
-                    Radius = 5f,
+                    Radius = 9f,
                     Colour = Color4.Black.Opacity(0.25f),
                 };
                 AddRangeInternal(new Drawable[]
                 {
                     new Box
                     {
-                        RelativeSizeAxes = Axes.Both
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = IWannaColour.IWannaGrayDarker
                     },
                     new Container
                     {
@@ -136,9 +137,8 @@ namespace IWBTM.Game.Overlays
                                 Anchor = Anchor.TopCentre,
                                 Origin = Anchor.TopCentre,
                                 Text = text,
-                                Colour = Color4.Black
                             },
-                            new FillFlowContainer<WhiteButton>
+                            new FillFlowContainer<IWannaBasicButton>
                             {
                                 Anchor = Anchor.BottomCentre,
                                 Origin = Anchor.BottomCentre,
@@ -147,8 +147,8 @@ namespace IWBTM.Game.Overlays
                                 Spacing = new Vector2(50, 0),
                                 Children = new[]
                                 {
-                                    new WhiteButton("yes", confirm),
-                                    new WhiteButton("no", decline)
+                                    new IWannaBasicButton("yes", confirm),
+                                    new IWannaBasicButton("no", decline)
                                 }
                             }
                         }

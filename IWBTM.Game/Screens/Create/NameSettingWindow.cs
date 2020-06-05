@@ -4,7 +4,6 @@ using osuTK;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Sprites;
-using osuTK.Graphics;
 using IWBTM.Game.Overlays;
 using osu.Framework.Allocation;
 using IWBTM.Game.Helpers;
@@ -43,14 +42,13 @@ namespace IWBTM.Game.Screens.Create
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Text = "Set the room name",
-                            Colour = Color4.Black
                         },
                         textbox = new LocalTextbox
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                         },
-                        new WhiteButton("Ok", onPressed)
+                        new IWannaBasicButton("Ok", onPressed)
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,

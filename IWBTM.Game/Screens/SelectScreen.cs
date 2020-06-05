@@ -1,12 +1,11 @@
 ﻿using IWBTM.Game.Screens.Select;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
-using osuTK.Graphics;
+using System;
 
 namespace IWBTM.Game.Screens
 {
@@ -20,27 +19,33 @@ namespace IWBTM.Game.Screens
 
         public SelectScreen()
         {
-            AddRangeInternal(new Drawable[]
+            AddInternal(new Container
             {
-                carousel = new Carousel
+                RelativeSizeAxes = Axes.Both,
+                Padding = new MarginPadding(10),
+                Children = new Drawable[]
                 {
-                    Width = 0.5f,
-                    OnEdit = editRequested,
-                },
-                preview = new RoomPreviewContainer
-                {
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
-                    Width = 0.5f
-                },
-                new PlayButton
-                {
-                    Anchor = Anchor.BottomRight,
-                    Origin = Anchor.BottomRight,
-                    Action = () =>
+                    carousel = new Carousel
                     {
-                        if (selectedRoom.Value != default)
-                            this.Push(new GameplayScreen(selectedRoom.Value.Room, selectedRoom.Value.RoomName));
+                        Width = 0.5f,
+                        OnEdit = editRequested,
+                    },
+                    preview = new RoomPreviewContainer
+                    {
+                        Anchor = Anchor.TopRight,
+                        Origin = Anchor.TopRight,
+                        Width = 0.5f
+                    },
+                    new Container
+                    {
+                        AutoSizeAxes = Axes.Both,
+                        Anchor = Anchor.BottomRight,
+                        Origin = Anchor.BottomRight,
+                        Child = new PlayButton(() =>
+                        {
+                            if (selectedRoom.Value != default)
+                                this.Push(new GameplayScreen(selectedRoom.Value.Room, selectedRoom.Value.RoomName));
+                        })
                     }
                 }
             });
@@ -71,25 +76,12 @@ namespace IWBTM.Game.Screens
             carousel.UpdateItems();
         }
 
-        private class PlayButton : ClickableContainer
+        private class PlayButton : IWannaButton
         {
-            public PlayButton()
+            public PlayButton(Action action)
+                : base("Play", action)
             {
                 Size = new Vector2(100, 50);
-                Children = new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both
-                    },
-                    new SpriteText
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Text = "Play",
-                        Colour = Color4.Black
-                    }
-                };
             }
         }
     }

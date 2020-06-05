@@ -3,7 +3,6 @@ using osu.Framework.Graphics;
 using osuTK;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Sprites;
-using osuTK.Graphics;
 using System;
 using IWBTM.Game.UserInterface;
 
@@ -37,7 +36,6 @@ namespace IWBTM.Game.Screens.Create
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Text = "Set default room audio",
-                            Colour = Color4.Black
                         },
                         new Container
                         {
@@ -48,7 +46,7 @@ namespace IWBTM.Game.Screens.Create
                             Origin = Anchor.Centre,
                             Child = musicSelector = new MusicSelector()
                         },
-                        new WhiteButton("Ok", onPressed)
+                        new IWannaBasicButton("Ok", onPressed)
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,

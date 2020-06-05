@@ -1,12 +1,11 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.Events;
 using osuTK;
-using osuTK.Graphics;
 using System;
 
 namespace IWBTM.Game.Screens.Edit
@@ -31,30 +30,30 @@ namespace IWBTM.Game.Screens.Edit
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Gray
+                    Colour = IWannaColour.IWannaGrayDarker
                 },
-                new GridContainer
+                new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    ColumnDimensions = new[]
+                    Padding = new MarginPadding(10),
+                    Child = new GridContainer
                     {
-                        new Dimension()
-                    },
-                    RowDimensions = new[]
-                    {
-                        new Dimension(),
-                        new Dimension(),
-                        new Dimension(),
-                    },
-                    Content = new[]
-                    {
-                        new Drawable[]
+                        RelativeSizeAxes = Axes.Both,
+                        ColumnDimensions = new[]
                         {
-                            new Container
+                            new Dimension()
+                        },
+                        RowDimensions = new[]
+                        {
+                            new Dimension(),
+                            new Dimension(),
+                            new Dimension(),
+                        },
+                        Content = new[]
+                        {
+                            new Drawable[]
                             {
-                                RelativeSizeAxes = Axes.Both,
-                                Padding = new MarginPadding(5),
-                                Child = new FillFlowContainer
+                                new FillFlowContainer
                                 {
                                     RelativeSizeAxes = Axes.X,
                                     AutoSizeAxes = Axes.Y,
@@ -65,20 +64,14 @@ namespace IWBTM.Game.Screens.Edit
                                         new SpriteText
                                         {
                                             Text = "Object selector",
-                                            Colour = Color4.Black
                                         },
                                         selector = new ObjectSelectorTabControl()
                                     }
                                 }
-                            }
-                        },
-                        new Drawable[]
-                        {
-                            new Container
+                            },
+                            new Drawable[]
                             {
-                                RelativeSizeAxes = Axes.Both,
-                                Padding = new MarginPadding(5),
-                                Child = new FillFlowContainer
+                                new FillFlowContainer
                                 {
                                     RelativeSizeAxes = Axes.X,
                                     AutoSizeAxes = Axes.Y,
@@ -89,66 +82,39 @@ namespace IWBTM.Game.Screens.Edit
                                         new SpriteText
                                         {
                                             Text = "Snap distance",
-                                            Colour = Color4.Black
                                         },
                                         snapControl = new GridSnapTabControl()
                                     }
                                 }
-                            }
-                        },
-                        new Drawable[]
-                        {
-                            new FillFlowContainer
+                            },
+                            new Drawable[]
                             {
-                                Anchor = Anchor.Centre,
-                                Origin = Anchor.Centre,
-                                AutoSizeAxes = Axes.Both,
-                                Direction = FillDirection.Vertical,
-                                Spacing = new Vector2(0, 10),
-                                Children = new Drawable[]
+                                new FillFlowContainer
                                 {
-                                    new Container
+                                    Anchor = Anchor.Centre,
+                                    Origin = Anchor.Centre,
+                                    AutoSizeAxes = Axes.Both,
+                                    Direction = FillDirection.Vertical,
+                                    Spacing = new Vector2(0, 20),
+                                    Children = new Drawable[]
                                     {
-                                        Depth = -float.MaxValue,
-                                        RelativeSizeAxes = Axes.X,
-                                        Height = 30,
-                                    },
-                                    new EditorButon("Test")
-                                    {
-                                        Action = () => OnTest?.Invoke()
-                                    },
-                                    new EditorButon("Save")
-                                    {
-                                        Action = () => OnSave?.Invoke()
+                                        new EditorButton("Test", () => OnTest?.Invoke()),
+                                        new EditorButton("Save", () => OnSave?.Invoke())
                                     }
                                 }
-                            }
-                        },
-                    }
-                },
+                            },
+                        }
+                    },
+                }
             });
         }
 
-        private class EditorButon : ClickableContainer
+        private class EditorButton : IWannaButton
         {
-            public EditorButon(string text)
+            public EditorButton(string text, Action action)
+                : base(text, action)
             {
                 Size = new Vector2(100, 50);
-
-                AddRangeInternal(new Drawable[]
-                {
-                    new Box
-                    {
-                        RelativeSizeAxes = Axes.Both
-                    },
-                    new SpriteText
-                    {
-                        Text = text,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Color4.Black
-                    }
-                });
             }
         }
     }

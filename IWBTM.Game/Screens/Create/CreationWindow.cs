@@ -1,7 +1,7 @@
 ﻿using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
-using osuTK.Graphics;
+using IWBTM.Game.UserInterface;
 
 namespace IWBTM.Game.Screens.Create
 {
@@ -16,7 +16,7 @@ namespace IWBTM.Game.Screens.Create
             AddInternal(new Box
             {
                 RelativeSizeAxes = Axes.Both,
-                Colour = Color4.Gray
+                Colour = IWannaColour.IWannaGrayDarker
             });
         }
     }
