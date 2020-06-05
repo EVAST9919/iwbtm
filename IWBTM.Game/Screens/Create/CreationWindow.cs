@@ -2,6 +2,9 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Graphics.Effects;
+using osuTK.Graphics;
+using osu.Framework.Extensions.Color4Extensions;
 
 namespace IWBTM.Game.Screens.Create
 {
@@ -13,10 +16,17 @@ namespace IWBTM.Game.Screens.Create
             AutoSizeAxes = Axes.Y;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
+            Masking = true;
+            EdgeEffect = new EdgeEffectParameters
+            {
+                Type = EdgeEffectType.Shadow,
+                Radius = 9f,
+                Colour = Color4.Black.Opacity(0.4f),
+            };
             AddInternal(new Box
             {
                 RelativeSizeAxes = Axes.Both,
-                Colour = IWannaColour.IWannaGrayDarker
+                Colour = IWannaColour.GrayDark
             });
         }
     }

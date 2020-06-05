@@ -114,14 +114,14 @@ namespace IWBTM.Game.Overlays
                 {
                     Type = EdgeEffectType.Shadow,
                     Radius = 9f,
-                    Colour = Color4.Black.Opacity(0.25f),
+                    Colour = Color4.Black.Opacity(0.4f),
                 };
                 AddRangeInternal(new Drawable[]
                 {
                     new Box
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Colour = IWannaColour.IWannaGrayDarker
+                        Colour = IWannaColour.GrayDark
                     },
                     new Container
                     {

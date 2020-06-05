@@ -2,7 +2,6 @@
 using osu.Framework.Graphics;
 using osuTK;
 using IWBTM.Game.UserInterface;
-using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Graphics.Sprites;
 using IWBTM.Game.Overlays;
 using osu.Framework.Allocation;
@@ -18,7 +17,7 @@ namespace IWBTM.Game.Screens.Create
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
-        private readonly LocalTextbox textbox;
+        private readonly IWannaTextBox textbox;
 
         public NameSettingWindow()
         {
@@ -43,8 +42,9 @@ namespace IWBTM.Game.Screens.Create
                             Origin = Anchor.Centre,
                             Text = "Set the room name",
                         },
-                        textbox = new LocalTextbox
+                        textbox = new IWannaTextBox
                         {
+                            Width = 300,
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                         },
@@ -77,15 +77,6 @@ namespace IWBTM.Game.Screens.Create
             }
 
             OnCommit?.Invoke(text);
-        }
-
-        private class LocalTextbox : BasicTextBox
-        {
-            public LocalTextbox()
-            {
-                Height = 40;
-                Width = 300;
-            }
         }
     }
 }

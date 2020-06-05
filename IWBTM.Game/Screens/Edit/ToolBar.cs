@@ -1,11 +1,14 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using osuTK.Graphics;
 using System;
 
 namespace IWBTM.Game.Screens.Edit
@@ -24,13 +27,20 @@ namespace IWBTM.Game.Screens.Edit
         public ToolBar()
         {
             RelativeSizeAxes = Axes.Both;
+            Masking = true;
+            EdgeEffect = new EdgeEffectParameters
+            {
+                Type = EdgeEffectType.Shadow,
+                Radius = 9f,
+                Colour = Color4.Black.Opacity(0.4f),
+            };
 
             AddRangeInternal(new Drawable[]
             {
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Colour = IWannaColour.IWannaGrayDarker
+                    Colour = IWannaColour.GrayDark
                 },
                 new Container
                 {

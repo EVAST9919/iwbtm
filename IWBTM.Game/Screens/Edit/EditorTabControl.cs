@@ -1,9 +1,8 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.UserInterface;
 using osuTK;
-using osuTK.Graphics;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -31,28 +30,29 @@ namespace IWBTM.Game.Screens.Edit
 
         protected class EditorTabItem<U> : TabItem<U>
         {
+            private readonly Background background;
+
             public EditorTabItem(U value)
                 : base(value)
             {
                 Size = new Vector2(DrawableTile.SIZE);
-                Masking = true;
-                CornerRadius = 5;
-                BorderColour = Color4.Red;
+                Add(background = new Background());
+            }
 
-                Add(new Box
+            protected override void OnActivated() => background.Activate();
+
+            protected override void OnDeactivated() => background.Deactivate();
+
+            private class Background : IWannaButtonBackground
+            {
+                public Background()
                 {
-                    RelativeSizeAxes = Axes.Both,
-                });
-            }
+                    BorderColour = IWannaColour.Blue;
+                }
 
-            protected override void OnActivated()
-            {
-                BorderThickness = 5;
-            }
+                public void Activate() => BorderThickness = 5;
 
-            protected override void OnDeactivated()
-            {
-                BorderThickness = 0;
+                public void Deactivate() => BorderThickness = 0;
             }
         }
     }

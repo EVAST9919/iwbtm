@@ -13,14 +13,14 @@ namespace IWBTM.Game.Screens.Select
 {
     public class Carousel : CompositeDrawable
     {
-        public readonly Bindable<CarouselRoomItem> Current = new Bindable<CarouselRoomItem>();
+        public readonly Bindable<CarouselItem> Current = new Bindable<CarouselItem>();
 
-        public Action<CarouselRoomItem> OnEdit;
+        public Action<CarouselItem> OnEdit;
 
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
-        private readonly FillFlowContainer<CarouselRoomItem> flow;
+        private readonly FillFlowContainer<CarouselItem> flow;
 
         public Carousel()
         {
@@ -30,7 +30,7 @@ namespace IWBTM.Game.Screens.Select
             AddInternal(new BasicScrollContainer
             {
                 RelativeSizeAxes = Axes.Both,
-                Child = flow = new FillFlowContainer<CarouselRoomItem>
+                Child = flow = new FillFlowContainer<CarouselItem>
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
@@ -46,7 +46,7 @@ namespace IWBTM.Game.Screens.Select
 
             foreach (var r in RoomStorage.GetRooms())
             {
-                flow.Add(new CarouselRoomItem(r)
+                flow.Add(new CarouselItem(r)
                 {
                     Selected = onSelection,
                     OnEdit = editRequested,
@@ -57,7 +57,7 @@ namespace IWBTM.Game.Screens.Select
             selectFirst();
         }
 
-        private void deleteRequested(CarouselRoomItem item)
+        private void deleteRequested(CarouselItem item)
         {
             var name = item.RoomName;
 
@@ -67,12 +67,12 @@ namespace IWBTM.Game.Screens.Select
             item.Expire();
         }
 
-        private void editRequested(CarouselRoomItem item)
+        private void editRequested(CarouselItem item)
         {
             OnEdit?.Invoke(item);
         }
 
-        private void onSelection(CarouselRoomItem item)
+        private void onSelection(CarouselItem item)
         {
             Current.Value = item;
 

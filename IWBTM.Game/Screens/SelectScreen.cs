@@ -13,7 +13,7 @@ namespace IWBTM.Game.Screens
     {
         private readonly RoomPreviewContainer preview;
 
-        private readonly Bindable<CarouselRoomItem> selectedRoom = new Bindable<CarouselRoomItem>();
+        private readonly Bindable<CarouselItem> selectedRoom = new Bindable<CarouselItem>();
 
         private readonly Carousel carousel;
 
@@ -59,7 +59,7 @@ namespace IWBTM.Game.Screens
             selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Room));
         }
 
-        private void editRequested(CarouselRoomItem room)
+        private void editRequested(CarouselItem room)
         {
             this.Push(new EditorScreen(room.Room, room.RoomName));
         }

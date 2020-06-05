@@ -1,6 +1,5 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
-using osuTK.Graphics;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -27,8 +26,7 @@ namespace IWBTM.Game.Screens.Edit
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Text = value.ToString(),
-                    Colour = Color4.Black
+                    Text = value.ToString()
                 });
             }
         }
