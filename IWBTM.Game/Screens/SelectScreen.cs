@@ -3,8 +3,10 @@ using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
+using osuTK.Input;
 using System;
 
 namespace IWBTM.Game.Screens
@@ -17,8 +19,16 @@ namespace IWBTM.Game.Screens
 
         private readonly Carousel carousel;
 
+        private readonly Action onEnterPressed;
+
         public SelectScreen()
         {
+            onEnterPressed = () =>
+            {
+                if (selectedRoom.Value != default)
+                    this.Push(new GameplayScreen(selectedRoom.Value.Room, selectedRoom.Value.RoomName));
+            };
+
             AddInternal(new Container
             {
                 RelativeSizeAxes = Axes.Both,
@@ -41,11 +51,7 @@ namespace IWBTM.Game.Screens
                         AutoSizeAxes = Axes.Both,
                         Anchor = Anchor.BottomRight,
                         Origin = Anchor.BottomRight,
-                        Child = new PlayButton(() =>
-                        {
-                            if (selectedRoom.Value != default)
-                                this.Push(new GameplayScreen(selectedRoom.Value.Room, selectedRoom.Value.RoomName));
-                        })
+                        Child = new PlayButton(onEnterPressed.Invoke)
                     }
                 }
             });
@@ -74,6 +80,21 @@ namespace IWBTM.Game.Screens
         {
             base.OnResuming(last);
             carousel.UpdateItems();
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (!e.Repeat)
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        onEnterPressed.Invoke();
+                        return true;
+                }
+            };
+
+            return base.OnKeyDown(e);
         }
 
         private class PlayButton : IWannaButton
