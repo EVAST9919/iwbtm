@@ -21,32 +21,41 @@ namespace IWBTM.Game.Screens
 
         public MainMenuScreen()
         {
-            AddInternal(new SpriteText
+            AddRangeInternal(new Drawable[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Text = "IWBTM",
-                Font = FontUsage.Default.With(size: 30),
-                Y = -100
-            });
-
-            AddInternal(new FillFlowContainer<Button>
-            {
-                AutoSizeAxes = Axes.Both,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Direction = FillDirection.Horizontal,
-                Spacing = new Vector2(5, 0),
-                Children = new[]
+                new SpriteText
                 {
-                    new Button("Play")
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Text = "IWBTM",
+                    Font = FontUsage.Default.With(size: 30),
+                    Y = -100
+                },
+                new FillFlowContainer<Button>
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Direction = FillDirection.Horizontal,
+                    Spacing = new Vector2(5, 0),
+                    Children = new[]
                     {
-                        Action = () => this.Push(new SelectScreen())
-                    },
-                    new Button("Create")
-                    {
-                        Action = () => this.Push(new CreationScreen())
+                        new Button("Play")
+                        {
+                            Action = () => this.Push(new SelectScreen())
+                        },
+                        new Button("Create")
+                        {
+                            Action = () => this.Push(new CreationScreen())
+                        }
                     }
+                },
+                new SpriteText
+                {
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
+                    Text = "v.0.5.5",
+                    Margin = new MarginPadding(10)
                 }
             });
         }
