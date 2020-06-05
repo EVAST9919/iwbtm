@@ -68,6 +68,12 @@ namespace IWBTM.Game.Screens
             this.Push(new EditorScreen(room.Room, room.RoomName));
         }
 
+        public override void OnEntering(IScreen last)
+        {
+            base.OnEntering(last);
+            carousel.UpdateItems();
+        }
+
         public override void OnResuming(IScreen last)
         {
             base.OnResuming(last);
