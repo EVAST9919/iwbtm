@@ -5,12 +5,23 @@ using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using System.Collections.Generic;
+using osu.Framework.Allocation;
 
 namespace IWBTM.Game.Screens
 {
     public class ResultsScreen : IWannaScreen
     {
+        private readonly List<Vector2> deathSpots;
+        private readonly Room room;
+
         public ResultsScreen(List<Vector2> deathSpots, Room room)
+        {
+            this.deathSpots = deathSpots;
+            this.room = room;
+        }
+
+        [BackgroundDependencyLoader]
+        private void load()
         {
             RoomPreviewContainer preview;
 
