@@ -91,6 +91,14 @@ namespace IWBTM.Game.Screens
                     case Key.Enter:
                         onEnterPressed.Invoke();
                         return true;
+
+                    case Key.Down:
+                        carousel.TrySelectNext();
+                        return true;
+
+                    case Key.Up:
+                        carousel.TrySelectPrev();
+                        return true;
                 }
             };
 

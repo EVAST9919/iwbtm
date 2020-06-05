@@ -57,6 +57,36 @@ namespace IWBTM.Game.Screens.Select
             selectFirst();
         }
 
+        public void TrySelectNext()
+        {
+            if (Current.Value == flow.Children.Last())
+                return;
+
+            for (int i = 0; i < flow.Count; i++)
+            {
+                if (Current.Value == flow.Children[i])
+                {
+                    flow.Children[i + 1].Select();
+                    return;
+                }
+            }
+        }
+
+        public void TrySelectPrev()
+        {
+            if (Current.Value == flow.Children.First())
+                return;
+
+            for (int i = 0; i < flow.Count; i++)
+            {
+                if (Current.Value == flow.Children[i])
+                {
+                    flow.Children[i - 1].Select();
+                    return;
+                }
+            }
+        }
+
         private void deleteRequested(CarouselItem item)
         {
             var name = item.RoomName;
