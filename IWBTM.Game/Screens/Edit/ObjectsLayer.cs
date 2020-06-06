@@ -15,9 +15,9 @@ namespace IWBTM.Game.Screens.Edit
         {
         }
 
-        public void TryPlace(TileType type, Vector2 position, Vector2 roomSize)
+        public void TryPlace(TileType type, Vector2 position)
         {
-            var snappedPosition = BluePrint.GetSnappedPosition(position, roomSize, SnapValue.Value);
+            var snappedPosition = BluePrint.GetSnappedPosition(position, SnapValue.Value);
 
             if (!this.Any())
             {

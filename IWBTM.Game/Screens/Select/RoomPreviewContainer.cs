@@ -22,24 +22,32 @@ namespace IWBTM.Game.Screens.Select
 
         public void Preview(Room room, bool showPlayerSpawn = true, List<Vector2> deathSpots = null)
         {
-            FullRoomPreviewContainer roomPreview;
+            Container content;
 
-            InternalChild = roomPreview = new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY));
+            InternalChild = new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY))
+            {
+                Child = content = new Container
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                }
+            };
 
-            roomPreview.Children = new Drawable[]
+            content.AddRange(new Drawable[]
             {
                 new Box
                 {
                     RelativeSizeAxes = Axes.Both
                 },
                 new DrawableRoom(room, showPlayerSpawn)
-            };
+            });
 
             if (deathSpots != null)
             {
                 foreach (var spot in deathSpots)
                 {
-                    roomPreview.Add(new DeathSpot
+                    content.Add(new DeathSpot
                     {
                         Position = spot
                     });

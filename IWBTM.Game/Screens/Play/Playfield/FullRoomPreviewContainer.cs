@@ -2,6 +2,7 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK;
+using System;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -21,7 +22,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 Origin = Anchor.Centre,
                 RelativeSizeAxes = Axes.Both,
                 FillMode = FillMode.Fit,
-                FillAspectRatio = roomSize.X / roomSize.Y,
+                FillAspectRatio = Math.Max(25, roomSize.X) / Math.Max(19, roomSize.Y),
                 Child = content = new ScalingContainer(roomSize)
                 {
                     RelativeSizeAxes = Axes.Both
@@ -41,7 +42,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
             protected override void Update()
             {
                 base.Update();
-                Scale = new Vector2(Parent.ChildSize.X / (roomSize.X * DrawableTile.SIZE));
+                Scale = new Vector2(Parent.ChildSize.X / (Math.Max(25, roomSize.X) * DrawableTile.SIZE));
                 Size = Vector2.Divide(Vector2.One, Scale);
             }
         }

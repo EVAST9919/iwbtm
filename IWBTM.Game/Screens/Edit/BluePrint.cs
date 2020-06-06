@@ -19,12 +19,10 @@ namespace IWBTM.Game.Screens.Edit
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
-        private readonly Vector2 roomSize;
 
         public BluePrint(Room room)
         {
-            roomSize = new Vector2(room.SizeX, room.SizeY);
-            Size = roomSize * DrawableTile.SIZE;
+            Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
 
             Grid grid;
 
@@ -76,13 +74,13 @@ namespace IWBTM.Game.Screens.Edit
                     t.Alpha = 0.5f;
                 });
 
-            tileToPlace.Position = GetSnappedPosition(mousePosition, roomSize, SnapValue.Value);
+            tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
 
             var buttons = e.CurrentState.Mouse.Buttons;
 
             if (buttons.IsPressed(MouseButton.Left))
             {
-                objectsLayer.TryPlace(Selected.Value, mousePosition, roomSize);
+                objectsLayer.TryPlace(Selected.Value, mousePosition);
                 return true;
             }
 
@@ -114,7 +112,7 @@ namespace IWBTM.Game.Screens.Edit
             switch (e.Button)
             {
                 case MouseButton.Left:
-                    objectsLayer.TryPlace(Selected.Value, mousePosition, roomSize);
+                    objectsLayer.TryPlace(Selected.Value, mousePosition);
                     return true;
 
                 case MouseButton.Right:
@@ -125,9 +123,9 @@ namespace IWBTM.Game.Screens.Edit
             return base.OnMouseDown(e);
         }
 
-        public static Vector2 GetSnappedPosition(Vector2 input, Vector2 roomSize, int snapValue)
+        public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)
         {
-            return new Vector2((int)(input.X / (roomSize.X * DrawableTile.SIZE) * (roomSize.X * DrawableTile.SIZE / snapValue)), (int)(input.Y / (roomSize.Y * DrawableTile.SIZE) * (roomSize.Y * DrawableTile.SIZE / snapValue))) * snapValue;
+            return new Vector2((int)(input.X / snapValue), (int)(input.Y / snapValue)) * snapValue;
         }
 
         private static DrawableTile createTile(Tile tile)
