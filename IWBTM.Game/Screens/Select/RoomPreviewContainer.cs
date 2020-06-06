@@ -1,12 +1,12 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osuTK;
-using osuTK.Graphics;
 using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens.Select
@@ -39,20 +39,9 @@ namespace IWBTM.Game.Screens.Select
             {
                 foreach (var spot in deathSpots)
                 {
-                    roomPreview.Add(new Container
+                    roomPreview.Add(new DeathSpot
                     {
-                        Origin = Anchor.Centre,
-                        Size = new Vector2(11, 21),
-                        Position = spot,
-                        Masking = true,
-                        BorderColour = Color4.Red,
-                        BorderThickness = 2,
-                        Child = new Box
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = Color4.Red,
-                            Alpha = 0.5f
-                        }
+                        Position = spot
                     });
                 }
             }

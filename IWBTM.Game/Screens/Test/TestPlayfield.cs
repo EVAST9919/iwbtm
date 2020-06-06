@@ -1,14 +1,12 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
-using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osuTK;
-using osuTK.Graphics;
 using System.Linq;
 
 namespace IWBTM.Game.Screens.Test
@@ -43,13 +41,9 @@ namespace IWBTM.Game.Screens.Test
         {
             if (ShowDeath.Value)
             {
-                trailLayer.Add(new Box
+                trailLayer.Add(new DeathSpot
                 {
-                    Position = position,
-                    Size = DefaultPlayer.SIZE,
-                    Origin = Anchor.Centre,
-                    Colour = Color4.Red,
-                    Alpha = 0.5f
+                    Position = position
                 });
             }
         }
