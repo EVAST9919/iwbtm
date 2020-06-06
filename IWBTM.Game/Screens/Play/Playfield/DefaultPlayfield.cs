@@ -22,9 +22,10 @@ namespace IWBTM.Game.Screens.Play.Playfield
     {
         public Action<List<Vector2>> Completed;
         public Action OnDeath;
+        public Action OnRespawn;
 
         public DefaultPlayer Player;
-        private DeathOverlay deathOverlay;
+        private PlayerParticlesContainer deathOverlay;
         private Track track;
         private DrawableSample roomEntering;
 
@@ -68,7 +69,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                     Died = onDeath,
                     Completed = onCompletion
                 },
-                deathOverlay = new DeathOverlay(),
+                deathOverlay = new PlayerParticlesContainer(),
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
@@ -134,6 +135,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
             roomEntering.Stop();
             roomEntering.Play();
             track?.Start();
+            OnRespawn?.Invoke();
         }
 
         protected override void Dispose(bool isDisposing)

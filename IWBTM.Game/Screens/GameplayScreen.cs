@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
@@ -8,7 +9,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
-using osuTK.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -20,6 +20,7 @@ namespace IWBTM.Game.Screens
 
         private readonly Room room;
         private readonly SpriteText deathCountText;
+        private readonly DeathOverlay deathOverlay;
 
         private readonly Bindable<int> deathCount = new Bindable<int>();
 
@@ -56,17 +57,29 @@ namespace IWBTM.Game.Screens
                             }
                         }
                     },
+                    deathOverlay = new DeathOverlay()
                 }
             });
 
-            Playfield.OnDeath += () => deathCount.Value++;
+            Playfield.OnDeath += onDeath;
+            Playfield.OnRespawn += onRespawn;
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
+        }
+
+        private void onDeath()
+        {
+            deathCount.Value++;
+            deathOverlay.Play();
+        }
+
+        private void onRespawn()
+        {
+            deathOverlay.Restore();
         }
 
         protected override void Update()
