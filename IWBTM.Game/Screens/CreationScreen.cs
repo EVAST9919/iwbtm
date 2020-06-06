@@ -91,7 +91,7 @@ namespace IWBTM.Game.Screens
                 return;
 
             RoomStorage.CreateRoomDirectory(name);
-            var room = RoomStorage.CreateEmptyRoom(name, musicSelector.Current.Value);
+            var room = RoomStorage.CreateEmptyRoom(name, musicSelector.Current.Value, sizeSetting.Current.Value);
             this.Push(new EditorScreen(room, name));
         }
 

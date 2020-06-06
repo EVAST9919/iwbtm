@@ -59,7 +59,7 @@ namespace IWBTM.Game.Screens
                     {
                         new Drawable[]
                         {
-                            new PlayfieldAdjustmentContainer
+                            new PlayfieldAdjustmentContainer(new Vector2(room.SizeX, room.SizeY))
                             {
                                 Scale = new Vector2(0.9f),
                                 Child = blueprint = new BluePrint(room)
@@ -97,7 +97,9 @@ namespace IWBTM.Game.Screens
             this.Push(new TestGameplayScreen(new Room
             {
                 Music = room.Music,
-                Tiles = blueprint.GetTiles()
+                Tiles = blueprint.GetTiles(),
+                SizeX = room.SizeX,
+                SizeY = room.SizeY
             }, name));
         }
 

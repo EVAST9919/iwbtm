@@ -1,5 +1,4 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
-using osu.Framework.Graphics.Containers;
+﻿using osu.Framework.Graphics.Containers;
 using osuTK;
 
 namespace IWBTM.Game.Rooms.Drawables
@@ -10,7 +9,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
-            Size = DefaultPlayfield.BASE_SIZE;
+            Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
 
             if (room != null)
             {

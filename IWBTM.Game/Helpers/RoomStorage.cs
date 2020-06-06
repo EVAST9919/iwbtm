@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Rooms;
 using Newtonsoft.Json;
+using osuTK;
 using System.Collections.Generic;
 using System.IO;
 
@@ -78,12 +79,14 @@ namespace IWBTM.Game.Helpers
             Directory.CreateDirectory($"Rooms/{name}");
         }
 
-        public static Room CreateEmptyRoom(string name, string musicName)
+        public static Room CreateEmptyRoom(string name, string musicName, Vector2 size)
         {
             var file = new Room
             {
                 Music = musicName,
-                Tiles = new List<Tile>()
+                Tiles = new List<Tile>(),
+                SizeX = size.X,
+                SizeY = size.Y
             };
 
             string jsonResult = JsonConvert.SerializeObject(file);
@@ -102,7 +105,9 @@ namespace IWBTM.Game.Helpers
             var file = new Room
             {
                 Music = room.Music,
-                Tiles = tiles
+                Tiles = tiles,
+                SizeX = room.SizeX,
+                SizeY = room.SizeY
             };
 
             string jsonResult = JsonConvert.SerializeObject(file);

@@ -20,12 +20,12 @@ namespace IWBTM.Game.Screens.Select
         {
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);
-
-            AddInternal(roomPreview = new PlayfieldAdjustmentContainer());
         }
 
         public void Preview(Room room, bool showPlayerSpawn = true, List<Vector2> deathSpots = null)
         {
+            InternalChild = roomPreview = new PlayfieldAdjustmentContainer(new Vector2(room.SizeX, room.SizeY));
+
             roomPreview.Children = new Drawable[]
             {
                 new Box

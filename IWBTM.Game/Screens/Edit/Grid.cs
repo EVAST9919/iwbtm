@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.Screens.Play.Playfield;
+﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -12,9 +13,9 @@ namespace IWBTM.Game.Screens.Edit
     {
         public readonly Bindable<int> Current = new Bindable<int>();
 
-        public Grid()
+        public Grid(Vector2 roomSize)
         {
-            Size = DefaultPlayfield.BASE_SIZE;
+            Size = new Vector2(roomSize.X, roomSize.Y) * DrawableTile.SIZE;
         }
 
         protected override void LoadComplete()
@@ -30,7 +31,7 @@ namespace IWBTM.Game.Screens.Edit
             if (snapValue < 4)
                 return;
 
-            for (int i = 0; i <= DefaultPlayfield.BASE_SIZE.X; i += snapValue)
+            for (int i = 0; i <= Size.X; i += snapValue)
             {
                 AddInternal(new VerticalLine
                 {
@@ -38,7 +39,7 @@ namespace IWBTM.Game.Screens.Edit
                 });
             }
 
-            for (int i = 0; i <= DefaultPlayfield.BASE_SIZE.Y; i += snapValue)
+            for (int i = 0; i <= Size.Y; i += snapValue)
             {
                 AddInternal(new HorizontalLine
                 {

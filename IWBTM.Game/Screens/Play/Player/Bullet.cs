@@ -5,7 +5,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using System;
-using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms.Drawables;
 
 namespace IWBTM.Game.Screens.Play.Player
@@ -19,13 +18,15 @@ namespace IWBTM.Game.Screens.Play.Player
         private readonly Sprite sprite;
 
         private readonly bool right;
+        private readonly Vector2 roomSize;
 
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
 
-        public Bullet(bool right)
+        public Bullet(bool right, Vector2 roomSize)
         {
             this.right = right;
+            this.roomSize = roomSize;
 
             Size = new Vector2(3);
             Origin = Anchor.Centre;
@@ -47,7 +48,7 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             base.Update();
 
-            if (Position.X <= 0 || Position.X >= DefaultPlayfield.BASE_SIZE.X)
+            if (Position.X <= 0 || Position.X >= roomSize.X)
             {
                 Expire();
                 return;

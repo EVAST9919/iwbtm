@@ -23,10 +23,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
 {
     public class DefaultPlayfield : CompositeDrawable
     {
-        public static readonly Vector2 BASE_SIZE = new Vector2(768, 608);
-        public static readonly int TILES_WIDTH = 24;
-        public static readonly int TILES_HEIGHT = 19;
-
         public Action<List<Vector2>> Completed;
 
         public DefaultPlayer Player;
@@ -59,7 +55,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
             DrawableRoom = new DrawableRoom(room);
             dependencies.Cache(DrawableRoom);
 
-            Size = BASE_SIZE;
+            Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
 

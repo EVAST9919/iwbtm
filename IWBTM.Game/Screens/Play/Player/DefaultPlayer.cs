@@ -12,7 +12,6 @@ using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
-using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Test;
 
@@ -51,19 +50,20 @@ namespace IWBTM.Game.Screens.Play.Player
         private bool midAir;
         private bool rightwards = true;
 
-        public readonly Container Player;
-        private readonly BulletsContainer bulletsContainer;
-        private readonly Container animationContainer;
-        private readonly Container hitbox;
+        public Container Player;
+        private BulletsContainer bulletsContainer;
+        private Container animationContainer;
+        private Container hitbox;
 
         private (Vector2 position, bool rightwards) savedPosition;
 
-        public DefaultPlayer()
+        [BackgroundDependencyLoader]
+        private void load(AudioManager audio)
         {
             RelativeSizeAxes = Axes.Both;
             AddRangeInternal(new Drawable[]
             {
-                bulletsContainer = new BulletsContainer
+                bulletsContainer = new BulletsContainer(drawableRoom.Size)
                 {
                     OnSave = () => savedPosition = (PlayerPosition(), rightwards)
                 },
@@ -94,11 +94,7 @@ namespace IWBTM.Game.Screens.Play.Player
                     }
                 }
             });
-        }
 
-        [BackgroundDependencyLoader]
-        private void load(AudioManager audio)
-        {
             AddRangeInternal(new[]
             {
                 jump = new DrawableSample(audio.Samples.Get("jump")),
@@ -250,8 +246,8 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkBorders()
         {
-            if (PlayerPosition().X - SIZE.X / 2f <= 0 || PlayerPosition().X + SIZE.X / 2f >= DefaultPlayfield.BASE_SIZE.X
-                || PlayerPosition().Y - SIZE.Y / 2f <= 0 || PlayerPosition().Y + SIZE.Y / 2f + 1 >= DefaultPlayfield.BASE_SIZE.Y)
+            if (PlayerPosition().X - SIZE.X / 2f <= 0 || PlayerPosition().X + SIZE.X / 2f >= drawableRoom.Size.X
+                || PlayerPosition().Y - SIZE.Y / 2f <= 0 || PlayerPosition().Y + SIZE.Y / 2f + 1 >= drawableRoom.Size.Y)
                 onDeath();
         }
 

@@ -19,7 +19,7 @@ namespace IWBTM.Game.Screens
 
             ValidForResume = false;
 
-            AddInternal(new PlayfieldAdjustmentContainer
+            AddInternal(new PlayfieldAdjustmentContainer(new Vector2(room.SizeX, room.SizeY))
             {
                 Child = Playfield = CreatePlayfield(room, name).With(p => p.Completed = OnCompletion)
             });

@@ -6,7 +6,6 @@ using osu.Framework.Input.Events;
 using osuTK;
 using System.Linq;
 using osuTK.Input;
-using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using System.Collections.Generic;
@@ -20,10 +19,12 @@ namespace IWBTM.Game.Screens.Edit
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
+        private readonly Vector2 roomSize;
 
         public BluePrint(Room room)
         {
-            Size = DefaultPlayfield.BASE_SIZE;
+            roomSize = new Vector2(room.SizeX, room.SizeY);
+            Size = roomSize * DrawableTile.SIZE;
 
             Grid grid;
 
@@ -34,7 +35,7 @@ namespace IWBTM.Game.Screens.Edit
                     RelativeSizeAxes = Axes.Both
                 },
                 objectsLayer = new ObjectsLayer(room),
-                grid = new Grid(),
+                grid = new Grid(new Vector2(room.SizeX, room.SizeY)),
                 hoverLayer = new Container
                 {
                     RelativeSizeAxes = Axes.Both
@@ -75,13 +76,13 @@ namespace IWBTM.Game.Screens.Edit
                     t.Alpha = 0.5f;
                 });
 
-            tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
+            tileToPlace.Position = GetSnappedPosition(mousePosition, roomSize, SnapValue.Value);
 
             var buttons = e.CurrentState.Mouse.Buttons;
 
             if (buttons.IsPressed(MouseButton.Left))
             {
-                objectsLayer.TryPlace(Selected.Value, mousePosition);
+                objectsLayer.TryPlace(Selected.Value, mousePosition, roomSize);
                 return true;
             }
 
@@ -110,10 +111,10 @@ namespace IWBTM.Game.Screens.Edit
             if (!IsHovered)
                 return false;
 
-            switch(e.Button)
+            switch (e.Button)
             {
                 case MouseButton.Left:
-                    objectsLayer.TryPlace(Selected.Value, mousePosition);
+                    objectsLayer.TryPlace(Selected.Value, mousePosition, roomSize);
                     return true;
 
                 case MouseButton.Right:
@@ -124,9 +125,9 @@ namespace IWBTM.Game.Screens.Edit
             return base.OnMouseDown(e);
         }
 
-        public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)
+        public static Vector2 GetSnappedPosition(Vector2 input, Vector2 roomSize, int snapValue)
         {
-            return new Vector2((int)(input.X / DefaultPlayfield.BASE_SIZE.X * (DefaultPlayfield.TILES_WIDTH * DrawableTile.SIZE / snapValue)), (int)(input.Y / DefaultPlayfield.BASE_SIZE.Y * (DefaultPlayfield.TILES_HEIGHT * DrawableTile.SIZE / snapValue))) * snapValue;
+            return new Vector2((int)(input.X / (roomSize.X * DrawableTile.SIZE) * (roomSize.X * DrawableTile.SIZE / snapValue)), (int)(input.Y / (roomSize.Y * DrawableTile.SIZE) * (roomSize.Y * DrawableTile.SIZE / snapValue))) * snapValue;
         }
 
         private static DrawableTile createTile(Tile tile)
