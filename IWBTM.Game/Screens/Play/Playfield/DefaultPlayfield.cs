@@ -12,9 +12,6 @@ using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Rooms.Drawables;
 using osu.Framework.Graphics.Audio;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Bindables;
-using osuTK.Graphics;
 using System;
 using System.Collections.Generic;
 using IWBTM.Game.Helpers;
@@ -24,13 +21,12 @@ namespace IWBTM.Game.Screens.Play.Playfield
     public class DefaultPlayfield : CompositeDrawable
     {
         public Action<List<Vector2>> Completed;
+        public Action OnDeath;
 
         public DefaultPlayer Player;
         private DeathOverlay deathOverlay;
         private Track track;
         private DrawableSample roomEntering;
-        private SpriteText deathCountText;
-        private readonly Bindable<int> deathCount = new Bindable<int>();
 
         private readonly List<Vector2> deathSpots = new List<Vector2>();
 
@@ -72,23 +68,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
                     Died = onDeath,
                     Completed = onCompletion
                 },
-                new FillFlowContainer
-                {
-                    Anchor = Anchor.TopRight,
-                    Origin = Anchor.TopRight,
-                    Margin = new MarginPadding(32 + 5),
-                    AutoSizeAxes = Axes.Both,
-                    Direction = FillDirection.Vertical,
-                    Spacing = new Vector2(0, 5),
-                    Children = new Drawable[]
-                    {
-                        deathCountText = new SpriteText
-                        {
-                            Colour = Color4.Black,
-                            Font = FontUsage.Default.With(size: 14)
-                        }
-                    }
-                },
                 deathOverlay = new DeathOverlay(),
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
@@ -114,8 +93,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
-            deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
             restart();
         }
 
@@ -125,7 +102,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         {
             track?.Stop();
             deathOverlay.Play(position, speed);
-            deathCount.Value++;
+            OnDeath?.Invoke();
             deathSpots.Add(position);
         }
 
