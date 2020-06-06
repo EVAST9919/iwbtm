@@ -12,7 +12,7 @@ namespace IWBTM.Game.Screens.Create
     {
         public Action AdjustRequested;
 
-        public readonly Bindable<Vector2> Current = new Bindable<Vector2>(new Vector2(24, 19));
+        public readonly Bindable<Vector2> Current = new Bindable<Vector2>(new Vector2(25, 19));
 
         private readonly SpriteText sizeText;
 
