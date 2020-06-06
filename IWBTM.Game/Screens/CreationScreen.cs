@@ -1,11 +1,11 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
+using IWBTM.Game.Screens.Create;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
@@ -23,75 +23,99 @@ namespace IWBTM.Game.Screens
 
         private readonly IWannaTextBox textbox;
         private readonly MusicSelector musicSelector;
+        private readonly SizeSetting sizeSetting;
+        private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
 
         public CreationScreen()
         {
             ValidForResume = false;
 
-            AddInternal(new FillFlowContainer
+            AddRangeInternal(new Drawable[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                AutoSizeAxes = Axes.Both,
-                Direction = FillDirection.Vertical,
-                Spacing = new Vector2(0, 10),
-                Children = new Drawable[]
+                new FillFlowContainer
                 {
-                    new SpriteText
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    AutoSizeAxes = Axes.Both,
+                    Direction = FillDirection.Vertical,
+                    Spacing = new Vector2(0, 10),
+                    Children = new Drawable[]
                     {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Text = "Room name"
-                    },
-                    textbox = new IWannaTextBox
-                    {
-                        Width = 300,
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                    },
-                    new SpriteText
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Text = "Room audio"
-                    },
-                    new Container
-                    {
-                        Width = 300,
-                        Height = 40,
-                        Anchor = Anchor.Centre,
-                        Depth = -int.MaxValue,
-                        Origin = Anchor.Centre,
-                        Child = musicSelector = new MusicSelector()
-                    },
-                    new IWannaBasicButton("Ok", onCommit)
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
+                        new SettingName("Name"),
+                        textbox = new IWannaTextBox
+                        {
+                            Width = 300,
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                        },
+                        new SettingName("Size"),
+                        sizeSetting = new SizeSetting
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                        },
+                        new SettingName("Audio"),
+                        new Container
+                        {
+                            Width = 300,
+                            Height = 40,
+                            Anchor = Anchor.Centre,
+                            Depth = -int.MaxValue,
+                            Origin = Anchor.Centre,
+                            Child = musicSelector = new MusicSelector()
+                        },
+                        new IWannaBasicButton("Ok", onCommit)
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                        }
                     }
-                }
+                },
+                sizeAdjustmentOverlay = new SizeAdjustmentOverlay(),
             });
+
+            sizeSetting.AdjustRequested += onSizeAdjust;
+            sizeAdjustmentOverlay.NewSize += newSize => sizeSetting.Current.Value = newSize;
+        }
+
+        private void onSizeAdjust()
+        {
+            sizeAdjustmentOverlay.Show();
         }
 
         private void onCommit()
         {
-            var text = textbox.Current.Value;
+            var name = textbox.Current.Value;
 
-            if (string.IsNullOrEmpty(text))
+            if (!canBeCreated(name))
+                return;
+
+            RoomStorage.CreateRoomDirectory(name);
+            var room = RoomStorage.CreateEmptyRoom(name, musicSelector.Current.Value);
+            this.Push(new EditorScreen(room, name));
+        }
+
+        private bool canBeCreated(string name)
+        {
+            if (string.IsNullOrEmpty(name))
             {
                 notifications.Push("Name can't be empty", NotificationState.Bad);
-                return;
+                return false;
             }
 
-            if (RoomStorage.RoomExists(text))
+            if (RoomStorage.RoomExists(name))
             {
-                notifications.Push($"\"{text}\" room already exists", NotificationState.Bad);
-                return;
+                notifications.Push($"\"{name}\" room already exists", NotificationState.Bad);
+                return false;
             }
 
-            RoomStorage.CreateRoomDirectory(text);
-            var room = RoomStorage.CreateEmptyRoom(text, musicSelector.Current.Value);
-            this.Push(new EditorScreen(room, text));
+            if (sizeSetting.Current.Value.X < 4 || sizeSetting.Current.Value.Y < 4)
+            {
+                notifications.Push("Width and Height can't be below 4", NotificationState.Bad);
+                return false;
+            }
+
+            return true;
         }
 
         protected override void OnExit()
@@ -114,22 +138,13 @@ namespace IWBTM.Game.Screens
             return base.OnKeyDown(e);
         }
 
-        private class MusicSelector : BasicDropdown<string>
+        private class SettingName : SpriteText
         {
-            public MusicSelector()
+            public SettingName(string text)
             {
-                RelativeSizeAxes = Axes.X;
-
-                AddDropdownItem("none");
-                AddDropdownItem("room-1");
-                AddDropdownItem("room-2");
-                AddDropdownItem("room-3");
-            }
-
-            protected override void LoadComplete()
-            {
-                base.LoadComplete();
-                Current.Value = "none";
+                Anchor = Anchor.Centre;
+                Origin = Anchor.Centre;
+                Text = text;
             }
         }
     }
