@@ -24,6 +24,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 FillAspectRatio = 25f / 19,
                 Child = content = new ScalingContainer
                 {
+                    Masking = true,
                     RelativeSizeAxes = Axes.Both,
                     Name = "Scaling Container"
                 }
