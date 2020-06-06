@@ -59,7 +59,7 @@ namespace IWBTM.Game.Screens
                     {
                         new Drawable[]
                         {
-                            new PlayfieldAdjustmentContainer(new Vector2(room.SizeX, room.SizeY))
+                            new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY))
                             {
                                 Scale = new Vector2(0.9f),
                                 Child = blueprint = new BluePrint(room)

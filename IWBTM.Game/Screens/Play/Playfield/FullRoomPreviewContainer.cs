@@ -5,12 +5,12 @@ using osuTK;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
-    public class PlayfieldAdjustmentContainer : Container
+    public class FullRoomPreviewContainer : Container
     {
         protected override Container<Drawable> Content => content;
         private readonly Container content;
 
-        public PlayfieldAdjustmentContainer(Vector2 roomSize)
+        public FullRoomPreviewContainer(Vector2 roomSize)
         {
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;

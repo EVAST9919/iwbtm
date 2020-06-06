@@ -13,8 +13,6 @@ namespace IWBTM.Game.Screens.Select
 {
     public class RoomPreviewContainer : CompositeDrawable
     {
-        private PlayfieldAdjustmentContainer roomPreview;
-
         [BackgroundDependencyLoader]
         private void load()
         {
@@ -24,7 +22,9 @@ namespace IWBTM.Game.Screens.Select
 
         public void Preview(Room room, bool showPlayerSpawn = true, List<Vector2> deathSpots = null)
         {
-            InternalChild = roomPreview = new PlayfieldAdjustmentContainer(new Vector2(room.SizeX, room.SizeY));
+            FullRoomPreviewContainer roomPreview;
+
+            InternalChild = roomPreview = new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY));
 
             roomPreview.Children = new Drawable[]
             {
