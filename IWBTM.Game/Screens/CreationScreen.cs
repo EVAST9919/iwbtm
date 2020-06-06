@@ -1,9 +1,15 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
-using IWBTM.Game.Screens.Create;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
+using osu.Framework.Input.Events;
 using osu.Framework.Screens;
+using osuTK;
+using osuTK.Input;
 
 namespace IWBTM.Game.Screens
 {
@@ -12,45 +18,119 @@ namespace IWBTM.Game.Screens
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
 
-        private readonly NameSettingWindow nameWindow;
-        private readonly MusicSettingWindow musicWindow;
+        [Resolved]
+        private NotificationOverlay notifications { get; set; }
 
-        private string roomName;
+        private readonly IWannaTextBox textbox;
+        private readonly MusicSelector musicSelector;
 
         public CreationScreen()
         {
             ValidForResume = false;
 
-            AddRangeInternal(new Drawable[]
+            AddInternal(new FillFlowContainer
             {
-                nameWindow = new NameSettingWindow(),
-                musicWindow = new MusicSettingWindow
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                AutoSizeAxes = Axes.Both,
+                Direction = FillDirection.Vertical,
+                Spacing = new Vector2(0, 10),
+                Children = new Drawable[]
                 {
-                    Alpha = 0
+                    new SpriteText
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Text = "Room name"
+                    },
+                    textbox = new IWannaTextBox
+                    {
+                        Width = 300,
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                    },
+                    new SpriteText
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Text = "Room audio"
+                    },
+                    new Container
+                    {
+                        Width = 300,
+                        Height = 40,
+                        Anchor = Anchor.Centre,
+                        Depth = -int.MaxValue,
+                        Origin = Anchor.Centre,
+                        Child = musicSelector = new MusicSelector()
+                    },
+                    new IWannaBasicButton("Ok", onCommit)
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                    }
                 }
             });
-
-            nameWindow.OnCommit += onNameCommit;
-            musicWindow.OnCommit += onMusicCommit;
         }
 
-        private void onNameCommit(string name)
+        private void onCommit()
         {
-            roomName = name;
-            nameWindow.Hide();
-            musicWindow.Show();
-        }
+            var text = textbox.Current.Value;
 
-        private void onMusicCommit(string name)
-        {
-            RoomStorage.CreateRoomDirectory(roomName);
-            var room = RoomStorage.CreateEmptyRoom(roomName, name);
-            this.Push(new EditorScreen(room, roomName));
+            if (string.IsNullOrEmpty(text))
+            {
+                notifications.Push("Name can't be empty", NotificationState.Bad);
+                return;
+            }
+
+            if (RoomStorage.RoomExists(text))
+            {
+                notifications.Push($"\"{text}\" room already exists", NotificationState.Bad);
+                return;
+            }
+
+            RoomStorage.CreateRoomDirectory(text);
+            var room = RoomStorage.CreateEmptyRoom(text, musicSelector.Current.Value);
+            this.Push(new EditorScreen(room, text));
         }
 
         protected override void OnExit()
         {
             confirmationOverlay.Push("Are you sure you want to exit? All unsaved progress will be lost.", () => base.OnExit());
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (!e.Repeat)
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter:
+                        onCommit();
+                        return true;
+                }
+            };
+
+            return base.OnKeyDown(e);
+        }
+
+        private class MusicSelector : BasicDropdown<string>
+        {
+            public MusicSelector()
+            {
+                RelativeSizeAxes = Axes.X;
+
+                AddDropdownItem("none");
+                AddDropdownItem("room-1");
+                AddDropdownItem("room-2");
+                AddDropdownItem("room-3");
+            }
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+                Current.Value = "none";
+            }
         }
     }
 }
