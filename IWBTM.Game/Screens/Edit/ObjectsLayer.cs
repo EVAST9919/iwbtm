@@ -64,6 +64,8 @@ namespace IWBTM.Game.Screens.Edit
                         child.Expire();
                 }
             }
+
+            save();
         }
 
         private void addUniqueTile(Vector2 position, TileType type)
@@ -99,6 +101,8 @@ namespace IWBTM.Game.Screens.Edit
                 Add(new DrawableCherry(tile));
             else
                 Add(new DrawableTile(tile));
+
+            save();
         }
 
         public bool SpawnDefined()
@@ -121,6 +125,11 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             return false;
+        }
+
+        private void save()
+        {
+            Room.Tiles = Children.Select(c => c.Tile).ToList();
         }
     }
 }

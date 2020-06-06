@@ -7,8 +7,11 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         public Vector2 PlayerSpawnPosition { get; private set; }
 
+        protected Room Room { get; set; }
+
         public DrawableRoom(Room room, bool showPlayerSpawn = false)
         {
+            Room = room;
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
 
             if (room != null)

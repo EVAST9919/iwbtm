@@ -11,15 +11,18 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
+using System.Linq;
 
 namespace IWBTM.Game.Screens
 {
     public class EditorScreen : IWannaScreen
     {
         private readonly Bindable<TileType> selectedObject = new Bindable<TileType>();
+        private readonly BindableList<Room> rooms = new BindableList<Room>();
+        private readonly Bindable<Room> selectedRoom = new Bindable<Room>();
 
         private readonly SpriteText selectedItemText;
-        private readonly BluePrint blueprint;
+        private BluePrint blueprint;
 
         [Resolved]
         private NotificationOverlay notifications { get; set; }
@@ -27,15 +30,16 @@ namespace IWBTM.Game.Screens
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
 
-        private readonly Room room;
         private readonly string name;
+        private readonly RoomSelectorOverlay roomSelector;
+        private readonly Container drawableRoomPlaceholder;
+        private readonly ToolBar toolbar;
 
-        public EditorScreen(Room room, string name)
+        public EditorScreen(Level level, string name)
         {
-            this.room = room;
             this.name = name;
-
-            ToolBar toolbar;
+            rooms.AddRange(level.Rooms);
+            selectedRoom.Value = rooms[0];
 
             AddRangeInternal(new Drawable[]
             {
@@ -59,31 +63,47 @@ namespace IWBTM.Game.Screens
                     {
                         new Drawable[]
                         {
-                            new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY))
+                            drawableRoomPlaceholder = new Container
                             {
-                                Scale = new Vector2(0.9f),
-                                Child = blueprint = new BluePrint(room)
+                                RelativeSizeAxes = Axes.Both
                             },
                             toolbar = new ToolBar()
                             {
                                 OnTest = test,
-                                OnSave = save
+                                OnSave = save,
+                                OnRoomSelect = selectRoom
                             }
                         }
                     }
                 },
+                roomSelector = new RoomSelectorOverlay()
             });
 
+            roomSelector.Rooms.BindTo(rooms);
+            roomSelector.Selected.BindTo(selectedRoom);
+
             selectedObject.BindTo(toolbar.Selected);
-            blueprint.Selected.BindTo(toolbar.Selected);
-            blueprint.SnapValue.BindTo(toolbar.SnapValue);
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             selectedObject.BindValueChanged(newSelected => selectedItemText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
+            selectedRoom.BindValueChanged(onSelectedRoomChanged, true);
+        }
+
+        private void onSelectedRoomChanged(ValueChangedEvent<Room> room)
+        {
+            var newRoom = room.NewValue;
+
+            drawableRoomPlaceholder.Child = new FullRoomPreviewContainer(new Vector2(newRoom.SizeX, newRoom.SizeY))
+            {
+                Scale = new Vector2(0.9f),
+                Child = blueprint = new BluePrint(newRoom)
+            };
+
+            blueprint.Selected.BindTo(toolbar.Selected);
+            blueprint.SnapValue.BindTo(toolbar.SnapValue);
         }
 
         private void test()
@@ -93,6 +113,8 @@ namespace IWBTM.Game.Screens
                 notifications.Push("Player spawn is not defined", NotificationState.Bad);
                 return;
             }
+
+            var room = selectedRoom.Value;
 
             this.Push(new TestGameplayScreen(new Room
             {
@@ -117,8 +139,16 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            RoomStorage.UpdateRoomTiles(room, name, blueprint.GetTiles());
-            notifications.Push("Room has been saved!", NotificationState.Good);
+            LevelStorage.UpdateLevel(name, new Level
+            {
+                Rooms = rooms.ToList()
+            });
+            notifications.Push("Level has been saved!", NotificationState.Good);
+        }
+
+        private void selectRoom()
+        {
+            roomSelector.Show();
         }
 
         protected override void OnExit()

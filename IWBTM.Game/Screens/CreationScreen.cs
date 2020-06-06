@@ -1,15 +1,16 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
+using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Create;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Input;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -22,9 +23,7 @@ namespace IWBTM.Game.Screens
         private NotificationOverlay notifications { get; set; }
 
         private readonly IWannaTextBox textbox;
-        private readonly MusicSelector musicSelector;
-        private readonly SizeSetting sizeSetting;
-        private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
+        private readonly RoomCreationOverlay roomCreationOverlay;
 
         public CreationScreen()
         {
@@ -48,39 +47,27 @@ namespace IWBTM.Game.Screens
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                         },
-                        new SettingName("Size"),
-                        sizeSetting = new SizeSetting
+                        new SettingName("First room settings"),
+                        new IWannaBasicButton("Adjust", onAdjust)
                         {
                             Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                        },
-                        new SettingName("Audio"),
-                        new Container
-                        {
-                            Width = 300,
-                            Height = 40,
-                            Anchor = Anchor.Centre,
-                            Depth = -int.MaxValue,
-                            Origin = Anchor.Centre,
-                            Child = musicSelector = new MusicSelector()
+                            Origin = Anchor.Centre
                         },
                         new IWannaBasicButton("Ok", onCommit)
                         {
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
+                            Margin = new MarginPadding { Top = 20 }
                         }
                     }
                 },
-                sizeAdjustmentOverlay = new SizeAdjustmentOverlay(),
+                roomCreationOverlay = new RoomCreationOverlay(),
             });
-
-            sizeSetting.AdjustRequested += onSizeAdjust;
-            sizeAdjustmentOverlay.NewSize += newSize => sizeSetting.Current.Value = newSize;
         }
 
-        private void onSizeAdjust()
+        private void onAdjust()
         {
-            sizeAdjustmentOverlay.Show();
+            roomCreationOverlay.Show();
         }
 
         private void onCommit()
@@ -90,28 +77,28 @@ namespace IWBTM.Game.Screens
             if (!canBeCreated(name))
                 return;
 
-            RoomStorage.CreateRoomDirectory(name);
-            var room = RoomStorage.CreateEmptyRoom(name, musicSelector.Current.Value, sizeSetting.Current.Value);
-            this.Push(new EditorScreen(room, name));
+            LevelStorage.CreateLevelDirectory(name);
+
+            var rooms = new List<Room>
+            {
+                roomCreationOverlay.GenerateRoom()
+            };
+
+            var level = LevelStorage.CreateEmptyLevel(name, rooms);
+            this.Push(new EditorScreen(level, name));
         }
 
         private bool canBeCreated(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
-                notifications.Push("Name can't be empty", NotificationState.Bad);
+                notifications.Push("Level name can't be empty", NotificationState.Bad);
                 return false;
             }
 
-            if (RoomStorage.RoomExists(name))
+            if (LevelStorage.LevelExists(name))
             {
-                notifications.Push($"\"{name}\" room already exists", NotificationState.Bad);
-                return false;
-            }
-
-            if (sizeSetting.Current.Value.X < 4 || sizeSetting.Current.Value.Y < 4)
-            {
-                notifications.Push("Width and Height can't be below 4", NotificationState.Bad);
+                notifications.Push($"\"{name}\" level already exists", NotificationState.Bad);
                 return false;
             }
 
@@ -136,16 +123,6 @@ namespace IWBTM.Game.Screens
             };
 
             return base.OnKeyDown(e);
-        }
-
-        private class SettingName : SpriteText
-        {
-            public SettingName(string text)
-            {
-                Anchor = Anchor.Centre;
-                Origin = Anchor.Centre;
-                Text = text;
-            }
         }
     }
 }

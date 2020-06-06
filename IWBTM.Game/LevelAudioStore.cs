@@ -21,7 +21,7 @@ namespace IWBTM.Game
 
         public Task<byte[]> GetAsync(string name) => null;
 
-        public Stream GetStream(string name) => File.OpenRead($"Rooms/{name}/audio.mp3");
+        public Stream GetStream(string name) => File.OpenRead($"Levels/{name}/audio.mp3");
 
         public IEnumerable<string> GetAvailableResources() => Enumerable.Empty<string>();
 

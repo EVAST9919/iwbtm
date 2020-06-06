@@ -9,6 +9,7 @@ using osu.Framework.Screens;
 using osuTK;
 using osuTK.Input;
 using System;
+using System.Linq;
 
 namespace IWBTM.Game.Screens
 {
@@ -27,7 +28,7 @@ namespace IWBTM.Game.Screens
             onEnterPressed = () =>
             {
                 if (selectedRoom.Value != default)
-                    this.Push(new GameplayScreen(selectedRoom.Value.Room, selectedRoom.Value.RoomName));
+                    this.Push(new GameplayScreen(selectedRoom.Value.Level.Rooms.First(), selectedRoom.Value.LevelName));
             };
 
             AddInternal(new Container
@@ -58,14 +59,14 @@ namespace IWBTM.Game.Screens
             });
 
             selectedRoom.BindTo(carousel.Current);
-            selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Room));
+            selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Level.Rooms.First()));
 
             carousel.UpdateItems();
         }
 
-        private void editRequested(CarouselItem room)
+        private void editRequested(CarouselItem item)
         {
-            this.Push(new EditorScreen(room.Room, room.RoomName));
+            this.Push(new EditorScreen(item.Level, item.LevelName));
         }
 
         public override void OnEntering(IScreen last)

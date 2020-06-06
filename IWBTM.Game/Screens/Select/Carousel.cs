@@ -45,9 +45,9 @@ namespace IWBTM.Game.Screens.Select
         {
             flow.Clear();
 
-            foreach (var r in RoomStorage.GetRooms())
+            foreach (var l in LevelStorage.GetLevels())
             {
-                flow.Add(new CarouselItem(r)
+                flow.Add(new CarouselItem(l)
                 {
                     Selected = onSelection,
                     OnEdit = editRequested,
@@ -90,9 +90,9 @@ namespace IWBTM.Game.Screens.Select
 
         private void deleteRequested(CarouselItem item)
         {
-            var name = item.RoomName;
+            var name = item.LevelName;
 
-            RoomStorage.DeleteRoom(name);
+            LevelStorage.DeleteLevel(name);
             notifications.Push($"{name} room has been deleted!", NotificationState.Good);
             selectFirst();
             item.Expire();
@@ -116,6 +116,12 @@ namespace IWBTM.Game.Screens.Select
 
         private void selectFirst()
         {
+            if (!flow.Any())
+            {
+                Current.Value = null;
+                return;
+            }
+
             flow.Children.FirstOrDefault().Select();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
-using osuTK.Graphics;
 using osu.Framework.Input.Events;
 using osuTK.Input;
 using osuTK;
@@ -12,72 +11,59 @@ using IWBTM.Game.Overlays;
 
 namespace IWBTM.Game.Screens.Create
 {
-    public class SizeAdjustmentOverlay : OverlayContainer
+    public class SizeAdjustmentOverlay : IWannaOverlay
     {
-        protected override bool StartHidden => true;
-
         public Action<Vector2> NewSize;
 
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
-        private readonly Box bg;
         private readonly Container settings;
         private readonly IWannaTextBox widthTextBox;
         private readonly IWannaTextBox heightTextBox;
 
         public SizeAdjustmentOverlay()
         {
-            RelativeSizeAxes = Axes.Both;
-
-            AddRange(new Drawable[]
+            Add(settings = new Container
             {
-                bg = new Box
+                AutoSizeAxes = Axes.Both,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
+                Children = new Drawable[]
                 {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.Black,
-                },
-                settings = new Container
-                {
-                    AutoSizeAxes = Axes.Both,
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Children = new Drawable[]
+                    new Box
                     {
-                        new Box
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = IWannaColour.GrayDarker
+                    },
+                    new FillFlowContainer
+                    {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Vertical,
+                        Spacing = new Vector2(0, 10),
+                        Margin = new MarginPadding(10),
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = IWannaColour.GrayDarker
-                        },
-                        new FillFlowContainer
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            AutoSizeAxes = Axes.Both,
-                            Direction = FillDirection.Vertical,
-                            Spacing = new Vector2(0, 10),
-                            Margin = new MarginPadding(10),
-                            Children = new Drawable[]
+                            widthTextBox = new IWannaTextBox
                             {
-                                widthTextBox = new IWannaTextBox
-                                {
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
-                                    PlaceholderText = "Width",
-                                    Width = 300,
-                                },
-                                heightTextBox = new IWannaTextBox
-                                {
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
-                                    PlaceholderText = "Height",
-                                    Width = 300,
-                                },
-                                new IWannaBasicButton("Ok", onConfirm)
-                                {
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
-                                }
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                PlaceholderText = "Width",
+                                Width = 300,
+                            },
+                            heightTextBox = new IWannaTextBox
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
+                                PlaceholderText = "Height",
+                                Width = 300,
+                            },
+                            new IWannaBasicButton("Ok", onConfirm)
+                            {
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
                             }
                         }
                     }
@@ -87,14 +73,14 @@ namespace IWBTM.Game.Screens.Create
 
         protected override void PopIn()
         {
-            bg.FadeTo(0.5f, 200, Easing.Out);
+            base.PopIn();
             settings.ScaleTo(1, 200, Easing.Out);
             settings.FadeIn(200, Easing.Out);
         }
 
         protected override void PopOut()
         {
-            bg.FadeOut(200, Easing.Out);
+            base.PopOut();
             settings.ScaleTo(1.1f, 200, Easing.Out);
             settings.FadeOut(200, Easing.Out);
         }
@@ -118,10 +104,6 @@ namespace IWBTM.Game.Screens.Create
             {
                 switch (e.Key)
                 {
-                    case Key.Escape:
-                        Hide();
-                        return true;
-
                     case Key.Enter:
                         onConfirm();
                         return true;

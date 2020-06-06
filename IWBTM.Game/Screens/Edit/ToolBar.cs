@@ -20,6 +20,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public Action OnTest;
         public Action OnSave;
+        public Action OnRoomSelect;
 
         private readonly ObjectSelectorTabControl selector;
         private readonly GridSnapTabControl snapControl;
@@ -108,8 +109,9 @@ namespace IWBTM.Game.Screens.Edit
                                     Spacing = new Vector2(0, 20),
                                     Children = new Drawable[]
                                     {
+                                        new EditorButton("Select room", () => OnRoomSelect?.Invoke()),
                                         new EditorButton("Test", () => OnTest?.Invoke()),
-                                        new EditorButton("Save", () => OnSave?.Invoke())
+                                        new EditorButton("Save", () => OnSave?.Invoke()),
                                     }
                                 }
                             },

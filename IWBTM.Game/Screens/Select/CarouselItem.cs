@@ -16,8 +16,8 @@ namespace IWBTM.Game.Screens.Select
         public Action<CarouselItem> Deleted;
         public Action<CarouselItem> OnEdit;
 
-        public Room Room { get; private set; }
-        public string RoomName { get; private set; }
+        public Level Level { get; private set; }
+        public string LevelName { get; private set; }
 
         public MenuItem[] ContextMenuItems => new[]
         {
@@ -25,23 +25,23 @@ namespace IWBTM.Game.Screens.Select
             new MenuItem("Edit", () => OnEdit?.Invoke(this)),
         };
 
-        private readonly Background background;
+        private readonly IWannaSelectableButtonBackground background;
 
-        public CarouselItem((Room, string) room)
+        public CarouselItem((Level, string) level)
         {
-            Room = room.Item1;
-            RoomName = room.Item2;
+            Level = level.Item1;
+            LevelName = level.Item2;
 
             RelativeSizeAxes = Axes.X;
             Height = 50;
             AddRangeInternal(new Drawable[]
             {
-                background = new Background(),
+                background = new IWannaSelectableButtonBackground(),
                 new SpriteText
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Text = room.Item2
+                    Text = level.Item2
                 }
             });
         }
@@ -61,18 +61,6 @@ namespace IWBTM.Game.Screens.Select
             base.OnClick(e);
             Select();
             return true;
-        }
-
-        private class Background : IWannaButtonBackground
-        {
-            public Background()
-            {
-                BorderColour = IWannaColour.Blue;
-            }
-
-            public void Activate() => BorderThickness = 5;
-
-            public void Deactivate() => BorderThickness = 0;
         }
     }
 }

@@ -73,7 +73,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
             });
 
-            if (RoomStorage.RoomHasCustomAudio(name))
+            if (LevelStorage.LevelHasCustomAudio(name))
             {
                 track = levelAudio.Tracks.Get(name);
                 track.Looping = true;
