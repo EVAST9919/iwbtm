@@ -59,7 +59,7 @@ namespace IWBTM.Game.Screens
             });
 
             selectedRoom.BindTo(carousel.Current);
-            selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Level.Rooms.First()));
+            selectedRoom.BindValueChanged(selected => preview.Preview(selected.NewValue.Level));
 
             carousel.UpdateItems();
         }

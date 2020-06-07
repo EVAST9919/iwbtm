@@ -56,7 +56,7 @@ namespace IWBTM.Game.Screens
                 }
             });
 
-            preview.Preview(room, false, deathSpots);
+            //preview.Preview(room, false, deathSpots);
         }
     }
 }
