@@ -36,6 +36,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public Action<Vector2, Vector2> Died;
         public Action Completed;
+        public Action<Vector2, bool> Saved;
 
         private bool died;
         private bool completed;
@@ -55,8 +56,6 @@ namespace IWBTM.Game.Screens.Play.Player
         private Container animationContainer;
         private Container hitbox;
 
-        private (Vector2 position, bool rightwards) savedPosition;
-
         [BackgroundDependencyLoader]
         private void load(AudioManager audio)
         {
@@ -65,7 +64,7 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 bulletsContainer = new BulletsContainer(drawableRoom.Size)
                 {
-                    OnSave = () => savedPosition = (PlayerPosition(), rightwards)
+                    OnSave = () => Saved?.Invoke(PlayerPosition(), rightwards)
                 },
                 player = new Container
                 {
@@ -108,22 +107,13 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public Vector2 PlayerPosition() => player.Position;
 
-        public void Revive()
+        public void Revive(Vector2 position, bool rightwards)
         {
             if (completed)
                 return;
 
-            if (savedPosition == default)
-            {
-                var position = drawableRoom.PlayerSpawnPosition;
-                player.Position = new Vector2(position.X + 16, position.Y + DrawableTile.SIZE - SIZE.Y / 2f);
-                rightwards = true;
-            }
-            else
-            {
-                player.Position = savedPosition.position;
-                rightwards = savedPosition.rightwards;
-            }
+            player.Position = position;
+            this.rightwards = rightwards;
 
             verticalSpeed = 0;
             midAir = true;

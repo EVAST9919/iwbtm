@@ -4,8 +4,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Audio.Track;
 using osu.Framework.Audio;
-using osu.Framework.Input.Events;
-using osuTK.Input;
 using osuTK;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Player;
@@ -21,7 +19,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
     {
         public Action Completed;
         public Action<Vector2> OnDeath;
-        public Action OnRespawn;
+        public Action<Vector2, bool> OnSave;
 
         public DefaultPlayer Player;
         private PlayerParticlesContainer deathOverlay;
@@ -64,7 +62,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 Player = new DefaultPlayer
                 {
                     Died = onDeath,
-                    Completed = onCompletion
+                    Completed = onCompletion,
+                    Saved = onSave,
                 },
                 deathOverlay = new PlayerParticlesContainer(),
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
@@ -88,12 +87,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
             }
         }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-            restart();
-        }
-
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();
 
         private void onDeath(Vector2 position, Vector2 speed)
@@ -109,29 +102,18 @@ namespace IWBTM.Game.Screens.Play.Playfield
             Completed?.Invoke();
         }
 
-        protected override bool OnKeyDown(KeyDownEvent e)
+        private void onSave(Vector2 position, bool rightwards)
         {
-            if (!e.Repeat)
-            {
-                switch (e.Key)
-                {
-                    case Key.R:
-                        restart();
-                        return true;
-                }
-            }
-
-            return base.OnKeyDown(e);
+            OnSave?.Invoke(position, rightwards);
         }
 
-        private void restart()
+        public void Restart(Vector2 position, bool rightwards)
         {
-            Player.Revive();
+            Player.Revive(position, rightwards);
             deathOverlay.Restore();
             roomEntering.Stop();
             roomEntering.Play();
             track?.Start();
-            OnRespawn?.Invoke();
         }
 
         protected override void Dispose(bool isDisposing)

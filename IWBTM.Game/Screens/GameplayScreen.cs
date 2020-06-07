@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.Rooms;
+﻿using IWBTM.Game.Helpers;
+using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Screens.Play.Playfield;
@@ -80,7 +81,8 @@ namespace IWBTM.Game.Screens
                 }
             });
 
-            loadRoom(currentRoomIndex);
+            savedPoint = (RoomHelper.PlayerSpawnPosition(level.Rooms.First()), true, 0);
+            loadRoom(currentRoomIndex, (savedPoint.Item1, savedPoint.Item2));
         }
 
         protected override void LoadComplete()
@@ -94,7 +96,9 @@ namespace IWBTM.Game.Screens
         private Room currentRoom;
         private int currentRoomIndex;
 
-        private void loadRoom(int index)
+        private (Vector2, bool, int) savedPoint;
+
+        private void loadRoom(int index, (Vector2, bool)? restartPoint)
         {
             currentRoomIndex = index;
             currentRoom = level.Rooms[index];
@@ -102,14 +106,28 @@ namespace IWBTM.Game.Screens
             roomXBorder = (currentRoom.SizeX - 25) / 2 * DrawableTile.SIZE;
             roomYBorder = (currentRoom.SizeY - 19) / 2 * DrawableTile.SIZE;
 
-            LoadComponentAsync(CreatePlayfield(currentRoom, name), NewPlayfieldLoaded);
+            LoadComponentAsync(CreatePlayfield(currentRoom, name), loaded =>
+            {
+                NewPlayfieldLoaded(loaded);
+
+                deathOverlay.Restore();
+
+                if (restartPoint.HasValue)
+                {
+                    Playfield.Restart(restartPoint.Value.Item1, restartPoint.Value.Item2);
+                }
+                else
+                {
+                    Playfield.Restart(RoomHelper.PlayerSpawnPosition(currentRoom), true);
+                }
+            });
         }
 
         protected virtual void NewPlayfieldLoaded(DefaultPlayfield playfield)
         {
             playfield.OnDeath += onDeath;
-            playfield.OnRespawn += onRespawn;
             playfield.Completed += OnCompletion;
+            playfield.OnSave += onSave;
             roomPlaceholder.Child = playfield;
         }
 
@@ -120,9 +138,9 @@ namespace IWBTM.Game.Screens
             deathSpots.Add((position, currentRoomIndex));
         }
 
-        private void onRespawn()
+        private void onSave(Vector2 position, bool rightwards)
         {
-            deathOverlay.Restore();
+            savedPoint = (position, rightwards, currentRoomIndex);
         }
 
         protected override void Update()
@@ -150,7 +168,7 @@ namespace IWBTM.Game.Screens
             }
 
             currentRoomIndex++;
-            loadRoom(currentRoomIndex);
+            loadRoom(currentRoomIndex, null);
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -159,8 +177,8 @@ namespace IWBTM.Game.Screens
             {
                 switch (e.Key)
                 {
-                    case Key.Enter:
-                        Playfield.Player.Completed?.Invoke();
+                    case Key.R:
+                        loadRoom(savedPoint.Item3, (savedPoint.Item1, savedPoint.Item2));
                         return true;
                 }
             }
