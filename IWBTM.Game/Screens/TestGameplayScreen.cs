@@ -82,7 +82,7 @@ namespace IWBTM.Game.Screens
             }
         }
 
-        protected override DefaultPlayfield CreatePlayfield(Room room, string name) => new TestPlayfield(room, name);
+        protected override DefaultPlayfield CreatePlayfield(Room room) => new TestPlayfield(room);
 
         private TestPlayfield getPlayfield() => (TestPlayfield)Playfield;
 

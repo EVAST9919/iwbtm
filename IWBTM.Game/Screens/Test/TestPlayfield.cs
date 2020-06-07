@@ -16,8 +16,8 @@ namespace IWBTM.Game.Screens.Test
         public readonly Bindable<bool> ShowDeath = new Bindable<bool>();
         public readonly Bindable<bool> ShowHitbox = new Bindable<bool>();
 
-        public TestPlayfield(Room room, string name)
-            : base(room, name)
+        public TestPlayfield(Room room)
+            : base(room)
         {
         }
 

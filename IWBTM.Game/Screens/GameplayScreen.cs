@@ -5,6 +5,8 @@ using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -32,6 +34,10 @@ namespace IWBTM.Game.Screens
             }
         }
 
+        [Resolved]
+        private AudioManager audio { get; set; }
+
+        private Track track;
         private readonly Level level;
         private readonly string name;
         private SpriteText deathCountText;
@@ -96,17 +102,21 @@ namespace IWBTM.Game.Screens
         private Room currentRoom;
         private int currentRoomIndex;
 
+        private string lastRoomAudio;
+
         private (Vector2, bool, int) savedPoint;
 
         private void loadRoom(int index, (Vector2, bool)? restartPoint)
         {
+            lastRoomAudio = currentRoom?.Music;
+
             currentRoomIndex = index;
             currentRoom = level.Rooms[index];
 
             roomXBorder = (currentRoom.SizeX - 25) / 2 * DrawableTile.SIZE;
             roomYBorder = (currentRoom.SizeY - 19) / 2 * DrawableTile.SIZE;
 
-            LoadComponentAsync(CreatePlayfield(currentRoom, name), loaded =>
+            LoadComponentAsync(CreatePlayfield(currentRoom), loaded =>
             {
                 NewPlayfieldLoaded(loaded);
 
@@ -120,6 +130,22 @@ namespace IWBTM.Game.Screens
                 {
                     Playfield.Restart(RoomHelper.PlayerSpawnPosition(currentRoom), true);
                 }
+
+                var currentRoomAudio = currentRoom.Music;
+
+                if (currentRoomAudio != lastRoomAudio)
+                {
+                    track?.Stop();
+                    if (currentRoomAudio != "none")
+                    {
+                        track = audio.Tracks.Get(currentRoomAudio);
+                        track.Looping = true;
+                    }
+                    else
+                        track = null;
+                }
+
+                track?.Start();
             });
         }
 
@@ -133,6 +159,7 @@ namespace IWBTM.Game.Screens
 
         private void onDeath(Vector2 position)
         {
+            track?.Stop();
             deathCount.Value++;
             deathOverlay.Play();
             deathSpots.Add((position, currentRoomIndex));
@@ -163,6 +190,7 @@ namespace IWBTM.Game.Screens
         {
             if (level.Rooms.Last() == level.Rooms[currentRoomIndex])
             {
+                track?.Stop();
                 this.Push(new ResultsScreen(deathSpots, level));
                 return;
             }
@@ -186,6 +214,18 @@ namespace IWBTM.Game.Screens
             return base.OnKeyDown(e);
         }
 
-        protected virtual DefaultPlayfield CreatePlayfield(Room room, string name) => new DefaultPlayfield(room, name);
+        protected virtual DefaultPlayfield CreatePlayfield(Room room) => new DefaultPlayfield(room);
+
+        protected override void OnExit()
+        {
+            track?.Stop();
+            base.OnExit();
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            track?.Stop();
+            base.Dispose(isDisposing);
+        }
     }
 }
