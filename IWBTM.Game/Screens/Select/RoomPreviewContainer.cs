@@ -45,16 +45,16 @@ namespace IWBTM.Game.Screens.Select
         private List<Room> rooms;
         private int selected;
         private bool showPlayerSpawn;
-        private List<Vector2> deathSpots;
+        private List<(Vector2, int)> deathSpots;
 
-        public void Preview(Level level, bool showPlayerSpawn = true, List<Vector2> deathSpots = null)
+        public void Preview(Level level, bool showPlayerSpawn = true, List<(Vector2, int)> deathSpots = null)
         {
             rooms = level.Rooms;
             selected = 0;
             this.showPlayerSpawn = showPlayerSpawn;
             this.deathSpots = deathSpots;
 
-            preview(rooms.ElementAt(0), showPlayerSpawn, deathSpots);
+            preview(rooms.ElementAt(selected), selected, showPlayerSpawn, deathSpots);
         }
 
         private void trySelectNext()
@@ -66,7 +66,7 @@ namespace IWBTM.Game.Screens.Select
                 return;
 
             selected++;
-            preview(rooms.ElementAt(selected), showPlayerSpawn, deathSpots);
+            preview(rooms.ElementAt(selected), selected, showPlayerSpawn, deathSpots);
         }
 
         private void trySelectPrev()
@@ -78,10 +78,10 @@ namespace IWBTM.Game.Screens.Select
                 return;
 
             selected--;
-            preview(rooms.ElementAt(selected), showPlayerSpawn, deathSpots);
+            preview(rooms.ElementAt(selected), selected, showPlayerSpawn, deathSpots);
         }
 
-        private void preview(Room room, bool showPlayerSpawn, List<Vector2> deathSpots)
+        private void preview(Room room, int roomIndex, bool showPlayerSpawn, List<(Vector2, int)> deathSpots)
         {
             Container content;
 
@@ -108,10 +108,13 @@ namespace IWBTM.Game.Screens.Select
             {
                 foreach (var spot in deathSpots)
                 {
-                    content.Add(new DeathSpot
+                    if (roomIndex == spot.Item2)
                     {
-                        Position = spot
-                    });
+                        content.Add(new DeathSpot
+                        {
+                            Position = spot.Item1
+                        });
+                    }
                 }
             }
         }

@@ -13,23 +13,20 @@ using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Rooms.Drawables;
 using osu.Framework.Graphics.Audio;
 using System;
-using System.Collections.Generic;
 using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
     public class DefaultPlayfield : CompositeDrawable
     {
-        public Action<List<Vector2>> Completed;
-        public Action OnDeath;
+        public Action Completed;
+        public Action<Vector2> OnDeath;
         public Action OnRespawn;
 
         public DefaultPlayer Player;
         private PlayerParticlesContainer deathOverlay;
         private Track track;
         private DrawableSample roomEntering;
-
-        private readonly List<Vector2> deathSpots = new List<Vector2>();
 
         private DependencyContainer dependencies;
 
@@ -56,7 +53,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
 
-            AddRangeInternal(new Drawable[]
+            InternalChildren = new Drawable[]
             {
                 new Box
                 {
@@ -71,7 +68,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
                 },
                 deathOverlay = new PlayerParticlesContainer(),
                 roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
-            });
+            };
 
             if (LevelStorage.LevelHasCustomAudio(name))
             {
@@ -103,14 +100,13 @@ namespace IWBTM.Game.Screens.Play.Playfield
         {
             track?.Stop();
             deathOverlay.Play(position, speed);
-            OnDeath?.Invoke();
-            deathSpots.Add(position);
+            OnDeath?.Invoke(position);
         }
 
         private void onCompletion()
         {
-            Completed?.Invoke(deathSpots);
             track?.Stop();
+            Completed?.Invoke();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)

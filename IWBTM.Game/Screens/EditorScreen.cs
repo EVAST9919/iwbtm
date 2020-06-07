@@ -11,6 +11,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IWBTM.Game.Screens
@@ -116,12 +117,18 @@ namespace IWBTM.Game.Screens
 
             var room = selectedRoom.Value;
 
-            this.Push(new TestGameplayScreen(new Room
+            this.Push(new TestGameplayScreen(new Level
             {
-                Music = room.Music,
-                Tiles = blueprint.GetTiles(),
-                SizeX = room.SizeX,
-                SizeY = room.SizeY
+                Rooms = new List<Room>
+                {
+                    new Room
+                    {
+                        Music = room.Music,
+                        Tiles = blueprint.GetTiles(),
+                        SizeX = room.SizeX,
+                        SizeY = room.SizeY
+                    }
+                }
             }, name));
         }
 

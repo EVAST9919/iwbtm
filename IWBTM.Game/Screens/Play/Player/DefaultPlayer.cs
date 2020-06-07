@@ -50,7 +50,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private bool midAir;
         private bool rightwards = true;
 
-        public Container Player;
+        private Container player;
         private BulletsContainer bulletsContainer;
         private Container animationContainer;
         private Container hitbox;
@@ -61,13 +61,13 @@ namespace IWBTM.Game.Screens.Play.Player
         private void load(AudioManager audio)
         {
             RelativeSizeAxes = Axes.Both;
-            AddRangeInternal(new Drawable[]
+            InternalChildren = new Drawable[]
             {
                 bulletsContainer = new BulletsContainer(drawableRoom.Size)
                 {
                     OnSave = () => savedPosition = (PlayerPosition(), rightwards)
                 },
-                Player = new Container
+                player = new Container
                 {
                     Origin = Anchor.Centre,
                     Size = SIZE,
@@ -92,15 +92,11 @@ namespace IWBTM.Game.Screens.Play.Player
                             }
                         }
                     }
-                }
-            });
-
-            AddRangeInternal(new[]
-            {
+                },
                 jump = new DrawableSample(audio.Samples.Get("jump")),
                 doubleJump = new DrawableSample(audio.Samples.Get("double-jump")),
                 shoot = new DrawableSample(audio.Samples.Get("shoot")),
-            });
+            };
         }
 
         protected override void LoadComplete()
@@ -110,19 +106,22 @@ namespace IWBTM.Game.Screens.Play.Player
             State.BindValueChanged(onStateChanged, true);
         }
 
-        public Vector2 PlayerPosition() => Player.Position;
+        public Vector2 PlayerPosition() => player.Position;
 
         public void Revive()
         {
+            if (completed)
+                return;
+
             if (savedPosition == default)
             {
                 var position = drawableRoom.PlayerSpawnPosition;
-                Player.Position = new Vector2(position.X + 16, position.Y + DrawableTile.SIZE - SIZE.Y / 2f);
+                player.Position = new Vector2(position.X + 16, position.Y + DrawableTile.SIZE - SIZE.Y / 2f);
                 rightwards = true;
             }
             else
             {
-                Player.Position = savedPosition.position;
+                player.Position = savedPosition.position;
                 rightwards = savedPosition.rightwards;
             }
 
@@ -132,20 +131,14 @@ namespace IWBTM.Game.Screens.Play.Player
 
             died = false;
             updateAnimationDirection();
-            Player.Show();
+            player.Show();
         }
 
         private void onDeath()
         {
             died = true;
-            Player.Hide();
+            player.Hide();
             Died?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
-        }
-
-        private void onCompletion()
-        {
-            completed = true;
-            Completed?.Invoke();
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -233,15 +226,15 @@ namespace IWBTM.Game.Screens.Play.Player
                 var legacyDistance = verticalSpeed;
                 var adjustedDistance = legacyDistance * (elapsedFrameTime / 20);
 
-                Player.Y -= (float)adjustedDistance;
+                player.Y -= (float)adjustedDistance;
 
                 verticalSpeed -= gravity * (elapsedFrameTime / 20);
             }
 
             checkSpikes();
             checkCherries();
-            checkCompletion();
             updatePlayerState();
+            checkCompletion();
         }
 
         private void checkBorders()
@@ -271,16 +264,19 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkCompletion()
         {
-            if (died)
+            if (died || completed)
                 return;
 
             if (drawableRoom.HasTileAt(PlayerPosition(), TileGroup.Warp))
-                onCompletion();
+            {
+                completed = true;
+                Completed?.Invoke();
+            }
         }
 
         private void checkCherries()
         {
-            if (died)
+            if (died || completed)
                 return;
 
             foreach (var t in drawableRoom.Children)
@@ -307,10 +303,10 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkRightCollision(double elapsedFrameTime)
         {
-            var playerRightBorderPosition = Player.X + SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2;
 
-            var playerTopBorderPosition = Player.Y - SIZE.Y / 2;
-            var playerMiddleBorderPosition = Player.Y + SIZE.Y / 2 - 1;
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
             var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
             var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
@@ -318,18 +314,18 @@ namespace IWBTM.Game.Screens.Play.Player
             if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(topDrawableTile?.X ?? double.MaxValue, middleDrawableTile?.X ?? double.MaxValue);
-                Player.X = (int)closestDrawableTilePosition - SIZE.X / 2;
+                player.X = (int)closestDrawableTilePosition - SIZE.X / 2;
             }
             else
-                Player.X += (float)(max_horizontal_speed * elapsedFrameTime);
+                player.X += (float)(max_horizontal_speed * elapsedFrameTime);
         }
 
         private void checkLeftCollision(double elapsedFrameTime)
         {
-            var playerLeftBorderPosition = Player.X - SIZE.X / 2 - 1;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2 - 1;
 
-            var playerTopBorderPosition = Player.Y - SIZE.Y / 2;
-            var playerMiddleBorderPosition = Player.Y + SIZE.Y / 2 - 1;
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
             var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
             var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
@@ -337,17 +333,17 @@ namespace IWBTM.Game.Screens.Play.Player
             if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(topDrawableTile?.X ?? double.MinValue, middleDrawableTile?.X ?? double.MinValue);
-                Player.X = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.X / 2;
+                player.X = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.X / 2;
             }
             else
-                Player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
+                player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
         }
 
         private void checkTopCollision()
         {
-            var playerTopBorderPosition = Player.Y - SIZE.Y / 2 - 1;
-            var playerLeftBorderPosition = Player.X - SIZE.X / 2;
-            var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2 - 1;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
             var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
             var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
@@ -355,16 +351,16 @@ namespace IWBTM.Game.Screens.Play.Player
             if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(leftDrawableTile?.Y ?? double.MinValue, rightDrawableTile?.Y ?? double.MinValue);
-                Player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.Y / 2;
+                player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.Y / 2;
                 verticalSpeed = 0;
             }
         }
 
         private void checkBottomCollision()
         {
-            var playerBottomBorderPosition = Player.Y + SIZE.Y / 2 + 1;
-            var playerLeftBorderPosition = Player.X - SIZE.X / 2;
-            var playerRightBorderPosition = Player.X + SIZE.X / 2 - 1;
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 + 1;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
             var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
             var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
@@ -372,7 +368,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
-                Player.Y = (int)Math.Round(closestDrawableTilePosition) - SIZE.Y / 2;
+                player.Y = (int)Math.Round(closestDrawableTilePosition) - SIZE.Y / 2;
 
                 resetJumpLogic();
             }
@@ -437,7 +433,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void updatePlayerState()
         {
-            if (died)
+            if (died || completed)
                 return;
 
             if (verticalSpeed < 0)

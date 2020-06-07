@@ -8,7 +8,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 using osuTK;
-using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens
 {
@@ -17,8 +16,11 @@ namespace IWBTM.Game.Screens
         private SpriteText xPosition;
         private SpriteText yPosition;
 
-        public TestGameplayScreen(Room room, string name)
-            : base(room, name)
+        private BasicCheckbox hitboxCheckbox;
+        private BasicCheckbox deathSpotsCheckbox;
+
+        public TestGameplayScreen(Level level, string name)
+            : base(level, name)
         {
         }
 
@@ -36,15 +38,13 @@ namespace IWBTM.Game.Screens
                     Spacing = new Vector2(0, 5),
                     Children = new Drawable[]
                     {
-                        new BasicCheckbox
+                        hitboxCheckbox = new BasicCheckbox
                         {
                             LabelText = "Show hitbox",
-                            Current = getPlayfield().ShowHitbox
                         },
-                        new BasicCheckbox
+                        deathSpotsCheckbox = new BasicCheckbox
                         {
                             LabelText = "Show death spots",
-                            Current = getPlayfield().ShowDeath
                         },
                         xPosition = new SpriteText(),
                         yPosition = new SpriteText(),
@@ -55,17 +55,30 @@ namespace IWBTM.Game.Screens
 
         private Vector2 lastPlayerPosition;
 
+        protected override void NewPlayfieldLoaded(DefaultPlayfield playfield)
+        {
+            base.NewPlayfieldLoaded(playfield);
+
+            hitboxCheckbox.Current = ((TestPlayfield)playfield).ShowHitbox;
+            deathSpotsCheckbox.Current = ((TestPlayfield)playfield).ShowDeath;
+        }
+
         protected override void Update()
         {
             base.Update();
 
-            var playerPosition = getPlayfield().Player.PlayerPosition();
+            var playfield = getPlayfield();
 
-            if (playerPosition != lastPlayerPosition)
+            if (playfield != null)
             {
-                lastPlayerPosition = playerPosition;
-                xPosition.Text = $"X: {playerPosition.X}";
-                yPosition.Text = $"Y: {playerPosition.Y}";
+                var playerPosition = playfield.Player.PlayerPosition();
+
+                if (playerPosition != lastPlayerPosition)
+                {
+                    lastPlayerPosition = playerPosition;
+                    xPosition.Text = $"X: {playerPosition.X}";
+                    yPosition.Text = $"Y: {playerPosition.Y}";
+                }
             }
         }
 
@@ -73,9 +86,6 @@ namespace IWBTM.Game.Screens
 
         private TestPlayfield getPlayfield() => (TestPlayfield)Playfield;
 
-        protected override void OnCompletion(List<Vector2> deathSpots)
-        {
-            this.Exit();
-        }
+        protected override void OnCompletion() => this.Exit();
     }
 }

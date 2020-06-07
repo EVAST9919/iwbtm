@@ -11,13 +11,13 @@ namespace IWBTM.Game.Screens
 {
     public class ResultsScreen : IWannaScreen
     {
-        private readonly List<Vector2> deathSpots;
-        private readonly Room room;
+        private readonly List<(Vector2, int)> deathSpots;
+        private readonly Level level;
 
-        public ResultsScreen(List<Vector2> deathSpots, Room room)
+        public ResultsScreen(List<(Vector2, int)> deathSpots, Level level)
         {
             this.deathSpots = deathSpots;
-            this.room = room;
+            this.level = level;
         }
 
         [BackgroundDependencyLoader]
@@ -56,7 +56,7 @@ namespace IWBTM.Game.Screens
                 }
             });
 
-            //preview.Preview(room, false, deathSpots);
+            preview.Preview(level, false, deathSpots);
         }
     }
 }

@@ -9,7 +9,6 @@ using osu.Framework.Screens;
 using osuTK;
 using osuTK.Input;
 using System;
-using System.Linq;
 
 namespace IWBTM.Game.Screens
 {
@@ -28,7 +27,7 @@ namespace IWBTM.Game.Screens
             onEnterPressed = () =>
             {
                 if (selectedRoom.Value != default)
-                    this.Push(new GameplayScreen(selectedRoom.Value.Level.Rooms.First(), selectedRoom.Value.LevelName));
+                    this.Push(new GameplayScreen(selectedRoom.Value.Level, selectedRoom.Value.LevelName));
             };
 
             AddInternal(new Container
