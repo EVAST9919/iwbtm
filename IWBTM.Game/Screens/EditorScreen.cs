@@ -134,16 +134,19 @@ namespace IWBTM.Game.Screens
 
         private void save()
         {
-            if (!blueprint.SpawnDefined())
+            for (int i = 0; i < rooms.Count; i++)
             {
-                notifications.Push("Player spawn is not defined", NotificationState.Bad);
-                return;
-            }
+                if (!RoomHelper.SpawnDefined(rooms[i]))
+                {
+                    notifications.Push($"Player spawn is not defined in room-{i}", NotificationState.Bad);
+                    return;
+                }
 
-            if (!blueprint.EndDefined())
-            {
-                notifications.Push("Room end is not defined", NotificationState.Bad);
-                return;
+                if (!RoomHelper.EndDefined(rooms[i]))
+                {
+                    notifications.Push($"Room end is not defined in room-{i}", NotificationState.Bad);
+                    return;
+                }
             }
 
             LevelStorage.UpdateLevel(name, new Level

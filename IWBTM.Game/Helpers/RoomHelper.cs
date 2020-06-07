@@ -25,5 +25,27 @@ namespace IWBTM.Game.Helpers
 
             return new Vector2(spawn.PositionX + 16, spawn.PositionY + DrawableTile.SIZE - DefaultPlayer.SIZE.Y / 2f);
         }
+
+        public static bool SpawnDefined(Room room)
+        {
+            foreach (var tile in room.Tiles)
+            {
+                if (tile.Type == TileType.PlayerStart)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool EndDefined(Room room)
+        {
+            foreach (var tile in room.Tiles)
+            {
+                if (tile.Type == TileType.Warp)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }
