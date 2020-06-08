@@ -41,26 +41,11 @@ namespace IWBTM.Game.Helpers
             return levels;
         }
 
-        public static Level CreateEmptyLevel(string name, List<Room> rooms)
+        public static void CreateLevel(string name, Level level)
         {
-            var file = new Level
-            {
-                Rooms = rooms
-            };
+            if (!LevelExists(name))
+                CreateLevelDirectory(name);
 
-            string jsonResult = JsonConvert.SerializeObject(file);
-
-            using (StreamWriter sw = File.CreateText($"Levels/{name}/level"))
-            {
-                sw.WriteLine(jsonResult.ToString());
-                sw.Close();
-            }
-
-            return file;
-        }
-
-        public static void UpdateLevel(string name, Level level)
-        {
             string jsonResult = JsonConvert.SerializeObject(level);
 
             using (StreamWriter sw = File.CreateText($"Levels/{name}/level"))
@@ -94,12 +79,7 @@ namespace IWBTM.Game.Helpers
             Directory.Delete($"Levels/{name}", true);
         }
 
-        public static void CreateLevelDirectory(string name)
-        {
-            checkMainDirectoryExistance();
-
-            Directory.CreateDirectory($"Levels/{name}");
-        }
+        public static void CreateLevelDirectory(string name) => Directory.CreateDirectory($"Levels/{name}");
 
         public static bool LevelHasCustomAudio(string name) => File.Exists($"Levels/{name}/audio.mp3");
 

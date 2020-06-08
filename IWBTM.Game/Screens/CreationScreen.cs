@@ -65,10 +65,7 @@ namespace IWBTM.Game.Screens
             });
         }
 
-        private void onAdjust()
-        {
-            roomCreationOverlay.Show();
-        }
+        private void onAdjust() => roomCreationOverlay.Show();
 
         private void onCommit()
         {
@@ -77,14 +74,14 @@ namespace IWBTM.Game.Screens
             if (!canBeCreated(name))
                 return;
 
-            LevelStorage.CreateLevelDirectory(name);
-
-            var rooms = new List<Room>
+            var level = new Level
             {
-                roomCreationOverlay.GenerateRoom()
+                Rooms = new List<Room>
+                {
+                    roomCreationOverlay.GenerateRoom()
+                }
             };
 
-            var level = LevelStorage.CreateEmptyLevel(name, rooms);
             this.Push(new EditorScreen(level, name));
         }
 

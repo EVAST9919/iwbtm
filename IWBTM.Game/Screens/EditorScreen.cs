@@ -151,7 +151,7 @@ namespace IWBTM.Game.Screens
                 }
             }
 
-            LevelStorage.UpdateLevel(name, new Level
+            LevelStorage.CreateLevel(name, new Level
             {
                 Rooms = rooms.ToList()
             });
