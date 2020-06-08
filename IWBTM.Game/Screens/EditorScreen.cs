@@ -183,6 +183,16 @@ namespace IWBTM.Game.Screens
                 }
             }
 
+            if (!e.Repeat)
+            {
+                switch (e.Key)
+                {
+                    case Key.Tab:
+                        selectRoom();
+                        return true;
+                }
+            }
+
             return base.OnKeyDown(e);
         }
     }
