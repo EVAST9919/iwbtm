@@ -9,8 +9,10 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
+using osuTK.Input;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -164,6 +166,24 @@ namespace IWBTM.Game.Screens
         protected override void OnExit()
         {
             confirmationOverlay.Push("Are you sure you want to exit? All unsaved progress will be lost.", () => base.OnExit());
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (e.ControlPressed)
+            {
+                if (!e.Repeat)
+                {
+                    switch (e.Key)
+                    {
+                        case Key.S:
+                            save();
+                            return true;
+                    }
+                }
+            }
+
+            return base.OnKeyDown(e);
         }
     }
 }
