@@ -199,6 +199,18 @@ namespace IWBTM.Game.Screens
             loadRoom(currentRoomIndex, null);
         }
 
+        private void restart()
+        {
+            if (savedPoint.Item3 == currentRoomIndex)
+            {
+                deathOverlay.Restore();
+                Playfield.Restart(savedPoint.Item1, savedPoint.Item2);
+                track?.Start();
+            }
+            else
+                loadRoom(savedPoint.Item3, (savedPoint.Item1, savedPoint.Item2));
+        }
+
         protected override bool OnKeyDown(KeyDownEvent e)
         {
             if (!e.Repeat)
@@ -206,7 +218,7 @@ namespace IWBTM.Game.Screens
                 switch (e.Key)
                 {
                     case Key.R:
-                        loadRoom(savedPoint.Item3, (savedPoint.Item1, savedPoint.Item2));
+                        restart();
                         return true;
                 }
             }
