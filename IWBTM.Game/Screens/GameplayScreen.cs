@@ -14,6 +14,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
+using osuTK.Graphics;
 using osuTK.Input;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace IWBTM.Game.Screens
                         {
                             deathCountText = new SpriteText
                             {
-                                Colour = IWannaColour.Blue,
+                                Colour = Color4.Red,
                                 Font = FontUsage.Default.With(size: 14)
                             }
                         }
