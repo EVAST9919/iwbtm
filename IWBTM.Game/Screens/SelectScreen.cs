@@ -17,7 +17,7 @@ namespace IWBTM.Game.Screens
         private readonly Bindable<CarouselItem> selectedRoom = new Bindable<CarouselItem>();
 
         private Carousel carousel;
-        private RoomPreviewContainer preview;
+        private LevelPreviewContainer preview;
 
         private Action onEnterPressed;
 
@@ -41,7 +41,7 @@ namespace IWBTM.Game.Screens
                         Width = 0.5f,
                         OnEdit = editRequested,
                     },
-                    preview = new RoomPreviewContainer
+                    preview = new LevelPreviewContainer
                     {
                         Anchor = Anchor.TopRight,
                         Origin = Anchor.TopRight,

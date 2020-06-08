@@ -23,7 +23,7 @@ namespace IWBTM.Game.Screens
         [BackgroundDependencyLoader]
         private void load()
         {
-            RoomPreviewContainer preview;
+            LevelPreviewContainer preview;
 
             AddInternal(new Container
             {
@@ -31,7 +31,7 @@ namespace IWBTM.Game.Screens
                 Padding = new MarginPadding(10),
                 Children = new Drawable[]
                 {
-                    preview = new RoomPreviewContainer
+                    preview = new LevelPreviewContainer
                     {
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
