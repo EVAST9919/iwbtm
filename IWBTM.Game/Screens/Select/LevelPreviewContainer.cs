@@ -19,6 +19,7 @@ namespace IWBTM.Game.Screens.Select
     public class LevelPreviewContainer : CompositeDrawable
     {
         private Container placeholder;
+        private Container buttonsContainer;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -31,16 +32,25 @@ namespace IWBTM.Game.Screens.Select
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new Button(trySelectPrev, FontAwesome.Solid.ChevronLeft)
+                buttonsContainer = new Container
                 {
-                    Anchor = Anchor.CentreLeft,
-                    Origin = Anchor.CentreLeft
-                },
-                new Button(trySelectNext, FontAwesome.Solid.ChevronRight)
-                {
-                    Anchor = Anchor.CentreRight,
-                    Origin = Anchor.CentreRight
-                },
+                    Alpha = 0,
+                    RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        new Button(trySelectPrev, FontAwesome.Solid.ChevronLeft)
+                        {
+                            Anchor = Anchor.CentreLeft,
+                            Origin = Anchor.CentreLeft
+                        },
+                        new Button(trySelectNext, FontAwesome.Solid.ChevronRight)
+                        {
+                            Anchor = Anchor.CentreRight,
+                            Origin = Anchor.CentreRight
+                        },
+
+                    }
+                }
             });
         }
 
@@ -57,6 +67,7 @@ namespace IWBTM.Game.Screens.Select
             this.deathSpots = deathSpots;
 
             preview(rooms.ElementAt(selected), selected, showPlayerSpawn, deathSpots);
+            buttonsContainer.Alpha = 1;
         }
 
         private void preview(Room room, int roomIndex, bool showPlayerSpawn, List<(Vector2, int)> deathSpots)

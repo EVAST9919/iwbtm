@@ -1,5 +1,6 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -28,7 +29,7 @@ namespace IWBTM.Game.Screens.Select
             RelativeSizeAxes = Axes.Both;
             Padding = new MarginPadding(10);
 
-            AddInternal(new BasicScrollContainer
+            AddInternal(new IWannaScrollContainer
             {
                 RelativeSizeAxes = Axes.Both,
                 Child = flow = new FillFlowContainer<CarouselItem>
