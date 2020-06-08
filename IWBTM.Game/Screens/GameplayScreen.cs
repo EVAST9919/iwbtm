@@ -200,16 +200,27 @@ namespace IWBTM.Game.Screens
             loadRoom(currentRoomIndex, null);
         }
 
-        private void restart()
+        private void restart(bool usingSave)
         {
             if (savedPoint.Item3 == currentRoomIndex)
             {
                 deathOverlay.Restore();
-                Playfield.Restart(savedPoint.Item1, savedPoint.Item2);
+
+                if (usingSave)
+                    Playfield.Restart(savedPoint.Item1, savedPoint.Item2);
+                else
+                    Playfield.Restart(RoomHelper.PlayerSpawnPosition(currentRoom), true);
+
                 track?.Start();
             }
             else
-                loadRoom(savedPoint.Item3, (savedPoint.Item1, savedPoint.Item2));
+            {
+                if (usingSave)
+                    loadRoom(savedPoint.Item3, (savedPoint.Item1, savedPoint.Item2));
+                else
+                    loadRoom(savedPoint.Item3, null);
+            }
+
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
@@ -219,7 +230,7 @@ namespace IWBTM.Game.Screens
                 switch (e.Key)
                 {
                     case Key.R:
-                        restart();
+                        restart(!e.ControlPressed);
                         return true;
                 }
             }
