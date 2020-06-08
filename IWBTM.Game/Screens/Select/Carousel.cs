@@ -93,7 +93,7 @@ namespace IWBTM.Game.Screens.Select
             var name = item.LevelName;
 
             LevelStorage.DeleteLevel(name);
-            notifications.Push($"{name} room has been deleted!", NotificationState.Good);
+            notifications.Push($"{name} level has been deleted!", NotificationState.Good);
             selectFirst();
             item.Expire();
         }
