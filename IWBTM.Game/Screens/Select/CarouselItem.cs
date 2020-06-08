@@ -1,5 +1,7 @@
-﻿using IWBTM.Game.Rooms;
+﻿using IWBTM.Game.Overlays;
+using IWBTM.Game.Rooms;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -15,6 +17,9 @@ namespace IWBTM.Game.Screens.Select
         public Action<CarouselItem> Selected;
         public Action<CarouselItem> Deleted;
         public Action<CarouselItem> OnEdit;
+
+        [Resolved]
+        private ConfirmationOverlay confirmationOverlay { get; set; }
 
         public Level Level { get; private set; }
         public string LevelName { get; private set; }
@@ -46,7 +51,10 @@ namespace IWBTM.Game.Screens.Select
             });
         }
 
-        private void onDelete() => Deleted?.Invoke(this);
+        private void onDelete()
+        {
+            confirmationOverlay.Push("Are you sure you want to delete this level?", () => Deleted?.Invoke(this));
+        }
 
         public void Select()
         {
