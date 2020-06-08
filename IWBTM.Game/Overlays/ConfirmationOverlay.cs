@@ -91,18 +91,22 @@ namespace IWBTM.Game.Overlays
             private readonly Action confirm;
             private readonly Action decline;
 
+            private readonly Box box;
+            private readonly SpriteText textContainer;
+            private readonly FillFlowContainer<IWannaBasicButton> buttonsContainer;
+
             public ConfirmationWindow(string text, Action onConfirm, Action onDecline)
             {
                 confirm = () =>
                 {
                     onConfirm?.Invoke();
-                    Expire();
+                    animateHide();
                 };
 
                 decline = () =>
                 {
                     onDecline?.Invoke();
-                    Expire();
+                    animateHide();
                 };
 
                 Anchor = Anchor.Centre;
@@ -110,6 +114,7 @@ namespace IWBTM.Game.Overlays
                 RelativeSizeAxes = Axes.X;
                 Height = 200;
                 Masking = true;
+                Alpha = 0;
                 EdgeEffect = new EdgeEffectParameters
                 {
                     Type = EdgeEffectType.Shadow,
@@ -118,10 +123,13 @@ namespace IWBTM.Game.Overlays
                 };
                 AddRangeInternal(new Drawable[]
                 {
-                    new Box
+                    box = new Box
                     {
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
                         RelativeSizeAxes = Axes.Both,
-                        Colour = IWannaColour.GrayDark
+                        Colour = IWannaColour.GrayDark,
+                        Size = new Vector2(0, 1)
                     },
                     new Container
                     {
@@ -132,19 +140,23 @@ namespace IWBTM.Game.Overlays
                         Padding = new MarginPadding {Vertical = 30},
                         Children = new Drawable[]
                         {
-                            new SpriteText
+                            textContainer = new SpriteText
                             {
                                 Anchor = Anchor.TopCentre,
                                 Origin = Anchor.TopCentre,
                                 Text = text,
+                                Alpha = 0,
+                                Y = -100,
                             },
-                            new FillFlowContainer<IWannaBasicButton>
+                            buttonsContainer = new FillFlowContainer<IWannaBasicButton>
                             {
                                 Anchor = Anchor.BottomCentre,
                                 Origin = Anchor.BottomCentre,
                                 Direction = FillDirection.Horizontal,
                                 AutoSizeAxes = Axes.Both,
                                 Spacing = new Vector2(50, 0),
+                                Alpha = 0,
+                                Y = 100,
                                 Children = new[]
                                 {
                                     new IWannaBasicButton("yes", confirm),
@@ -159,6 +171,38 @@ namespace IWBTM.Game.Overlays
             public void ForceConfirm() => confirm?.Invoke();
 
             public void ForceDecline() => decline?.Invoke();
+
+            protected override void LoadComplete()
+            {
+                base.LoadComplete();
+                animateShow();
+            }
+
+            private void animateShow()
+            {
+                box.ResizeWidthTo(1, 200, Easing.Out);
+
+                textContainer.FadeIn(200, Easing.Out);
+                textContainer.MoveToY(0, 200, Easing.Out);
+
+                buttonsContainer.FadeIn(200, Easing.Out);
+                buttonsContainer.MoveToY(0, 200, Easing.Out);
+
+                this.FadeIn(200, Easing.Out);
+            }
+
+            private void animateHide()
+            {
+                box.ResizeWidthTo(0, 200, Easing.Out);
+
+                textContainer.FadeOut(200, Easing.Out);
+                textContainer.MoveToY(-100, 200, Easing.Out);
+
+                buttonsContainer.FadeOut(200, Easing.Out);
+                buttonsContainer.MoveToY(100, 200, Easing.Out);
+
+                this.FadeOut(200, Easing.Out).Expire();
+            }
         }
     }
 }
