@@ -17,9 +17,6 @@ namespace IWBTM.Game.Screens
     public class CreationScreen : IWannaScreen
     {
         [Resolved]
-        private ConfirmationOverlay confirmationOverlay { get; set; }
-
-        [Resolved]
         private NotificationOverlay notifications { get; set; }
 
         private readonly IWannaTextBox textbox;
@@ -100,11 +97,6 @@ namespace IWBTM.Game.Screens
             }
 
             return true;
-        }
-
-        protected override void OnExit()
-        {
-            confirmationOverlay.Push("Are you sure you want to exit? All unsaved progress will be lost.", () => base.OnExit());
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
