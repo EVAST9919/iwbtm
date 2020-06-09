@@ -187,6 +187,10 @@ namespace IWBTM.Game.Screens
                     case Key.Tab:
                         selectRoom();
                         return true;
+
+                    case Key.Enter:
+                        test();
+                        return true;
                 }
             }
 
