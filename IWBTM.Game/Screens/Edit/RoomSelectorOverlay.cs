@@ -76,6 +76,7 @@ namespace IWBTM.Game.Screens.Edit
         private void onCreation(Room room)
         {
             Rooms.Add(room);
+            Selected.Value = room;
             resetRooms();
         }
 
