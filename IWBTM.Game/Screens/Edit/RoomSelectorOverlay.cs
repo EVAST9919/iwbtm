@@ -260,13 +260,19 @@ namespace IWBTM.Game.Screens.Edit
 
                 Add(new FullRoomPreviewContainer(new Vector2(room.SizeX, room.SizeY))
                 {
-                    Children = new Drawable[]
+                    Child = new Container
                     {
-                        new Box
+                        AutoSizeAxes = Axes.Both,
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                        Children = new Drawable[]
                         {
-                            RelativeSizeAxes = Axes.Both
-                        },
-                        new DrawableRoom(room, true)
+                            new Box
+                            {
+                                RelativeSizeAxes = Axes.Both
+                            },
+                            new DrawableRoom(room, true)
+                        }
                     }
                 });
             }
