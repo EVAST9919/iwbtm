@@ -158,10 +158,7 @@ namespace IWBTM.Game.Screens
             notifications.Push("Level has been saved!", NotificationState.Good);
         }
 
-        private void selectRoom()
-        {
-            roomSelector.Show();
-        }
+        private void selectRoom() => roomSelector.ToggleVisibility();
 
         protected override void OnExit()
         {
