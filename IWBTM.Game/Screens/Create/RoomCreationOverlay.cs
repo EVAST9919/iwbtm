@@ -1,10 +1,12 @@
 ﻿using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.UserInterface;
 using osuTK;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace IWBTM.Game.Screens.Create
         private readonly MusicSelector musicSelector;
         private readonly SizeSetting sizeSetting;
         private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
+        private readonly BasicCheckbox createBorders;
 
         public RoomCreationOverlay()
         {
@@ -54,6 +57,12 @@ namespace IWBTM.Game.Screens.Create
                                 {
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
+                                },
+                                createBorders = new BasicCheckbox
+                                {
+                                    Anchor = Anchor.Centre,
+                                    Origin = Anchor.Centre,
+                                    LabelText = "Create borders"
                                 },
                                 new SettingName("Audio"),
                                 new Container
@@ -95,13 +104,90 @@ namespace IWBTM.Game.Screens.Create
             content.FadeOut(200, Easing.Out);
         }
 
-        public Room GenerateRoom() => new Room
+        public Room GenerateRoom()
         {
-            Music = musicSelector.Current.Value,
-            Tiles = new List<Tile>(),
-            SizeX = sizeSetting.Current.Value.X,
-            SizeY = sizeSetting.Current.Value.Y
-        };
+            var xSize = sizeSetting.Current.Value.X;
+            var ySize = sizeSetting.Current.Value.Y;
+
+            var tiles = new List<Tile>();
+
+            if (createBorders.Current.Value)
+            {
+                tiles.AddRange(new Tile[]
+                {
+                    new Tile
+                    {
+                        Type = TileType.PlatformCorner,
+                        PositionX = 0,
+                        PositionY = 0
+                    },
+                    new Tile
+                    {
+                        Type = TileType.PlatformCorner,
+                        PositionX = ((int)xSize - 1) * DrawableTile.SIZE,
+                        PositionY = 0
+                    },
+                    new Tile
+                    {
+                        Type = TileType.PlatformCorner,
+                        PositionX = 0,
+                        PositionY = ((int)ySize - 1) * DrawableTile.SIZE
+                    },
+                    new Tile
+                    {
+                        Type = TileType.PlatformCorner,
+                        PositionX = ((int)xSize - 1) * DrawableTile.SIZE,
+                        PositionY = ((int)ySize - 1) * DrawableTile.SIZE
+                    }
+                });
+
+                for (int i = 1; i < (int)xSize - 1; i++)
+                {
+                    tiles.AddRange(new Tile[]
+                    {
+                        new Tile
+                        {
+                            PositionX = i * DrawableTile.SIZE,
+                            PositionY = 0,
+                            Type = TileType.PlatformMiddle
+                        },
+                        new Tile
+                        {
+                            PositionX = i * DrawableTile.SIZE,
+                            PositionY = ((int)ySize - 1) * DrawableTile.SIZE,
+                            Type = TileType.PlatformMiddle
+                        }
+                    });
+                }
+
+                for (int i = 1; i < (int)ySize - 1; i++)
+                {
+                    tiles.AddRange(new Tile[]
+                    {
+                        new Tile
+                        {
+                            PositionX = 0,
+                            PositionY = i * DrawableTile.SIZE,
+                            Type = TileType.PlatformMiddleRotated
+                        },
+                        new Tile
+                        {
+                            PositionX = ((int)xSize - 1) * DrawableTile.SIZE,
+                            PositionY = i * DrawableTile.SIZE,
+                            Type = TileType.PlatformMiddleRotated
+                        }
+                    });
+                }
+            }
+
+            return new Room
+            {
+                Music = musicSelector.Current.Value,
+                Tiles = tiles,
+                SizeX = xSize,
+                SizeY = ySize
+            };
+        }
 
         private void onSizeAdjust()
         {
