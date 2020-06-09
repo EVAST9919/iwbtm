@@ -47,13 +47,17 @@ namespace IWBTM.Game.Screens.Edit
                     {
                         Padding = new MarginPadding(10),
                         RelativeSizeAxes = Axes.Both,
-                        Child = flow = new FillFlowContainer<FlowItem>
+                        Child = new IWannaScrollContainer
                         {
-                            RelativeSizeAxes = Axes.X,
-                            AutoSizeAxes = Axes.Y,
-                            Direction = FillDirection.Full,
-                            Spacing = new Vector2(10)
-                        },
+                            RelativeSizeAxes = Axes.Both,
+                            Child = flow = new FillFlowContainer<FlowItem>
+                            {
+                                RelativeSizeAxes = Axes.X,
+                                AutoSizeAxes = Axes.Y,
+                                Direction = FillDirection.Full,
+                                Spacing = new Vector2(10)
+                            }
+                        }
                     }
                 },
                 roomCreationOverlay = new RoomCreationOverlay()
