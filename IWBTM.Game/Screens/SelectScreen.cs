@@ -97,6 +97,10 @@ namespace IWBTM.Game.Screens
                     case Key.Up:
                         carousel.TrySelectPrev();
                         return true;
+
+                    case Key.Delete:
+                        carousel.TryDelete();
+                        return true;
                 }
             };
 

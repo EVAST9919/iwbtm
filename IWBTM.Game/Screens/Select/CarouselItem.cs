@@ -26,7 +26,7 @@ namespace IWBTM.Game.Screens.Select
 
         public MenuItem[] ContextMenuItems => new[]
         {
-            new MenuItem("Delete", onDelete),
+            new MenuItem("Delete", OnDelete),
             new MenuItem("Edit", () => OnEdit?.Invoke(this)),
         };
 
@@ -51,18 +51,25 @@ namespace IWBTM.Game.Screens.Select
             });
         }
 
-        private void onDelete()
+        public void OnDelete()
         {
             confirmationOverlay.Push("Are you sure you want to delete this level?", () => Deleted?.Invoke(this));
         }
+
+        public bool IsSelected;
 
         public void Select()
         {
             Selected?.Invoke(this);
             background.Activate();
+            IsSelected = true;
         }
 
-        public void Deselect() => background.Deactivate();
+        public void Deselect()
+        {
+            IsSelected = false;
+            background.Deactivate();
+        }
 
         protected override bool OnClick(ClickEvent e)
         {

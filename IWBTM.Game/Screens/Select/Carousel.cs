@@ -89,6 +89,18 @@ namespace IWBTM.Game.Screens.Select
             }
         }
 
+        public void TryDelete()
+        {
+            flow.ForEach(c =>
+            {
+                if (c.IsSelected)
+                {
+                    c.OnDelete();
+                    return;
+                }
+            });
+        }
+
         private void deleteRequested(CarouselItem item)
         {
             var name = item.LevelName;
