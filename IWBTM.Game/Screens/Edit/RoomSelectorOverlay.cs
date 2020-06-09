@@ -1,14 +1,18 @@
-﻿using IWBTM.Game.Rooms;
+﻿using IWBTM.Game.Overlays;
+using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Create;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
@@ -19,6 +23,12 @@ namespace IWBTM.Game.Screens.Edit
 {
     public class RoomSelectorOverlay : IWannaOverlay
     {
+        [Resolved]
+        private NotificationOverlay notifications { get; set; }
+
+        [Resolved]
+        private ConfirmationOverlay confirmation { get; set; }
+
         private readonly FillFlowContainer<FlowItem> flow;
         private readonly RoomCreationOverlay roomCreationOverlay;
 
@@ -29,17 +39,21 @@ namespace IWBTM.Game.Screens.Edit
         {
             AddRange(new Drawable[]
             {
-                new Container
+                new BasicContextMenuContainer
                 {
-                    Padding = new MarginPadding(10),
                     RelativeSizeAxes = Axes.Both,
-                    Child = flow = new FillFlowContainer<FlowItem>
+                    Child = new Container
                     {
-                        RelativeSizeAxes = Axes.X,
-                        AutoSizeAxes = Axes.Y,
-                        Direction = FillDirection.Full,
-                        Spacing = new Vector2(10)
-                    },
+                        Padding = new MarginPadding(10),
+                        RelativeSizeAxes = Axes.Both,
+                        Child = flow = new FillFlowContainer<FlowItem>
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            AutoSizeAxes = Axes.Y,
+                            Direction = FillDirection.Full,
+                            Spacing = new Vector2(10)
+                        },
+                    }
                 },
                 roomCreationOverlay = new RoomCreationOverlay()
             });
@@ -56,11 +70,35 @@ namespace IWBTM.Game.Screens.Edit
                 var correspondingRoom = Rooms.ElementAt(i);
                 flow.Add(new RoomItem(i, correspondingRoom, () => updateSelections(correspondingRoom))
                 {
-                    Selected = Selected.Value == correspondingRoom
+                    Selected = Selected.Value == correspondingRoom,
+                    DeleteRequested = tryDelete
                 });
             };
 
             flow.Add(new CreationButton(roomCreationOverlay.Show));
+        }
+
+        private void tryDelete(RoomItem item)
+        {
+            if (Rooms.Count == 1)
+            {
+                notifications.Push("You can't delete the only one room in the level", NotificationState.Bad);
+                return;
+            }
+
+            confirmation.Push("Are you sure you want to delete selected room?", () => confirmDeletion(item));
+        }
+
+        private void confirmDeletion(RoomItem item)
+        {
+            var removeableRoom = item.Room;
+            var index = Rooms.IndexOf(removeableRoom);
+            var newIndex = index == 0 ? 1 : index - 1;
+            Selected.Value = Rooms[newIndex];
+            Rooms.Remove(removeableRoom);
+
+            resetRooms();
+            notifications.Push("Selected room has been deleted", NotificationState.Good);
         }
 
         private void updateSelections(Room selected)
@@ -210,8 +248,9 @@ namespace IWBTM.Game.Screens.Edit
             }
         }
 
-        private class RoomItem : FlowItem
+        private class RoomItem : FlowItem, IHasContextMenu
         {
+            public Action<RoomItem> DeleteRequested;
             public readonly Room Room;
 
             public RoomItem(int index, Room room, Action action)
@@ -231,6 +270,11 @@ namespace IWBTM.Game.Screens.Edit
                     }
                 });
             }
+
+            public MenuItem[] ContextMenuItems => new[]
+            {
+                new MenuItem("Delete", () => DeleteRequested?.Invoke(this))
+            };
         }
     }
 }
