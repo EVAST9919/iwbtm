@@ -184,7 +184,7 @@ namespace IWBTM.Game.Screens.Edit
 
             public FlowItem(string text, Action action)
             {
-                Size = new Vector2(200);
+                Size = new Vector2(250);
                 BorderColour = IWannaColour.Blue;
                 Masking = true;
                 CornerRadius = 5;
@@ -194,11 +194,12 @@ namespace IWBTM.Game.Screens.Edit
                     {
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.Black,
-                        Alpha = 0.5f
+                        Alpha = 0.7f
                     },
                     content = new Container
                     {
                         RelativeSizeAxes = Axes.Both,
+                        Scale = new Vector2(0.9f),
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre
                     },
@@ -215,7 +216,7 @@ namespace IWBTM.Game.Screens.Edit
                             {
                                 RelativeSizeAxes = Axes.Both,
                                 Colour = Color4.Black,
-                                Alpha = 0.5f
+                                Alpha = 0.7f
                             },
                             new SpriteText
                             {
@@ -232,29 +233,21 @@ namespace IWBTM.Game.Screens.Edit
 
             protected override bool OnHover(HoverEvent e)
             {
-                BorderThickness = 5;
                 textContainer.MoveToY(0, 100, Easing.Out);
-                content.ScaleTo(1.1f, 100, Easing.Out);
+                content.ScaleTo(0.95f, 100, Easing.Out);
                 return base.OnHover(e);
             }
 
             protected override void OnHoverLost(HoverLostEvent e)
             {
                 base.OnHoverLost(e);
-                if (!selected)
-                    BorderThickness = 0;
-
                 textContainer.MoveToY(40, 100, Easing.Out);
-                content.ScaleTo(1, 100, Easing.Out);
+                content.ScaleTo(0.9f, 100, Easing.Out);
             }
 
             protected void Activate() => BorderThickness = 5;
 
-            protected void Deactivate()
-            {
-                if (!IsHovered)
-                    BorderThickness = 0;
-            }
+            protected void Deactivate() => BorderThickness = 0;
 
             private void updateSelection()
             {
@@ -267,16 +260,32 @@ namespace IWBTM.Game.Screens.Edit
 
         private class CreationButton : FlowItem
         {
+            private readonly SpriteIcon icon;
+
             public CreationButton(Action action)
                 : base("new", action)
             {
-                Add(new SpriteIcon
+                Add(icon = new SpriteIcon
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Size = new Vector2(100),
+                    Size = new Vector2(80),
                     Icon = FontAwesome.Solid.Plus
                 });
+            }
+
+            protected override bool OnHover(HoverEvent e)
+            {
+                icon.RotateTo(90, 100, Easing.Out);
+                icon.ScaleTo(1.2f, 100, Easing.Out);
+                return base.OnHover(e);
+            }
+
+            protected override void OnHoverLost(HoverLostEvent e)
+            {
+                base.OnHoverLost(e);
+                icon.RotateTo(0, 100, Easing.Out);
+                icon.ScaleTo(1, 100, Easing.Out);
             }
         }
 
