@@ -16,6 +16,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
+using osuTK.Input;
 using System;
 using System.Linq;
 
@@ -89,6 +90,18 @@ namespace IWBTM.Game.Screens.Edit
             confirmation.Push("Are you sure you want to delete selected room?", () => confirmDeletion(item));
         }
 
+        private void tryDelete()
+        {
+            flow.Children.OfType<RoomItem>().ForEach(c =>
+            {
+                if (c.Selected)
+                {
+                    tryDelete(c);
+                    return;
+                }
+            });
+        }
+
         private void confirmDeletion(RoomItem item)
         {
             var removeableRoom = item.Room;
@@ -129,6 +142,21 @@ namespace IWBTM.Game.Screens.Edit
         {
             base.PopOut();
             flow.FadeOut(200, Easing.Out);
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (!e.Repeat)
+            {
+                switch (e.Key)
+                {
+                    case Key.Delete:
+                        tryDelete();
+                        return true;
+                }
+            }
+
+            return base.OnKeyDown(e);
         }
 
         private class FlowItem : ClickableContainer
