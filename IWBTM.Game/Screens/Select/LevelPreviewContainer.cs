@@ -20,6 +20,8 @@ namespace IWBTM.Game.Screens.Select
     {
         private Container placeholder;
         private Container buttonsContainer;
+        private Button leftButton;
+        private Button rightButton;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -38,15 +40,17 @@ namespace IWBTM.Game.Screens.Select
                     RelativeSizeAxes = Axes.Both,
                     Children = new Drawable[]
                     {
-                        new Button(trySelectPrev, FontAwesome.Solid.ChevronLeft)
+                        leftButton = new Button(trySelectPrev, FontAwesome.Solid.ChevronLeft)
                         {
                             Anchor = Anchor.CentreLeft,
-                            Origin = Anchor.CentreLeft
+                            Origin = Anchor.CentreLeft,
+                            Alpha = 0
                         },
-                        new Button(trySelectNext, FontAwesome.Solid.ChevronRight)
+                        rightButton = new Button(trySelectNext, FontAwesome.Solid.ChevronRight)
                         {
                             Anchor = Anchor.CentreRight,
-                            Origin = Anchor.CentreRight
+                            Origin = Anchor.CentreRight,
+                            Alpha = 0
                         },
 
                     }
@@ -106,6 +110,9 @@ namespace IWBTM.Game.Screens.Select
                     }
                 }
             }
+
+            leftButton.Alpha = roomIndex == 0 ? 0 : 1;
+            rightButton.Alpha = roomIndex == rooms.Count - 1 ? 0 : 1;
         }
 
         private void trySelectNext()
@@ -153,33 +160,39 @@ namespace IWBTM.Game.Screens.Select
 
         private class Button : ClickableContainer
         {
+            private readonly Container content;
+
             public Button(Action action, IconUsage icon)
             {
                 Size = new Vector2(30, 100);
                 Action = action;
-                Alpha = 0.6f;
-                AddRange(new Drawable[]
+                Add(content = new Container
                 {
-                    new IWannaButtonBackground(),
-                    new SpriteIcon
+                    Alpha = 0.6f,
+                    RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
                     {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Icon = icon,
-                        Size = new Vector2(20)
+                        new IWannaButtonBackground(),
+                        new SpriteIcon
+                        {
+                            Anchor = Anchor.Centre,
+                            Origin = Anchor.Centre,
+                            Icon = icon,
+                            Size = new Vector2(20)
+                        }
                     }
                 });
             }
 
             protected override bool OnHover(HoverEvent e)
             {
-                this.FadeIn(200, Easing.Out);
+                content.FadeIn(200, Easing.Out);
                 return base.OnHover(e);
             }
 
             protected override void OnHoverLost(HoverLostEvent e)
             {
-                this.FadeTo(0.6f, 200, Easing.Out);
+                content.FadeTo(0.6f, 200, Easing.Out);
                 base.OnHoverLost(e);
             }
         }
