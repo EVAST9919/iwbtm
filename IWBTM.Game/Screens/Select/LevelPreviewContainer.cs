@@ -90,7 +90,7 @@ namespace IWBTM.Game.Screens.Select
                 {
                     RelativeSizeAxes = Axes.Both
                 },
-                new DrawableRoom(room, showPlayerSpawn)
+                new DrawableRoom(room, showPlayerSpawn, true)
             });
 
             if (deathSpots != null)

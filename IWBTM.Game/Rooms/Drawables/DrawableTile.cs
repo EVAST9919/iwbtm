@@ -89,6 +89,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.KillerBlock:
                     return Textures.Get("Tiles/killerblock");
+
+                case TileType.BulletBlocker:
+                    return Textures.Get("Tiles/bulletblocker");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -155,6 +158,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.KillerBlock:
                     return TileGroup.KillerBlock;
+
+                case TileType.BulletBlocker:
+                    return TileGroup.BulletBlocker;
             }
 
             return TileGroup.Ungrouped;
@@ -178,7 +184,8 @@ namespace IWBTM.Game.Rooms.Drawables
         SmallSpikeRight,
         Warp,
         Cherry,
-        KillerBlock
+        KillerBlock,
+        BulletBlocker
     }
 
     public enum TileGroup
@@ -190,6 +197,7 @@ namespace IWBTM.Game.Rooms.Drawables
         Start,
         Cherry,
         KillerBlock,
+        BulletBlocker,
         Ungrouped
     }
 }

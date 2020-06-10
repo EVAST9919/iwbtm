@@ -60,11 +60,19 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            var tile = drawableRoom.GetTileAt(Position, TileGroup.Save);
-
-            if (tile != null)
+            var blocker = drawableRoom.GetTileAt(Position, TileGroup.BulletBlocker);
+            if (blocker != null)
             {
-                ((SaveTile)tile).Activate();
+                ((DrawableBulletBlocker)blocker).Activate();
+                Expire();
+                return;
+            }
+
+            var save = drawableRoom.GetTileAt(Position, TileGroup.Save);
+
+            if (save != null)
+            {
+                ((SaveTile)save).Activate();
                 OnSave?.Invoke();
                 Expire();
                 return;

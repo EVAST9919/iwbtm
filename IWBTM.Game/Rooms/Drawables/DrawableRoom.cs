@@ -9,7 +9,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         protected Room Room { get; set; }
 
-        public DrawableRoom(Room room, bool showPlayerSpawn = false)
+        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker)
         {
             Room = room;
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
@@ -21,6 +21,12 @@ namespace IWBTM.Game.Rooms.Drawables
                     if (t.Type == TileType.Save)
                     {
                         Add(new SaveTile(t));
+                        continue;
+                    }
+
+                    if (t.Type == TileType.BulletBlocker)
+                    {
+                        Add(new DrawableBulletBlocker(t, showBulletBlocker));
                         continue;
                     }
 
