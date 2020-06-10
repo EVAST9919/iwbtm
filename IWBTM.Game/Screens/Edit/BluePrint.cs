@@ -58,6 +58,8 @@ namespace IWBTM.Game.Screens.Edit
 
         public bool EndDefined() => objectsLayer.EndDefined();
 
+        public void Clear() => objectsLayer.ClearTiles();
+
         private DrawableTile tileToPlace;
         private Vector2 mousePosition;
 

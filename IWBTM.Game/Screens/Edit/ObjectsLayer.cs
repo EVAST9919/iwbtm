@@ -127,6 +127,14 @@ namespace IWBTM.Game.Screens.Edit
             return false;
         }
 
+        public void ClearTiles()
+        {
+            foreach (var c in Children)
+                c.Expire();
+
+            save();
+        }
+
         private void save()
         {
             Room.Tiles = Children.Select(c => c.Tile).ToList();

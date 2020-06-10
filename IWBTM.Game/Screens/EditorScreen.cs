@@ -74,7 +74,8 @@ namespace IWBTM.Game.Screens
                             {
                                 OnTest = test,
                                 OnSave = save,
-                                OnRoomSelect = selectRoom
+                                OnRoomSelect = selectRoom,
+                                OnClear = clear
                             }
                         }
                     }
@@ -156,6 +157,11 @@ namespace IWBTM.Game.Screens
                 Rooms = rooms.ToList()
             });
             notifications.Push("Level has been saved!", NotificationState.Good);
+        }
+
+        private void clear()
+        {
+            confirmationOverlay.Push("Are you sure you want to clear entire room?", blueprint.Clear);
         }
 
         private void selectRoom() => roomSelector.ToggleVisibility();
