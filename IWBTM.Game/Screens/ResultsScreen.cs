@@ -13,11 +13,13 @@ namespace IWBTM.Game.Screens
     {
         private readonly List<(Vector2, int)> deathSpots;
         private readonly Level level;
+        private readonly string time;
 
-        public ResultsScreen(List<(Vector2, int)> deathSpots, Level level)
+        public ResultsScreen(List<(Vector2, int)> deathSpots, Level level, string time)
         {
             this.deathSpots = deathSpots;
             this.level = level;
+            this.time = time;
         }
 
         [BackgroundDependencyLoader]
@@ -49,6 +51,11 @@ namespace IWBTM.Game.Screens
                             new SpriteText
                             {
                                 Text = $"Deaths: {deathSpots.Count}",
+                                Font = FontUsage.Default.With(size: 40)
+                            },
+                            new SpriteText
+                            {
+                                Text = $"Time: {time}",
                                 Font = FontUsage.Default.With(size: 40)
                             }
                         }

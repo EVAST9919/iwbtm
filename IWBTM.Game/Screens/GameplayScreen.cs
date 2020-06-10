@@ -14,7 +14,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
-using osuTK.Graphics;
 using osuTK.Input;
 using System;
 using System.Collections.Generic;
@@ -42,6 +41,7 @@ namespace IWBTM.Game.Screens
         private readonly Level level;
         private readonly string name;
         private SpriteText deathCountText;
+        private SpriteText timer;
         private DeathOverlay deathOverlay;
         private Container roomPlaceholder;
 
@@ -59,43 +59,54 @@ namespace IWBTM.Game.Screens
         [BackgroundDependencyLoader]
         private void load()
         {
-            AddInternal(new PlayfieldCameraContainer
+            AddRangeInternal(new Drawable[]
             {
-                Children = new Drawable[]
+                new PlayfieldCameraContainer
                 {
-                    roomPlaceholder = new Container()
+                    Children = new Drawable[]
                     {
-                        RelativeSizeAxes = Axes.Both,
-                    },
-                    new FillFlowContainer
-                    {
-                        Anchor = Anchor.TopRight,
-                        Origin = Anchor.TopRight,
-                        Margin = new MarginPadding(32 + 5),
-                        AutoSizeAxes = Axes.Both,
-                        Direction = FillDirection.Vertical,
-                        Spacing = new Vector2(0, 5),
-                        Children = new Drawable[]
+                        roomPlaceholder = new Container()
                         {
-                            deathCountText = new SpriteText
-                            {
-                                Colour = Color4.Red,
-                                Font = FontUsage.Default.With(size: 14)
-                            }
+                            RelativeSizeAxes = Axes.Both,
+                        },
+                        deathOverlay = new DeathOverlay()
+                    }
+                },
+                new FillFlowContainer
+                {
+                    Anchor = Anchor.TopRight,
+                    Origin = Anchor.TopRight,
+                    Margin = new MarginPadding(32 + 5),
+                    AutoSizeAxes = Axes.Both,
+                    Direction = FillDirection.Vertical,
+                    Spacing = new Vector2(0, 5),
+                    Children = new Drawable[]
+                    {
+                        deathCountText = new SpriteText
+                        {
+                            Colour = IWannaColour.Blue,
+                            Font = FontUsage.Default.With(size: 20)
+                        },
+                        timer = new SpriteText
+                        {
+                            Colour = IWannaColour.Blue,
+                            Font = FontUsage.Default.With(size: 20)
                         }
-                    },
-                    deathOverlay = new DeathOverlay()
-                }
+                    }
+                },
             });
 
             savedPoint = (RoomHelper.PlayerSpawnPosition(level.Rooms.First()), true, 0);
             loadRoom(currentRoomIndex, (savedPoint.Item1, savedPoint.Item2));
         }
 
+        private double startTime;
+
         protected override void LoadComplete()
         {
             base.LoadComplete();
             deathCount.BindValueChanged(count => deathCountText.Text = $"deaths: {count.NewValue}", true);
+            startTime = Clock.CurrentTime;
         }
 
         private float roomXBorder;
@@ -175,6 +186,9 @@ namespace IWBTM.Game.Screens
         {
             base.Update();
 
+            TimeSpan t = TimeSpan.FromMilliseconds(Clock.CurrentTime - startTime);
+            timer.Text = string.Format("{0:D3}:{1:D2}:{2:D2}:{3:D3}", t.Hours, t.Minutes, t.Seconds, t.Milliseconds);
+
             if (Playfield != null)
             {
                 var playerPosition = Playfield.Player.PlayerPosition();
@@ -192,7 +206,7 @@ namespace IWBTM.Game.Screens
             if (level.Rooms.Last() == level.Rooms[currentRoomIndex])
             {
                 track?.Stop();
-                this.Push(new ResultsScreen(deathSpots, level));
+                this.Push(new ResultsScreen(deathSpots, level, timer.Text));
                 return;
             }
 
