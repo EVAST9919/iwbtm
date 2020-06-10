@@ -177,6 +177,9 @@ namespace IWBTM.Game.Screens.Play.Player
 
             checkBorders();
 
+            if (died)
+                return;
+
             var elapsedFrameTime = Clock.ElapsedFrameTime;
 
             // Limit vertical speed
@@ -187,9 +190,18 @@ namespace IWBTM.Game.Screens.Play.Player
                 verticalSpeed = 0;
 
             if (verticalSpeed <= 0)
+            {
                 checkBottomCollision();
+                checkBottomKillerBlock();
+            }
             else
+            {
                 checkTopCollision();
+                checkTopKillerBlock();
+            }
+
+            if (died)
+                return;
 
             horizontalSpeed = 0;
 
@@ -206,10 +218,19 @@ namespace IWBTM.Game.Screens.Play.Player
                 updateAnimationDirection();
 
                 if (rightwards)
+                {
                     checkRightCollision(elapsedFrameTime);
+                    checkRightKillerBlock();
+                }
                 else
+                {
                     checkLeftCollision(elapsedFrameTime);
+                    checkLeftKillerBlock();
+                }
             }
+
+            if (died)
+                return;
 
             if (midAir)
             {
@@ -310,6 +331,20 @@ namespace IWBTM.Game.Screens.Play.Player
                 player.X += (float)(max_horizontal_speed * elapsedFrameTime);
         }
 
+        private void checkRightKillerBlock()
+        {
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
+
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
+
+            var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+
+            if (topDrawableTile != null || middleDrawableTile != null)
+                onDeath();
+        }
+
         private void checkLeftCollision(double elapsedFrameTime)
         {
             var playerLeftBorderPosition = player.X - SIZE.X / 2 - 1;
@@ -329,6 +364,20 @@ namespace IWBTM.Game.Screens.Play.Player
                 player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
         }
 
+        private void checkLeftKillerBlock()
+        {
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
+
+            var topDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var middleDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+
+            if (topDrawableTile != null || middleDrawableTile != null)
+                onDeath();
+        }
+
         private void checkTopCollision()
         {
             var playerTopBorderPosition = player.Y - SIZE.Y / 2 - 1;
@@ -344,6 +393,19 @@ namespace IWBTM.Game.Screens.Play.Player
                 player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.Y / 2;
                 verticalSpeed = 0;
             }
+        }
+
+        private void checkTopKillerBlock()
+        {
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
+
+            var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+
+            if (leftDrawableTile != null || rightDrawableTile != null)
+                onDeath();
         }
 
         private void checkBottomCollision()
@@ -370,6 +432,19 @@ namespace IWBTM.Game.Screens.Play.Player
                     availableJumpCount = 1;
                 }
             }
+        }
+
+        private void checkBottomKillerBlock()
+        {
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 - 1;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
+
+            var leftDrawableTile = drawableRoom.GetTileAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
+            var rightDrawableTile = drawableRoom.GetTileAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
+
+            if (leftDrawableTile != null || rightDrawableTile != null)
+                onDeath();
         }
 
         private void resetJumpLogic()

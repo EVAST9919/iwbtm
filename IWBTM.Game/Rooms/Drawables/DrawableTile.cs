@@ -86,6 +86,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.Cherry:
                     return Textures.Get("Tiles/cherry-1");
+
+                case TileType.KillerBlock:
+                    return Textures.Get("Tiles/killerblock");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -149,6 +152,9 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SpikeRight:
                 case TileType.SpikeTop:
                     return TileGroup.Spike;
+
+                case TileType.KillerBlock:
+                    return TileGroup.KillerBlock;
             }
 
             return TileGroup.Ungrouped;
@@ -171,7 +177,8 @@ namespace IWBTM.Game.Rooms.Drawables
         SmallSpikeLeft,
         SmallSpikeRight,
         Warp,
-        Cherry
+        Cherry,
+        KillerBlock
     }
 
     public enum TileGroup
@@ -182,6 +189,7 @@ namespace IWBTM.Game.Rooms.Drawables
         Save,
         Start,
         Cherry,
+        KillerBlock,
         Ungrouped
     }
 }
