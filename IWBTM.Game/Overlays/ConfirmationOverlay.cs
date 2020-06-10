@@ -88,6 +88,8 @@ namespace IWBTM.Game.Overlays
 
         private class ConfirmationWindow : CompositeDrawable
         {
+            private const int content_offset = 20;
+
             private readonly Action confirm;
             private readonly Action decline;
 
@@ -146,7 +148,7 @@ namespace IWBTM.Game.Overlays
                                 Origin = Anchor.TopCentre,
                                 Text = text,
                                 Alpha = 0,
-                                Y = -100,
+                                Y = -content_offset,
                             },
                             buttonsContainer = new FillFlowContainer<IWannaBasicButton>
                             {
@@ -156,7 +158,7 @@ namespace IWBTM.Game.Overlays
                                 AutoSizeAxes = Axes.Both,
                                 Spacing = new Vector2(50, 0),
                                 Alpha = 0,
-                                Y = 100,
+                                Y = content_offset,
                                 Children = new[]
                                 {
                                     new IWannaBasicButton("yes", confirm),
@@ -196,10 +198,10 @@ namespace IWBTM.Game.Overlays
                 box.ResizeWidthTo(0, 200, Easing.Out);
 
                 textContainer.FadeOut(200, Easing.Out);
-                textContainer.MoveToY(-100, 200, Easing.Out);
+                textContainer.MoveToY(-content_offset, 200, Easing.Out);
 
                 buttonsContainer.FadeOut(200, Easing.Out);
-                buttonsContainer.MoveToY(100, 200, Easing.Out);
+                buttonsContainer.MoveToY(content_offset, 200, Easing.Out);
 
                 this.FadeOut(200, Easing.Out).Expire();
             }
