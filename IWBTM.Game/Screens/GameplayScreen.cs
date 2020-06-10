@@ -261,5 +261,11 @@ namespace IWBTM.Game.Screens
             track?.Stop();
             base.OnExit();
         }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            track?.Stop();
+            base.Dispose(isDisposing);
+        }
     }
 }
