@@ -52,6 +52,8 @@ namespace IWBTM.Game.Screens.Edit
                             RelativeSizeAxes = Axes.Both,
                             Child = flow = new FillFlowContainer<FlowItem>
                             {
+                                Anchor = Anchor.TopCentre,
+                                Origin = Anchor.TopCentre,
                                 RelativeSizeAxes = Axes.X,
                                 AutoSizeAxes = Axes.Y,
                                 Direction = FillDirection.Full,
@@ -157,6 +159,10 @@ namespace IWBTM.Game.Screens.Edit
                     case Key.Delete:
                         tryDelete();
                         return true;
+
+                    case Key.Tab:
+                        Hide();
+                        return true;
                 }
             }
 
@@ -184,6 +190,8 @@ namespace IWBTM.Game.Screens.Edit
 
             public FlowItem(string text, Action action)
             {
+                Anchor = Anchor.TopCentre;
+                Origin = Anchor.TopCentre;
                 Size = new Vector2(250);
                 BorderColour = IWannaColour.Blue;
                 Masking = true;

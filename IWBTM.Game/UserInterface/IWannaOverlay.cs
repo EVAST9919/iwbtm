@@ -9,6 +9,8 @@ namespace IWBTM.Game.UserInterface
 {
     public class IWannaOverlay : OverlayContainer
     {
+        protected override bool BlockNonPositionalInput => State.Value == Visibility.Visible;
+
         protected override bool StartHidden => true;
 
         private readonly Box bg;
