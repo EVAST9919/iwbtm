@@ -9,6 +9,7 @@ using osu.Framework.Audio;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
@@ -37,7 +38,7 @@ namespace IWBTM.Game.Screens
         [Resolved]
         private AudioManager audio { get; set; }
 
-        private Track track;
+        private DrawableTrack track;
         private readonly Level level;
         private readonly string name;
         private SpriteText deathCountText;
@@ -150,7 +151,7 @@ namespace IWBTM.Game.Screens
                     track?.Stop();
                     if (currentRoomAudio != "none")
                     {
-                        track = audio.Tracks.Get(currentRoomAudio);
+                        track = new DrawableTrack(audio.Tracks.Get(currentRoomAudio));
                         track.Looping = true;
                     }
                     else
@@ -158,6 +159,7 @@ namespace IWBTM.Game.Screens
                 }
 
                 track?.Start();
+                track?.VolumeTo(1, 200, Easing.Out);
             });
         }
 
@@ -171,7 +173,7 @@ namespace IWBTM.Game.Screens
 
         private void onDeath(Vector2 position)
         {
-            track?.Stop();
+            track?.VolumeTo(0, 200, Easing.Out);
             deathCount.Value++;
             deathOverlay.Play();
             deathSpots.Add((position, currentRoomIndex));
@@ -225,7 +227,7 @@ namespace IWBTM.Game.Screens
                 else
                     Playfield.Restart(RoomHelper.PlayerSpawnPosition(currentRoom), true);
 
-                track?.Start();
+                track?.VolumeTo(1, 200, Easing.Out);
             }
             else
             {
@@ -258,12 +260,6 @@ namespace IWBTM.Game.Screens
         {
             track?.Stop();
             base.OnExit();
-        }
-
-        protected override void Dispose(bool isDisposing)
-        {
-            track?.Stop();
-            base.Dispose(isDisposing);
         }
     }
 }
