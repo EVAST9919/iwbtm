@@ -137,7 +137,10 @@ namespace IWBTM.Game.Screens.Edit
 
         private void save()
         {
-            Room.Tiles = Children.Select(c => c.Tile).ToList();
+            Scheduler.AddDelayed(() =>
+            {
+                Room.Tiles = Children.Select(c => c.Tile).ToList();
+            }, 10);
         }
     }
 }
