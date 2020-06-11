@@ -186,6 +186,12 @@ namespace IWBTM.Game.Screens.Edit
                         tileToEdit.MoveToOffset(new Vector2(SnapValue.Value, 0));
                         objectsLayer.Save();
                         return true;
+
+                    case Key.Delete:
+                        tileToEdit.Expire();
+                        tileToEdit = null;
+                        objectsLayer.Save();
+                        return true;
                 }
             }
 
