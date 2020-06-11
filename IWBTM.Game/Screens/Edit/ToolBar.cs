@@ -58,8 +58,8 @@ namespace IWBTM.Game.Screens.Edit
                         },
                         RowDimensions = new[]
                         {
-                            new Dimension(),
-                            new Dimension(),
+                            new Dimension(GridSizeMode.AutoSize),
+                            new Dimension(GridSizeMode.AutoSize),
                             new Dimension(),
                         },
                         Content = new[]
@@ -90,6 +90,7 @@ namespace IWBTM.Game.Screens.Edit
                                     AutoSizeAxes = Axes.Y,
                                     Direction = FillDirection.Vertical,
                                     Spacing = new Vector2(0, 5),
+                                    Margin = new MarginPadding {Top = 10},
                                     Children = new Drawable[]
                                     {
                                         new SpriteText
@@ -104,11 +105,12 @@ namespace IWBTM.Game.Screens.Edit
                             {
                                 new FillFlowContainer
                                 {
-                                    Anchor = Anchor.Centre,
-                                    Origin = Anchor.Centre,
+                                    Anchor = Anchor.BottomCentre,
+                                    Origin = Anchor.BottomCentre,
                                     AutoSizeAxes = Axes.Both,
                                     Direction = FillDirection.Vertical,
-                                    Spacing = new Vector2(0, 20),
+                                    Spacing = new Vector2(0, 10),
+                                    Margin = new MarginPadding { Bottom = 20 },
                                     Children = new Drawable[]
                                     {
                                         new EditorButton("Select room", () => OnRoomSelect?.Invoke()),
