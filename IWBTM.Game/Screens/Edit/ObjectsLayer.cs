@@ -31,7 +31,7 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            DrawableTile placed = GetTileAt(position, DrawableTile.GetGroup(type));
+            DrawableTile placed = GetTileAt(position, type);
 
             if (placed != null)
                 return;
@@ -41,34 +41,17 @@ namespace IWBTM.Game.Screens.Edit
 
         public void TryRemove(Vector2 position)
         {
-            foreach (var child in Children)
-            {
-                if (position.X >= child.X && position.X < child.X + child.Size.X)
-                {
-                    if (position.Y >= child.Y && position.Y < child.Y + child.Size.Y)
-                        child.Expire();
-                }
-            }
+            var tileToRemove = GetAnyTileAt(position);
+            tileToRemove?.Expire();
 
             save();
         }
 
         private void addUniqueTile(Vector2 position, TileType type)
         {
-            foreach (var child in Children)
-            {
-                if (child.Tile.Type == type)
-                    child.Expire();
-            }
-
-            foreach (var child in Children)
-            {
-                if (child.Position == position)
-                {
-                    child.Expire();
-                    break;
-                }
-            }
+            var tilesToRemove = GetAllTiles(type);
+            foreach (var t in tilesToRemove)
+                t.Expire();
 
             addTile(type, position);
         }
@@ -82,35 +65,13 @@ namespace IWBTM.Game.Screens.Edit
                 PositionY = (int)position.Y
             };
 
-            if (tile.Type == TileType.Cherry)
-                Add(new DrawableCherry(tile, false));
-            else
-                Add(new DrawableTile(tile));
-
+            AddTile(tile);
             save();
         }
 
-        public bool SpawnDefined()
-        {
-            foreach (var child in Children)
-            {
-                if (DrawableTile.IsGroup(child, TileGroup.Start))
-                    return true;
-            }
+        public bool SpawnDefined() => HasTile(TileType.PlayerStart);
 
-            return false;
-        }
-
-        public bool EndDefined()
-        {
-            foreach (var child in Children)
-            {
-                if (DrawableTile.IsGroup(child, TileGroup.Warp))
-                    return true;
-            }
-
-            return false;
-        }
+        public bool EndDefined() => HasTile(TileType.Warp);
 
         public void ClearTiles()
         {

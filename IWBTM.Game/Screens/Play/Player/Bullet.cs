@@ -6,7 +6,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using System;
 using IWBTM.Game.Rooms.Drawables;
-using System.Linq;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
@@ -57,36 +56,42 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            var tiles = drawableRoom.GetTilesAt(position);
-
-            if (tiles.Any())
+            if (!drawableRoom.HasAnyTileAt(position))
             {
-                if (DrawableRoom.ContainsTileOfGroup(tiles, TileGroup.Solid))
-                {
-                    Expire();
-                    return;
-                }
-
-                var blocker = DrawableRoom.GetTileOfGroup(tiles, TileGroup.BulletBlocker);
-
-                if (blocker != null)
-                {
-                    ((DrawableBulletBlocker)blocker).Activate();
-                    Expire();
-                    return;
-                }
-
-                var save = DrawableRoom.GetTileOfGroup(tiles, TileGroup.Save);
-
-                if (save != null)
-                {
-                    ((SaveTile)save).Activate();
-                    OnSave?.Invoke();
-                    Expire();
-                    return;
-                }
+                move();
+                return;
             }
 
+            if (drawableRoom.HasTileOfGroupAt(position, TileGroup.Solid))
+            {
+                Expire();
+                return;
+            }
+
+            var blocker = drawableRoom.GetTileAt(position, TileType.BulletBlocker);
+
+            if (blocker != null)
+            {
+                ((DrawableBulletBlocker)blocker).Activate();
+                Expire();
+                return;
+            }
+
+            var save = drawableRoom.GetTileAt(position, TileType.Save);
+
+            if (save != null)
+            {
+                ((SaveTile)save).Activate();
+                OnSave?.Invoke();
+                Expire();
+                return;
+            }
+
+            move();
+        }
+
+        private void move()
+        {
             var delta = (right ? 1 : -1) * (float)(speed / 20 * Clock.ElapsedFrameTime);
             X += delta;
         }
