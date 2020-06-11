@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Graphics.Containers;
 using osuTK;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
@@ -72,5 +73,37 @@ namespace IWBTM.Game.Rooms.Drawables
 
             return null;
         }
+
+        public List<DrawableTile> GetTilesAt(Vector2 pixelPosition)
+        {
+            var tiles = new List<DrawableTile>();
+
+            foreach (var child in Children)
+            {
+                var tilePosition = child.Position;
+                var tileSize = child.Size;
+
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X < tilePosition.X + tileSize.X)
+                {
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y < tilePosition.Y + tileSize.Y)
+                        tiles.Add(child);
+                }
+            }
+
+            return tiles;
+        }
+
+        public static DrawableTile GetTileOfGroup(List<DrawableTile> tiles, TileGroup group)
+        {
+            foreach (var t in tiles)
+            {
+                if (DrawableTile.GetGroup(t.Tile.Type) == group)
+                    return t;
+            }
+
+            return null;
+        }
+
+        public static bool ContainsTileOfGroup(List<DrawableTile> tiles, TileGroup group) => GetTileOfGroup(tiles, group) != null;
     }
 }

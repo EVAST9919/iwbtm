@@ -6,6 +6,7 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using System;
 using IWBTM.Game.Rooms.Drawables;
+using System.Linq;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
@@ -48,34 +49,42 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             base.Update();
 
-            if (Position.X <= 0 || Position.X >= roomSize.X)
+            var position = new Vector2(Position.X + (1.5f * (right ? 1 : -1)), Position.Y);
+
+            if (position.X >= roomSize.X || position.X <= 0)
             {
                 Expire();
                 return;
             }
 
-            if (drawableRoom.HasTileAt(Position, TileGroup.Solid))
-            {
-                Expire();
-                return;
-            }
+            var tiles = drawableRoom.GetTilesAt(position);
 
-            var blocker = drawableRoom.GetTileAt(Position, TileGroup.BulletBlocker);
-            if (blocker != null)
+            if (tiles.Any())
             {
-                ((DrawableBulletBlocker)blocker).Activate();
-                Expire();
-                return;
-            }
+                if (DrawableRoom.ContainsTileOfGroup(tiles, TileGroup.Solid))
+                {
+                    Expire();
+                    return;
+                }
 
-            var save = drawableRoom.GetTileAt(Position, TileGroup.Save);
+                var blocker = DrawableRoom.GetTileOfGroup(tiles, TileGroup.BulletBlocker);
 
-            if (save != null)
-            {
-                ((SaveTile)save).Activate();
-                OnSave?.Invoke();
-                Expire();
-                return;
+                if (blocker != null)
+                {
+                    ((DrawableBulletBlocker)blocker).Activate();
+                    Expire();
+                    return;
+                }
+
+                var save = DrawableRoom.GetTileOfGroup(tiles, TileGroup.Save);
+
+                if (save != null)
+                {
+                    ((SaveTile)save).Activate();
+                    OnSave?.Invoke();
+                    Expire();
+                    return;
+                }
             }
 
             var delta = (right ? 1 : -1) * (float)(speed / 20 * Clock.ElapsedFrameTime);
