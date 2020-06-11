@@ -13,11 +13,10 @@ using osuTK.Graphics;
 using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Rooms.Drawables;
-using IWBTM.Game.Screens.Test;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
-    public class DefaultPlayer : CompositeDrawable, IHasHitbox
+    public class DefaultPlayer : CompositeDrawable
     {
         public static Vector2 SIZE = new Vector2(11, 21);
 
@@ -30,6 +29,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private const double max_vertical_speed = 9;
 
         public readonly Bindable<PlayerState> State = new Bindable<PlayerState>(PlayerState.Idle);
+        public readonly Bindable<bool> ShowHitbox = new Bindable<bool>();
 
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
@@ -81,7 +81,6 @@ namespace IWBTM.Game.Screens.Play.Player
                         },
                         hitbox = new Container
                         {
-                            Alpha = 0,
                             RelativeSizeAxes = Axes.Both,
                             Child = new Box
                             {
@@ -103,6 +102,7 @@ namespace IWBTM.Game.Screens.Play.Player
             base.LoadComplete();
 
             State.BindValueChanged(onStateChanged, true);
+            ShowHitbox.BindValueChanged(show => hitbox.Alpha = show.NewValue ? 1 : 0, true);
         }
 
         public Vector2 PlayerPosition() => player.Position;
@@ -520,11 +520,6 @@ namespace IWBTM.Game.Screens.Play.Player
             }
 
             State.Value = PlayerState.Idle;
-        }
-
-        public void Toggle(bool show)
-        {
-            hitbox.Alpha = show ? 1 : 0;
         }
     }
 }

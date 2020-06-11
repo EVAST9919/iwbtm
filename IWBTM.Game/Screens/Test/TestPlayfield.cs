@@ -1,13 +1,10 @@
 ﻿using IWBTM.Game.Rooms;
-using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
-using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK;
-using System.Linq;
 
 namespace IWBTM.Game.Screens.Test
 {
@@ -34,7 +31,8 @@ namespace IWBTM.Game.Screens.Test
 
             ShowDeath.BindValueChanged(onTrailChanged, true);
             Player.Died += (position, _) => onDeath(position);
-            ShowHitbox.BindValueChanged(onHitboxChanged, true);
+            Player.ShowHitbox.BindTo(ShowHitbox);
+            ShowHitbox.TriggerChange();
         }
 
         private void onDeath(Vector2 position)
@@ -55,12 +53,6 @@ namespace IWBTM.Game.Screens.Test
                 trailLayer.Clear();
                 return;
             }
-        }
-
-        private void onHitboxChanged(ValueChangedEvent<bool> show)
-        {
-            InternalChildren.OfType<IHasHitbox>().ForEach(c => c.Toggle(show.NewValue));
-            DrawableRoom.Children.OfType<IHasHitbox>().ForEach(c => c.Toggle(show.NewValue));
         }
     }
 }

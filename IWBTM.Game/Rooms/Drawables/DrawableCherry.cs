@@ -1,18 +1,15 @@
-﻿using IWBTM.Game.Screens.Test;
-using osu.Framework.Allocation;
+﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
-    public class DrawableCherry : DrawableTile, IHasHitbox
+    public class DrawableCherry : DrawableTile
     {
         private readonly Sprite overlay;
         private readonly Sprite branch;
-        private readonly Circle hitbox;
 
         private readonly bool animated;
 
@@ -35,12 +32,6 @@ namespace IWBTM.Game.Rooms.Drawables
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
                     Position = new Vector2(0, -1)
-                },
-                hitbox = new Circle
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Colour = Color4.DeepPink,
-                    Alpha = 0
                 }
             });
 
@@ -71,11 +62,6 @@ namespace IWBTM.Game.Rooms.Drawables
             branch.Y = secondFrame ? -3 : -1;
             branch.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-branch");
             overlay.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-overlay");
-        }
-
-        public void Toggle(bool show)
-        {
-            hitbox.Alpha = show ? 1 : 0;
         }
     }
 }
