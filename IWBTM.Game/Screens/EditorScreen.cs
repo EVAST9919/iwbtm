@@ -1,14 +1,12 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
-using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Edit;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osu.Framework.Screens;
 using osuTK;
@@ -20,11 +18,9 @@ namespace IWBTM.Game.Screens
 {
     public class EditorScreen : IWannaScreen
     {
-        private readonly Bindable<TileType> selectedObject = new Bindable<TileType>();
         private readonly BindableList<Room> rooms = new BindableList<Room>();
         private readonly Bindable<Room> selectedRoom = new Bindable<Room>();
 
-        private readonly SpriteText selectedItemText;
         private BluePrint blueprint;
 
         [Resolved]
@@ -47,10 +43,6 @@ namespace IWBTM.Game.Screens
 
             AddRangeInternal(new Drawable[]
             {
-                selectedItemText = new SpriteText
-                {
-                    Margin = new MarginPadding(10),
-                },
                 new GridContainer
                 {
                     RelativeSizeAxes = Axes.Both,
@@ -89,15 +81,12 @@ namespace IWBTM.Game.Screens
             roomSelector.Rooms.BindTo(rooms);
             roomSelector.Selected.BindTo(selectedRoom);
 
-            selectedObject.BindTo(toolbar.Selected);
-
             roomSettings.CreatedRoom += onRoomChanged;
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            selectedObject.BindValueChanged(newSelected => selectedItemText.Text = $"Selected: {newSelected.NewValue.ToString()}", true);
             selectedRoom.BindValueChanged(onSelectedRoomChanged, true);
         }
 
