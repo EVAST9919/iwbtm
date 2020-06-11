@@ -51,7 +51,7 @@ namespace IWBTM.Game.Screens
                 {
                     Anchor = Anchor.BottomRight,
                     Origin = Anchor.BottomRight,
-                    Text = "v.0.7.5",
+                    Text = "v.0.7.6",
                     Margin = new MarginPadding(10)
                 }
             });
