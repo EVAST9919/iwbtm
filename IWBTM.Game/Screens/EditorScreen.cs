@@ -34,6 +34,7 @@ namespace IWBTM.Game.Screens
         private readonly RoomEditOverlay roomSettings;
         private readonly Container drawableRoomPlaceholder;
         private readonly ToolBar toolbar;
+        private readonly ToolSelector toolSelector;
 
         public EditorScreen(Level level, string name)
         {
@@ -48,6 +49,7 @@ namespace IWBTM.Game.Screens
                     RelativeSizeAxes = Axes.Both,
                     ColumnDimensions = new[]
                     {
+                        new Dimension(GridSizeMode.Absolute, 200),
                         new Dimension(),
                         new Dimension(GridSizeMode.Absolute, 200)
                     },
@@ -59,6 +61,7 @@ namespace IWBTM.Game.Screens
                     {
                         new Drawable[]
                         {
+                            toolSelector = new ToolSelector(),
                             drawableRoomPlaceholder = new Container
                             {
                                 RelativeSizeAxes = Axes.Both
@@ -102,6 +105,7 @@ namespace IWBTM.Game.Screens
 
             blueprint.Selected.BindTo(toolbar.Selected);
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
+            blueprint.Tool.BindTo(toolSelector.Current);
         }
 
         private void test()
@@ -121,7 +125,7 @@ namespace IWBTM.Game.Screens
                     new Room
                     {
                         Music = room.Music,
-                        Tiles = blueprint.GetTiles(),
+                        Tiles = room.Tiles,
                         SizeX = room.SizeX,
                         SizeY = room.SizeY
                     }

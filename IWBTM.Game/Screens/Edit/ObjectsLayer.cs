@@ -44,7 +44,7 @@ namespace IWBTM.Game.Screens.Edit
             var tileToRemove = GetAnyTileAt(position);
             tileToRemove?.Expire();
 
-            save();
+            Save();
         }
 
         private void addUniqueTile(Vector2 position, TileType type)
@@ -66,7 +66,7 @@ namespace IWBTM.Game.Screens.Edit
             };
 
             AddTile(tile);
-            save();
+            Save();
         }
 
         public bool SpawnDefined() => HasTile(TileType.PlayerStart);
@@ -78,14 +78,25 @@ namespace IWBTM.Game.Screens.Edit
             foreach (var c in Children)
                 c.Expire();
 
-            save();
+            Save();
         }
 
-        private void save()
+        public void DeselectAll()
+        {
+            foreach (var child in Children)
+                child.Deselect();
+        }
+
+        public void Save()
         {
             Scheduler.AddDelayed(() =>
             {
-                Room.Tiles = Children.Select(c => c.Tile).ToList();
+                Room.Tiles = Children.Select(c => new Tile
+                {
+                    Type = c.Tile.Type,
+                    PositionX = (int)c.Position.X,
+                    PositionY = (int)c.Position.Y,
+                }).ToList();
             }, 10);
         }
     }

@@ -16,6 +16,7 @@ namespace IWBTM.Game.Screens.Edit
     {
         public readonly Bindable<TileType> Selected = new Bindable<TileType>();
         public readonly Bindable<int> SnapValue = new Bindable<int>();
+        public readonly Bindable<ToolEnum> Tool = new Bindable<ToolEnum>();
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
@@ -44,14 +45,24 @@ namespace IWBTM.Game.Screens.Edit
             objectsLayer.SnapValue.BindTo(SnapValue);
         }
 
-        public List<Tile> GetTiles()
+        protected override void LoadComplete()
         {
-            var tiles = new List<Tile>();
+            base.LoadComplete();
+            Tool.BindValueChanged(onToolChanged, true);
+        }
 
-            foreach (var dt in objectsLayer.Children)
-                tiles.Add(dt.Tile);
+        private void onToolChanged(ValueChangedEvent<ToolEnum> tool)
+        {
+            switch (tool.NewValue)
+            {
+                case ToolEnum.Place:
+                    tileToEdit = null;
+                    objectsLayer.DeselectAll();
+                    return;
 
-            return tiles;
+                case ToolEnum.Select:
+                    return;
+            }
         }
 
         public bool SpawnDefined() => objectsLayer.SpawnDefined();
@@ -65,10 +76,14 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
-            if (!IsHovered)
-                return false;
-
             mousePosition = e.MousePosition;
+
+            if (Tool.Value == ToolEnum.Select)
+            {
+                hoverLayer.Clear();
+                tileToPlace?.Expire();
+                return false;
+            }
 
             if (!hoverLayer.Any())
                 hoverLayer.Child = tileToPlace = createTile(new Tile { Type = Selected.Value }).With(t =>
@@ -106,23 +121,75 @@ namespace IWBTM.Game.Screens.Edit
             tileToPlace?.Expire();
         }
 
+        private DrawableTile tileToEdit;
+
         protected override bool OnMouseDown(MouseDownEvent e)
         {
-            if (!IsHovered)
-                return false;
-
-            switch (e.Button)
+            switch (Tool.Value)
             {
-                case MouseButton.Left:
-                    objectsLayer.TryPlace(Selected.Value, mousePosition);
-                    return true;
+                case ToolEnum.Place:
+                    switch (e.Button)
+                    {
+                        case MouseButton.Left:
+                            objectsLayer.TryPlace(Selected.Value, mousePosition);
+                            return true;
 
-                case MouseButton.Right:
-                    objectsLayer.TryRemove(mousePosition);
-                    return true;
+                        case MouseButton.Right:
+                            objectsLayer.TryRemove(mousePosition);
+                            return true;
+                    }
+                    break;
+
+                case ToolEnum.Select:
+                    objectsLayer.DeselectAll();
+
+                    var selectedTile = objectsLayer.GetAnyTileAt(mousePosition);
+                    if (selectedTile == null)
+                    {
+                        tileToEdit = null;
+                        return true;
+                    }
+
+                    tileToEdit = selectedTile;
+                    tileToEdit.Select();
+                    break;
             }
 
             return base.OnMouseDown(e);
+        }
+
+        protected override bool OnKeyDown(KeyDownEvent e)
+        {
+            if (tileToEdit == null)
+                return base.OnKeyDown(e);
+
+            if (!e.Repeat)
+            {
+                switch (e.Key)
+                {
+                    case Key.Up:
+                        tileToEdit.MoveToOffset(new Vector2(0, -SnapValue.Value));
+                        objectsLayer.Save();
+                        return true;
+
+                    case Key.Down:
+                        tileToEdit.MoveToOffset(new Vector2(0, SnapValue.Value));
+                        objectsLayer.Save();
+                        return true;
+
+                    case Key.Left:
+                        tileToEdit.MoveToOffset(new Vector2(-SnapValue.Value, 0));
+                        objectsLayer.Save();
+                        return true;
+
+                    case Key.Right:
+                        tileToEdit.MoveToOffset(new Vector2(SnapValue.Value, 0));
+                        objectsLayer.Save();
+                        return true;
+                }
+            }
+
+            return base.OnKeyDown(e);
         }
 
         public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)

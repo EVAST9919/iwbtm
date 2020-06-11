@@ -5,6 +5,7 @@ using System;
 using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
+using IWBTM.Game.UserInterface;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
@@ -27,6 +28,8 @@ namespace IWBTM.Game.Rooms.Drawables
             Tile = tile;
             Size = GetSize(tile.Type);
             Position = new Vector2(tile.PositionX, tile.PositionY);
+            Masking = true;
+            BorderColour = IWannaColour.Blue;
             AddInternal(MainSprite = new Sprite
             {
                 RelativeSizeAxes = Axes.Both
@@ -45,6 +48,9 @@ namespace IWBTM.Game.Rooms.Drawables
             PositionY = (int)Y,
             Type = Tile.Type
         };
+
+        public void Select() => BorderThickness = 5;
+        public void Deselect() => BorderThickness = 0;
 
         private Texture getTexture()
         {
