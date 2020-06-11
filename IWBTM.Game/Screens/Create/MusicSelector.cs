@@ -13,11 +13,7 @@ namespace IWBTM.Game.Screens.Create
             AddDropdownItem("room-1");
             AddDropdownItem("room-2");
             AddDropdownItem("room-3");
-        }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
             Current.Value = "none";
         }
     }

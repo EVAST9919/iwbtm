@@ -18,9 +18,10 @@ namespace IWBTM.Game.Screens.Edit
         public void Edit(Room room)
         {
             roomToEdit = room;
+            var music = room.Music;
 
             SizeSetting.Current.Value = new Vector2(room.SizeX, room.SizeY);
-            MusicSelector.Current.Value = room.Music;
+            MusicSelector.Current.Value = string.IsNullOrEmpty(music) ? "none" : music;
 
             Show();
         }
