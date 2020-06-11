@@ -13,22 +13,9 @@ using IWBTM.Game.UserInterface;
 
 namespace IWBTM.Game.Overlays
 {
-    public class ConfirmationOverlay : OverlayContainer
+    public class ConfirmationOverlay : IWannaOverlay
     {
         private ConfirmationWindow currentWindow;
-
-        private readonly Box dim;
-
-        public ConfirmationOverlay()
-        {
-            RelativeSizeAxes = Axes.Both;
-            Add(dim = new Box
-            {
-                RelativeSizeAxes = Axes.Both,
-                Alpha = 0,
-                Colour = Color4.Black
-            });
-        }
 
         public void Push(string text, Action onConfirm)
         {
@@ -74,16 +61,6 @@ namespace IWBTM.Game.Overlays
             }
 
             return base.OnKeyDown(e);
-        }
-
-        protected override void PopIn()
-        {
-            dim.FadeTo(0.5f);
-        }
-
-        protected override void PopOut()
-        {
-            dim.FadeOut(200, Easing.Out);
         }
 
         private class ConfirmationWindow : CompositeDrawable

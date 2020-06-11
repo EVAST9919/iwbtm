@@ -21,12 +21,12 @@ namespace IWBTM.Game.Screens.Create
         private NotificationOverlay notifications { get; set; }
 
         private readonly Container content;
-        private readonly MusicSelector musicSelector;
-        private readonly SizeSetting sizeSetting;
+        protected readonly MusicSelector MusicSelector;
+        protected readonly SizeSetting SizeSetting;
         private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
         private readonly BasicCheckbox createBorders;
 
-        public RoomCreationOverlay()
+        public RoomCreationOverlay(bool showCreationSettings = true)
         {
             AddRange(new Drawable[]
             {
@@ -53,7 +53,7 @@ namespace IWBTM.Game.Screens.Create
                             Children = new Drawable[]
                             {
                                 new SettingName("Size"),
-                                sizeSetting = new SizeSetting
+                                SizeSetting = new SizeSetting
                                 {
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
@@ -62,7 +62,8 @@ namespace IWBTM.Game.Screens.Create
                                 {
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
-                                    LabelText = "Create borders"
+                                    LabelText = "Create borders",
+                                    Alpha = showCreationSettings ? 1 : 0
                                 },
                                 new SettingName("Audio"),
                                 new Container
@@ -72,7 +73,7 @@ namespace IWBTM.Game.Screens.Create
                                     Anchor = Anchor.Centre,
                                     Depth = -int.MaxValue,
                                     Origin = Anchor.Centre,
-                                    Child = musicSelector = new MusicSelector()
+                                    Child = MusicSelector = new MusicSelector()
                                 },
                                 new IWannaBasicButton("Ok", onCommit)
                                 {
@@ -86,8 +87,8 @@ namespace IWBTM.Game.Screens.Create
                 sizeAdjustmentOverlay = new SizeAdjustmentOverlay(),
             });
 
-            sizeSetting.AdjustRequested += onSizeAdjust;
-            sizeAdjustmentOverlay.NewSize += newSize => sizeSetting.Current.Value = newSize;
+            SizeSetting.AdjustRequested += onSizeAdjust;
+            sizeAdjustmentOverlay.NewSize += newSize => SizeSetting.Current.Value = newSize;
         }
 
         protected override void PopIn()
@@ -106,8 +107,8 @@ namespace IWBTM.Game.Screens.Create
 
         public Room GenerateRoom()
         {
-            var xSize = sizeSetting.Current.Value.X;
-            var ySize = sizeSetting.Current.Value.Y;
+            var xSize = SizeSetting.Current.Value.X;
+            var ySize = SizeSetting.Current.Value.Y;
 
             var tiles = new List<Tile>();
 
@@ -182,7 +183,7 @@ namespace IWBTM.Game.Screens.Create
 
             return new Room
             {
-                Music = musicSelector.Current.Value,
+                Music = MusicSelector.Current.Value,
                 Tiles = tiles,
                 SizeX = xSize,
                 SizeY = ySize
@@ -199,13 +200,18 @@ namespace IWBTM.Game.Screens.Create
             if (!canBeCreated())
                 return;
 
-            CreatedRoom?.Invoke(GenerateRoom());
+            Commit();
             Hide();
+        }
+
+        protected virtual void Commit()
+        {
+            CreatedRoom?.Invoke(GenerateRoom());
         }
 
         private bool canBeCreated()
         {
-            if (sizeSetting.Current.Value.X < 4 || sizeSetting.Current.Value.Y < 4)
+            if (SizeSetting.Current.Value.X < 4 || SizeSetting.Current.Value.Y < 4)
             {
                 notifications.Push("Width and Height can't be below 4", NotificationState.Bad);
                 return false;

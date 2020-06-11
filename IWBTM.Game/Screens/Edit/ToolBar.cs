@@ -22,6 +22,7 @@ namespace IWBTM.Game.Screens.Edit
         public Action OnSave;
         public Action OnRoomSelect;
         public Action OnClear;
+        public Action OnSettings;
 
         private readonly ObjectSelectorTabControl selector;
         private readonly GridSnapTabControl snapControl;
@@ -111,6 +112,7 @@ namespace IWBTM.Game.Screens.Edit
                                     Children = new Drawable[]
                                     {
                                         new EditorButton("Select room", () => OnRoomSelect?.Invoke()),
+                                        new EditorButton("Settings", () => OnSettings?.Invoke()),
                                         new EditorButton("Clear", () => OnClear?.Invoke()),
                                         new EditorButton("Test", () => OnTest?.Invoke()),
                                         new EditorButton("Save", () => OnSave?.Invoke()),

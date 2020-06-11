@@ -25,7 +25,7 @@ namespace IWBTM.Game.Rooms.Drawables
         public DrawableTile(Tile tile)
         {
             Tile = tile;
-            Size = new Vector2(getSize(tile.Type));
+            Size = new Vector2(GetSize(tile.Type));
             Position = new Vector2(tile.PositionX, tile.PositionY);
             AddInternal(MainSprite = new Sprite
             {
@@ -97,7 +97,7 @@ namespace IWBTM.Game.Rooms.Drawables
             throw new NotImplementedException("Tile is not implemented");
         }
 
-        private int getSize(TileType type)
+        public static int GetSize(TileType type)
         {
             switch (type)
             {

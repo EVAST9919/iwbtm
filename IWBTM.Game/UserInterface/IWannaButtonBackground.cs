@@ -23,7 +23,7 @@ namespace IWBTM.Game.UserInterface
             EdgeEffect = new EdgeEffectParameters
             {
                 Type = EdgeEffectType.Shadow,
-                Radius = 1f,
+                Radius = 1.5f,
                 Colour = Color4.Black.Opacity(0.5f),
             };
             AddInternal(background = new Box
@@ -38,7 +38,7 @@ namespace IWBTM.Game.UserInterface
             TweenEdgeEffectTo(new EdgeEffectParameters
             {
                 Type = EdgeEffectType.Shadow,
-                Radius = 4f,
+                Radius = 5f,
                 Offset = new Vector2(0, 1),
                 Colour = Color4.Black.Opacity(0.4f),
             }, duration, Easing.OutQuint);
@@ -53,7 +53,7 @@ namespace IWBTM.Game.UserInterface
             TweenEdgeEffectTo(new EdgeEffectParameters
             {
                 Type = EdgeEffectType.Shadow,
-                Radius = 1f,
+                Radius = 1.5f,
                 Colour = Color4.Black.Opacity(0.5f),
             }, duration, Easing.OutQuint);
 

@@ -35,6 +35,7 @@ namespace IWBTM.Game.Screens
 
         private readonly string name;
         private readonly RoomSelectorOverlay roomSelector;
+        private readonly RoomEditOverlay roomSettings;
         private readonly Container drawableRoomPlaceholder;
         private readonly ToolBar toolbar;
 
@@ -75,18 +76,22 @@ namespace IWBTM.Game.Screens
                                 OnTest = test,
                                 OnSave = save,
                                 OnRoomSelect = selectRoom,
-                                OnClear = clear
+                                OnClear = clear,
+                                OnSettings = onSettings
                             }
                         }
                     }
                 },
-                roomSelector = new RoomSelectorOverlay()
+                roomSelector = new RoomSelectorOverlay(),
+                roomSettings = new RoomEditOverlay()
             });
 
             roomSelector.Rooms.BindTo(rooms);
             roomSelector.Selected.BindTo(selectedRoom);
 
             selectedObject.BindTo(toolbar.Selected);
+
+            roomSettings.CreatedRoom += onRoomChanged;
         }
 
         protected override void LoadComplete()
@@ -164,7 +169,25 @@ namespace IWBTM.Game.Screens
             confirmationOverlay.Push("Are you sure you want to clear entire room?", blueprint.Clear);
         }
 
-        private void selectRoom() => roomSelector.ToggleVisibility();
+        private void selectRoom() => roomSelector.Show();
+
+        private void onSettings()
+        {
+            roomSettings.Edit(selectedRoom.Value);
+        }
+
+        private void onRoomChanged(Room room)
+        {
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if (rooms[i] == selectedRoom.Value)
+                {
+                    rooms[i] = room;
+                    selectedRoom.Value = rooms[i];
+                    return;
+                }
+            }
+        }
 
         protected override void OnExit()
         {
