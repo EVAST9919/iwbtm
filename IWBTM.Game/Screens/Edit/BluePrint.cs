@@ -163,28 +163,46 @@ namespace IWBTM.Game.Screens.Edit
             if (tileToEdit == null)
                 return base.OnKeyDown(e);
 
+            float newX, newY;
+
             if (!e.Repeat)
             {
                 switch (e.Key)
                 {
                     case Key.Up:
-                        tileToEdit.MoveToOffset(new Vector2(0, -SnapValue.Value));
-                        objectsLayer.Save();
+                        newY = tileToEdit.Y - SnapValue.Value;
+                        if (newY >= 0)
+                        {
+                            tileToEdit.MoveToY(newY);
+                            objectsLayer.Save();
+                        }
                         return true;
 
                     case Key.Down:
-                        tileToEdit.MoveToOffset(new Vector2(0, SnapValue.Value));
-                        objectsLayer.Save();
+                        newY = tileToEdit.Y + SnapValue.Value;
+                        if (newY < Size.Y)
+                        {
+                            tileToEdit.MoveToY(newY);
+                            objectsLayer.Save();
+                        }
                         return true;
 
                     case Key.Left:
-                        tileToEdit.MoveToOffset(new Vector2(-SnapValue.Value, 0));
-                        objectsLayer.Save();
+                        newX = tileToEdit.X - SnapValue.Value;
+                        if (newX >= 0)
+                        {
+                            tileToEdit.MoveToX(newX);
+                            objectsLayer.Save();
+                        }
                         return true;
 
                     case Key.Right:
-                        tileToEdit.MoveToOffset(new Vector2(SnapValue.Value, 0));
-                        objectsLayer.Save();
+                        newX = tileToEdit.X + SnapValue.Value;
+                        if (newX < Size.X)
+                        {
+                            tileToEdit.MoveToX(newX);
+                            objectsLayer.Save();
+                        }
                         return true;
 
                     case Key.Delete:
