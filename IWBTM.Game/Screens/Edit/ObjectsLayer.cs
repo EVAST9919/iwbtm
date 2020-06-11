@@ -31,24 +31,9 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            DrawableTile placed = null;
+            DrawableTile placed = GetTileAt(position, DrawableTile.GetGroup(type));
 
-            foreach (var child in Children)
-            {
-                if (child.Position == snappedPosition)
-                {
-                    placed = child;
-                    break;
-                }
-            }
-
-            if (placed == null)
-            {
-                addTile(type, snappedPosition);
-                return;
-            }
-
-            if (placed.Tile.Type == type)
+            if (placed != null)
                 return;
 
             addTile(type, snappedPosition);

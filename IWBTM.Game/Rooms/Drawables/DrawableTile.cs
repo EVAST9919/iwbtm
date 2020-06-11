@@ -119,13 +119,13 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             var type = tile?.Tile.Type ?? null;
 
-            if (getGroup(type) == group)
+            if (GetGroup(type) == group)
                 return true;
 
             return false;
         }
 
-        private static TileGroup getGroup(TileType? type)
+        public static TileGroup GetGroup(TileType? type)
         {
             switch (type)
             {
