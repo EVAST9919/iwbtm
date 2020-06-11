@@ -13,7 +13,7 @@ namespace IWBTM.Game.Rooms.Drawables
         public const int SIZE = 32;
 
         [Resolved]
-        private PixelTextureStore pixelTextures { get; set; }
+        protected PixelTextureStore PixelTextures { get; private set; }
 
         [Resolved]
         protected TextureStore Textures { get; private set; }
@@ -25,7 +25,7 @@ namespace IWBTM.Game.Rooms.Drawables
         public DrawableTile(Tile tile)
         {
             Tile = tile;
-            Size = new Vector2(GetSize(tile.Type));
+            Size = GetSize(tile.Type);
             Position = new Vector2(tile.PositionX, tile.PositionY);
             AddInternal(MainSprite = new Sprite
             {
@@ -51,13 +51,13 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (Tile.Type)
             {
                 case TileType.PlatformCorner:
-                    return pixelTextures.Get("Tiles/platform-corner");
+                    return PixelTextures.Get("Tiles/platform-corner");
 
                 case TileType.PlatformMiddle:
-                    return pixelTextures.Get("Tiles/platform-middle");
+                    return PixelTextures.Get("Tiles/platform-middle");
 
                 case TileType.PlatformMiddleRotated:
-                    return pixelTextures.Get("Tiles/platform-middle-rotated");
+                    return PixelTextures.Get("Tiles/platform-middle-rotated");
 
                 case TileType.PlayerStart:
                     return Textures.Get("Tiles/player-start");
@@ -85,7 +85,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     return Textures.Get("Tiles/warp");
 
                 case TileType.Cherry:
-                    return Textures.Get("Tiles/cherry-1");
+                    return PixelTextures.Get("Objects/Cherry/cherry-1");
 
                 case TileType.KillerBlock:
                     return Textures.Get("Tiles/killerblock");
@@ -97,7 +97,7 @@ namespace IWBTM.Game.Rooms.Drawables
             throw new NotImplementedException("Tile is not implemented");
         }
 
-        public static int GetSize(TileType type)
+        public static Vector2 GetSize(TileType type)
         {
             switch (type)
             {
@@ -105,13 +105,13 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SmallSpikeTop:
                 case TileType.SmallSpikeLeft:
                 case TileType.SmallSpikeRight:
-                    return SIZE / 2;
+                    return new Vector2(SIZE / 2);
 
                 case TileType.Cherry:
-                    return 21;
+                    return new Vector2(21, 22);
 
                 default:
-                    return SIZE;
+                    return new Vector2(SIZE);
             }
         }
 

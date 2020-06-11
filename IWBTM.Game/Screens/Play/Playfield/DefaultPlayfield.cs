@@ -39,7 +39,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         [BackgroundDependencyLoader]
         private void load(AudioManager audio)
         {
-            DrawableRoom = new DrawableRoom(room, false, false);
+            DrawableRoom = new DrawableRoom(room, false, false, true);
             dependencies.Cache(DrawableRoom);
 
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;

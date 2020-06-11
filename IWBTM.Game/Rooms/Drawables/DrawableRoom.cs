@@ -9,7 +9,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         protected Room Room { get; set; }
 
-        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker)
+        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry)
         {
             Room = room;
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
@@ -32,7 +32,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
                     if (t.Type == TileType.Cherry)
                     {
-                        Add(new DrawableCherry(t));
+                        Add(new DrawableCherry(t, animatedCherry));
                         continue;
                     }
 

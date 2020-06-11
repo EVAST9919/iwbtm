@@ -14,9 +14,13 @@ namespace IWBTM.Game.Rooms.Drawables
         private readonly Sprite branch;
         private readonly Circle hitbox;
 
-        public DrawableCherry(Tile tile)
+        private readonly bool animated;
+
+        public DrawableCherry(Tile tile, bool animated)
             : base(tile)
         {
+            this.animated = animated;
+
             AddRangeInternal(new Drawable[]
             {
                 overlay = new Sprite
@@ -30,7 +34,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.Both,
-                    Position = new Vector2(1, -1)
+                    Position = new Vector2(0, -1)
                 },
                 hitbox = new Circle
                 {
@@ -46,14 +50,16 @@ namespace IWBTM.Game.Rooms.Drawables
         [BackgroundDependencyLoader]
         private void load()
         {
-            overlay.Texture = Textures.Get("Tiles/cherry-overlay");
-            branch.Texture = Textures.Get("Tiles/cherry-branch-1");
+            overlay.Texture = PixelTextures.Get("Objects/Cherry/cherry-1-overlay");
+            branch.Texture = PixelTextures.Get("Objects/Cherry/cherry-1-branch");
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            Scheduler.AddDelayed(updateFrame, 200, true);
+
+            if (animated)
+                Scheduler.AddDelayed(updateFrame, 400, true);
         }
 
         private bool secondFrame;
@@ -61,8 +67,10 @@ namespace IWBTM.Game.Rooms.Drawables
         private void updateFrame()
         {
             secondFrame = !secondFrame;
-            MainSprite.Texture = Textures.Get($"Tiles/cherry-{(secondFrame ? 2 : 1)}");
-            branch.Texture = Textures.Get($"Tiles/cherry-branch-{(secondFrame ? 2 : 1)}");
+            MainSprite.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}");
+            branch.Y = secondFrame ? -3 : -1;
+            branch.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-branch");
+            overlay.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-overlay");
         }
 
         public void Toggle(bool show)

@@ -48,9 +48,9 @@ namespace IWBTM.Game.Screens.Edit
 
             foreach (var t in oldTiles)
             {
-                if (t.PositionX + DrawableTile.GetSize(t.Type) <= newSize.X * DrawableTile.SIZE)
+                if (t.PositionX + DrawableTile.GetSize(t.Type).X <= newSize.X * DrawableTile.SIZE)
                 {
-                    if (t.PositionY + DrawableTile.GetSize(t.Type) <= newSize.Y * DrawableTile.SIZE)
+                    if (t.PositionY + DrawableTile.GetSize(t.Type).Y <= newSize.Y * DrawableTile.SIZE)
                         newTiles.Add(t);
                 }
             }

@@ -11,7 +11,7 @@ namespace IWBTM.Game.Screens.Edit
         public readonly Bindable<int> SnapValue = new Bindable<int>();
 
         public ObjectsLayer(Room room)
-            : base(room, true, true)
+            : base(room, true, true, false)
         {
         }
 
@@ -98,7 +98,7 @@ namespace IWBTM.Game.Screens.Edit
             };
 
             if (tile.Type == TileType.Cherry)
-                Add(new DrawableCherry(tile));
+                Add(new DrawableCherry(tile, false));
             else
                 Add(new DrawableTile(tile));
 

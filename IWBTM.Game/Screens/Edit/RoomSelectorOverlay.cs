@@ -320,7 +320,7 @@ namespace IWBTM.Game.Screens.Edit
                             {
                                 RelativeSizeAxes = Axes.Both
                             },
-                            new DrawableRoom(room, true, true)
+                            new DrawableRoom(room, true, true, false)
                         }
                     }
                 });
