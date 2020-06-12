@@ -46,12 +46,13 @@ namespace IWBTM.Game.Screens.Edit
             grid.Current.BindTo(SnapValue);
             objectsLayer.SnapValue.BindTo(SnapValue);
 
-            actionsLayer.UpdateActions(objectsLayer.Children.ToList());
+            objectsLayer.Updated += tiles => actionsLayer.UpdateActions(tiles);
         }
 
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            objectsLayer.Save();
             Tool.BindValueChanged(onToolChanged, true);
         }
 
@@ -132,7 +133,6 @@ namespace IWBTM.Game.Screens.Edit
             objectsLayer.UpdateAction(tile, action);
             TileToEdit.Value = null;
             TileToEdit.Value = tile;
-            actionsLayer.UpdateActions(objectsLayer.Children.ToList());
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)

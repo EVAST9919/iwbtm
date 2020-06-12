@@ -2,12 +2,16 @@
 using IWBTM.Game.Rooms.Drawables;
 using osu.Framework.Bindables;
 using osuTK;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IWBTM.Game.Screens.Edit
 {
     public class ObjectsLayer : DrawableRoom
     {
+        public Action<List<DrawableTile>> Updated;
+
         public readonly Bindable<int> SnapValue = new Bindable<int>();
 
         public ObjectsLayer(Room room)
@@ -110,6 +114,8 @@ namespace IWBTM.Game.Screens.Edit
                     PositionY = (int)c.Position.Y,
                     Action = c.Tile.Action
                 }).ToList();
+
+                Updated?.Invoke(Children.ToList());
             }, 10);
         }
     }

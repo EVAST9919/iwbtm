@@ -104,9 +104,7 @@ namespace IWBTM.Game.Screens.Edit
                 }
             };
 
-            var type = tile.NewValue.Tile.Type;
-
-            if (type == TileType.BulletBlocker || type == TileType.PlayerStart || type == TileType.Save)
+            if (!DrawableTile.IsGroup(tile.NewValue, TileGroup.Spike))
                 return;
 
             var hasAction = tile.NewValue.Tile.Action != null;
@@ -114,9 +112,7 @@ namespace IWBTM.Game.Screens.Edit
             flow.Add(new EditorButton($"{(hasAction ? "Edit" : "Add")} action", () => edit(tile.NewValue)));
 
             if (hasAction)
-            {
                 flow.Add(new EditorButton("Delete action", () => tryDelete(tile.NewValue)));
-            }
         }
 
         private void tryDelete(DrawableTile tile)

@@ -3,7 +3,6 @@ using osu.Framework.Graphics;
 using System.Collections.Generic;
 using IWBTM.Game.Rooms.Drawables;
 using osuTK;
-using IWBTM.Game.UserInterface;
 using osu.Framework.Graphics.Shapes;
 using IWBTM.Game.Helpers;
 using osuTK.Graphics;
