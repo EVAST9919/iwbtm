@@ -76,7 +76,9 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            selectedTilePlaceholder.Child = new FillFlowContainer
+            FillFlowContainer flow;
+
+            selectedTilePlaceholder.Child = flow = new FillFlowContainer
             {
                 RelativeSizeAxes = Axes.X,
                 AutoSizeAxes = Axes.Y,
@@ -95,10 +97,16 @@ namespace IWBTM.Game.Screens.Edit
                     new SpriteText
                     {
                         Text = $"Y: {tile.NewValue.Y}"
-                    },
-                    new EditorButton($"{(tile.NewValue.Tile.Action == null ? "Add" : "Edit")} action", () => edit(tile.NewValue))
+                    }
                 }
             };
+
+            var type = tile.NewValue.Tile.Type;
+
+            if (type == TileType.BulletBlocker || type == TileType.PlayerStart || type == TileType.Save)
+                return;
+
+            flow.Add(new EditorButton($"{(tile.NewValue.Tile.Action == null ? "Add" : "Edit")} action", () => edit(tile.NewValue)));
         }
 
         private void edit(DrawableTile tile)
