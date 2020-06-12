@@ -25,6 +25,9 @@ namespace IWBTM.Game.Screens.Edit
         [Resolved]
         private NotificationOverlay notifications { get; set; }
 
+        [Resolved]
+        private ConfirmationOverlay confirmation { get; set; }
+
         private readonly ToolSelectorTabControl control;
         private readonly FillFlowContainer selectedTilePlaceholder;
 
@@ -106,7 +109,22 @@ namespace IWBTM.Game.Screens.Edit
             if (type == TileType.BulletBlocker || type == TileType.PlayerStart || type == TileType.Save)
                 return;
 
-            flow.Add(new EditorButton($"{(tile.NewValue.Tile.Action == null ? "Add" : "Edit")} action", () => edit(tile.NewValue)));
+            var hasAction = tile.NewValue.Tile.Action != null;
+
+            flow.Add(new EditorButton($"{(hasAction ? "Edit" : "Add")} action", () => edit(tile.NewValue)));
+
+            if (hasAction)
+            {
+                flow.Add(new EditorButton("Delete action", () => tryDelete(tile.NewValue)));
+            }
+        }
+
+        private void tryDelete(DrawableTile tile)
+        {
+            confirmation.Push("Are you sure you want to delete action for this tile?", () =>
+            {
+                Edited?.Invoke(tile, null);
+            });
         }
 
         private void edit(DrawableTile tile)
