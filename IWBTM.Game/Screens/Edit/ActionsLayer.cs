@@ -34,7 +34,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             public ConnectionLine(DrawableTile tile)
             {
-                var startPosition = new Vector2(tile.Tile.PositionX + tile.Size.X / 2, tile.Tile.PositionY + tile.Size.Y / 2);
+                var startPosition = new Vector2(tile.X + tile.Size.X / 2, tile.Y + tile.Size.Y / 2);
                 var endPosition = new Vector2(tile.Tile.Action.EndX + tile.Size.X / 2, tile.Tile.Action.EndY + tile.Size.Y / 2);
 
                 Size = new Vector2(MathExtensions.Distance(startPosition, endPosition), 3);
