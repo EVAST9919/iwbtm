@@ -194,7 +194,7 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            if (TileToEdit == null)
+            if (TileToEdit.Value == null)
                 return base.OnKeyDown(e);
 
             float newX, newY;
