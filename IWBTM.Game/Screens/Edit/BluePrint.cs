@@ -20,6 +20,7 @@ namespace IWBTM.Game.Screens.Edit
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
+        private readonly ActionsLayer actionsLayer;
 
         public BluePrint(Room room)
         {
@@ -35,6 +36,7 @@ namespace IWBTM.Game.Screens.Edit
                 },
                 objectsLayer = new ObjectsLayer(room),
                 grid = new Grid(new Vector2(room.SizeX, room.SizeY)),
+                actionsLayer = new ActionsLayer(),
                 hoverLayer = new Container
                 {
                     RelativeSizeAxes = Axes.Both
@@ -43,6 +45,8 @@ namespace IWBTM.Game.Screens.Edit
 
             grid.Current.BindTo(SnapValue);
             objectsLayer.SnapValue.BindTo(SnapValue);
+
+            actionsLayer.UpdateActions(objectsLayer.Children.ToList());
         }
 
         protected override void LoadComplete()
@@ -58,9 +62,11 @@ namespace IWBTM.Game.Screens.Edit
                 case ToolEnum.Place:
                     TileToEdit.Value = null;
                     objectsLayer.DeselectAll();
+                    actionsLayer.Hide();
                     return;
 
                 case ToolEnum.Select:
+                    actionsLayer.Show();
                     return;
             }
         }
@@ -126,6 +132,7 @@ namespace IWBTM.Game.Screens.Edit
             objectsLayer.UpdateAction(tile, action);
             TileToEdit.Value = null;
             TileToEdit.Value = tile;
+            actionsLayer.UpdateActions(objectsLayer.Children.ToList());
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)

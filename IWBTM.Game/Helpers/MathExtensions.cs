@@ -16,5 +16,15 @@ namespace IWBTM.Game.Helpers
         }
 
         public static float Pow(float input) => input * input;
+
+        public static float GetAngle(Vector2 input1, Vector2 input2)
+        {
+            var angle = (float)(Math.Atan2(input1.Y - input2.Y, input1.X - input2.X) * 180 / Math.PI + 180);
+
+            if (angle > 360)
+                angle %= 360f;
+
+            return angle;
+        }
     }
 }
