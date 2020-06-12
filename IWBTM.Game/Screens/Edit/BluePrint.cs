@@ -84,12 +84,24 @@ namespace IWBTM.Game.Screens.Edit
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
             mousePosition = e.MousePosition;
+            var buttons = e.CurrentState.Mouse.Buttons;
 
             if (Tool.Value == ToolEnum.Select)
             {
-                hoverLayer.Clear();
-                tileToPlace?.Expire();
-                return false;
+                if (buttons.IsPressed(MouseButton.Left))
+                {
+                    var tile = TileToEdit.Value;
+
+                    if (tile != null)
+                    {
+                        tile.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
+                        TileToEdit.Value = null;
+                        TileToEdit.Value = tile;
+                        objectsLayer.Save();
+                    }
+                }
+
+                return true;
             }
 
             if (!hoverLayer.Any())
@@ -99,8 +111,6 @@ namespace IWBTM.Game.Screens.Edit
                 });
 
             tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
-
-            var buttons = e.CurrentState.Mouse.Buttons;
 
             if (buttons.IsPressed(MouseButton.Left))
             {
@@ -115,6 +125,18 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             return base.OnMouseMove(e);
+        }
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            if (Tool.Value == ToolEnum.Select)
+            {
+                hoverLayer.Clear();
+                tileToPlace?.Expire();
+                return true;
+            }
+
+            return base.OnHover(e);
         }
 
         protected override void OnHoverLost(HoverLostEvent e)
