@@ -106,6 +106,7 @@ namespace IWBTM.Game.Screens
             blueprint.Selected.BindTo(toolbar.Selected);
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
             blueprint.Tool.BindTo(toolSelector.Current);
+            toolSelector.SelectedTile.BindTo(blueprint.TileToEdit);
         }
 
         private void test()

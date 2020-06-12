@@ -16,6 +16,7 @@ namespace IWBTM.Game.Screens.Edit
         public readonly Bindable<TileType> Selected = new Bindable<TileType>();
         public readonly Bindable<int> SnapValue = new Bindable<int>();
         public readonly Bindable<ToolEnum> Tool = new Bindable<ToolEnum>();
+        public readonly Bindable<DrawableTile> TileToEdit = new Bindable<DrawableTile>();
 
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
@@ -55,7 +56,7 @@ namespace IWBTM.Game.Screens.Edit
             switch (tool.NewValue)
             {
                 case ToolEnum.Place:
-                    tileToEdit = null;
+                    TileToEdit.Value = null;
                     objectsLayer.DeselectAll();
                     return;
 
@@ -120,8 +121,6 @@ namespace IWBTM.Game.Screens.Edit
             tileToPlace?.Expire();
         }
 
-        private DrawableTile tileToEdit;
-
         protected override bool OnMouseDown(MouseDownEvent e)
         {
             switch (Tool.Value)
@@ -145,12 +144,12 @@ namespace IWBTM.Game.Screens.Edit
                     var selectedTile = objectsLayer.GetAnyTileAt(mousePosition);
                     if (selectedTile == null)
                     {
-                        tileToEdit = null;
+                        TileToEdit.Value = null;
                         return true;
                     }
 
-                    tileToEdit = selectedTile;
-                    tileToEdit.Select();
+                    TileToEdit.Value = selectedTile;
+                    selectedTile.Select();
                     break;
             }
 
@@ -159,54 +158,63 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            if (tileToEdit == null)
+            if (TileToEdit == null)
                 return base.OnKeyDown(e);
 
             float newX, newY;
+            var tile = TileToEdit.Value;
 
             if (!e.Repeat)
             {
                 switch (e.Key)
                 {
                     case Key.Up:
-                        newY = tileToEdit.Y - SnapValue.Value;
+                        newY = tile.Y - SnapValue.Value;
                         if (newY >= 0)
                         {
-                            tileToEdit.MoveToY(newY);
+                            tile.MoveToY(newY);
+                            TileToEdit.Value = null;
+                            TileToEdit.Value = tile;
                             objectsLayer.Save();
                         }
                         return true;
 
                     case Key.Down:
-                        newY = tileToEdit.Y + SnapValue.Value;
+                        newY = tile.Y + SnapValue.Value;
                         if (newY < Size.Y)
                         {
-                            tileToEdit.MoveToY(newY);
+                            tile.MoveToY(newY);
+                            TileToEdit.Value = null;
+                            TileToEdit.Value = tile;
                             objectsLayer.Save();
                         }
                         return true;
 
                     case Key.Left:
-                        newX = tileToEdit.X - SnapValue.Value;
+                        newX = tile.X - SnapValue.Value;
                         if (newX >= 0)
                         {
-                            tileToEdit.MoveToX(newX);
+                            tile.MoveToX(newX);
+                            TileToEdit.Value = null;
+                            TileToEdit.Value = tile;
                             objectsLayer.Save();
                         }
                         return true;
 
                     case Key.Right:
-                        newX = tileToEdit.X + SnapValue.Value;
+                        newX = tile.X + SnapValue.Value;
                         if (newX < Size.X)
                         {
-                            tileToEdit.MoveToX(newX);
+                            tile.MoveToX(newX);
+                            TileToEdit.Value = null;
+                            TileToEdit.Value = tile;
                             objectsLayer.Save();
                         }
                         return true;
 
                     case Key.Delete:
-                        tileToEdit.Expire();
-                        tileToEdit = null;
+                        tile.Expire();
+                        TileToEdit.Value = null;
                         objectsLayer.Save();
                         return true;
                 }

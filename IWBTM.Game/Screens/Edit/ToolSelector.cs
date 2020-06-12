@@ -1,4 +1,5 @@
-﻿using IWBTM.Game.UserInterface;
+﻿using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
@@ -6,18 +7,18 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
 using osuTK;
 using osuTK.Graphics;
-using System;
 
 namespace IWBTM.Game.Screens.Edit
 {
     public class ToolSelector : CompositeDrawable
     {
         public Bindable<ToolEnum> Current => control.Current;
+        public readonly Bindable<DrawableTile> SelectedTile = new Bindable<DrawableTile>();
 
         private readonly ToolSelectorTabControl control;
+        private readonly Container selectedTilePlaceholder;
 
         public ToolSelector()
         {
@@ -36,6 +37,12 @@ namespace IWBTM.Game.Screens.Edit
                     RelativeSizeAxes = Axes.Both,
                     Colour = IWannaColour.GrayDark
                 },
+                selectedTilePlaceholder = new Container
+                {
+                    RelativeSizeAxes = Axes.X,
+                    AutoSizeAxes = Axes.Y,
+                    Padding = new MarginPadding(10),
+                },
                 control = new ToolSelectorTabControl
                 {
                     Anchor = Anchor.BottomCentre,
@@ -45,63 +52,43 @@ namespace IWBTM.Game.Screens.Edit
             });
         }
 
-        private class ToolSelectorTabControl : TabControl<ToolEnum>
+        protected override void LoadComplete()
         {
-            public ToolSelectorTabControl()
-            {
-                RelativeSizeAxes = Axes.X;
-                AutoSizeAxes = Axes.Y;
+            base.LoadComplete();
 
-                foreach (var val in Enum.GetValues(typeof(ToolEnum)))
-                    AddItem((ToolEnum)val);
+            SelectedTile.BindValueChanged(onSelectedTileChanged, true);
+        }
+
+        private void onSelectedTileChanged(ValueChangedEvent<DrawableTile> tile)
+        {
+            if (tile.NewValue == null)
+            {
+                selectedTilePlaceholder.Clear();
+                return;
             }
 
-            protected override Dropdown<ToolEnum> CreateDropdown() => null;
-
-            protected override TabFillFlowContainer CreateTabFlow() => new TabFillFlowContainer
+            selectedTilePlaceholder.Child = new FillFlowContainer
             {
                 RelativeSizeAxes = Axes.X,
                 AutoSizeAxes = Axes.Y,
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                AllowMultiline = true,
-                Spacing = new Vector2(5),
-            };
-
-            protected override TabItem<ToolEnum> CreateTabItem(ToolEnum value) => new ToolSelectorTabItem(value);
-
-            private class ToolSelectorTabItem : TabItem<ToolEnum>
-            {
-                private readonly IWannaSelectableButtonBackground bg;
-
-                public ToolSelectorTabItem(ToolEnum value)
-                    : base(value)
+                Spacing = new Vector2(0, 10),
+                Direction = FillDirection.Vertical,
+                Children = new Drawable[]
                 {
-                    Anchor = Anchor.Centre;
-                    Origin = Anchor.Centre;
-                    Size = new Vector2(100, 50);
-                    Children = new Drawable[]
+                    new SpriteText
                     {
-                        bg = new IWannaSelectableButtonBackground(),
-                        new SpriteText
-                        {
-                            Anchor = Anchor.Centre,
-                            Origin = Anchor.Centre,
-                            Text = value.ToString()
-                        }
-                    };
+                        Text = tile.NewValue.Tile.Type.ToString()
+                    },
+                    new SpriteText
+                    {
+                        Text = $"X: {tile.NewValue.X}"
+                    },
+                    new SpriteText
+                    {
+                        Text = $"Y: {tile.NewValue.Y}"
+                    }
                 }
-
-                protected override void OnActivated() => bg.Activate();
-
-                protected override void OnDeactivated() => bg.Deactivate();
-            }
+            };
         }
-    }
-
-    public enum ToolEnum
-    {
-        Place,
-        Select
     }
 }
