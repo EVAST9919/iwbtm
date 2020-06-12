@@ -13,6 +13,7 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 using System;
+using System.Linq;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -95,25 +96,61 @@ namespace IWBTM.Game.Screens.Edit
                     {
                         Text = $"Y: {tile.NewValue.Y}"
                     },
-                    new SpriteText
-                    {
-                        Text = $"Action: {tile.NewValue.Tile.Action != null}"
-                    },
-                    new EditorButton("Add action", () => onAddAction(tile.NewValue)),
+                    new EditorButton($"{(tile.NewValue.Tile.Action == null ? "Add" : "Edit")} action", () => edit(tile.NewValue))
                 }
             };
         }
 
-        private void onAddAction(DrawableTile tile)
+        private void edit(DrawableTile tile)
         {
-            IWannaTextBox timeTextbox;
-            IWannaTextBox xTextbox;
-            IWannaTextBox yTextbox;
+            if (selectedTilePlaceholder.Children.OfType<ActionEditor>().Any())
+                return;
 
-            var container = new Container
+            var actionEditor = new ActionEditor(tile.Tile.Action);
+            selectedTilePlaceholder.Add(actionEditor);
+            actionEditor.OnConfirm += actionParams => trySave(tile, actionParams.time, actionParams.x, actionParams.y);
+        }
+
+        public Action<DrawableTile, TileAction> Edited;
+
+        private void trySave(DrawableTile tile, string timeString, string xString, string yString)
+        {
+            float time, x, y;
+
+            try
             {
-                RelativeSizeAxes = Axes.X,
-                AutoSizeAxes = Axes.Y,
+                time = float.Parse(timeString);
+                x = float.Parse(xString);
+                y = float.Parse(yString);
+            }
+            catch
+            {
+                notifications.Push("Make sure input is correct", NotificationState.Bad);
+                return;
+            }
+
+            var action = new TileAction
+            {
+                EndX = x,
+                EndY = y,
+                Time = time,
+            };
+
+            Edited?.Invoke(tile, action);
+        }
+
+        private class ActionEditor : Container
+        {
+            public Action<(string time, string x, string y)> OnConfirm;
+
+            private readonly IWannaTextBox timeTextbox;
+            private readonly IWannaTextBox xTextbox;
+            private readonly IWannaTextBox yTextbox;
+
+            public ActionEditor(TileAction existing = null)
+            {
+                RelativeSizeAxes = Axes.X;
+                AutoSizeAxes = Axes.Y;
                 Children = new Drawable[]
                 {
                     new Box
@@ -149,44 +186,19 @@ namespace IWBTM.Game.Screens.Edit
                                     RelativeSizeAxes = Axes.X,
                                     PlaceholderText = "Time (ms)"
                                 },
-                                new EditorButton("Ok", () => trySave(tile, timeTextbox.Current.Value, xTextbox.Current.Value, yTextbox.Current.Value))
+                                new EditorButton("Ok", () => OnConfirm?.Invoke((timeTextbox.Current.Value, xTextbox.Current.Value, yTextbox.Current.Value)))
                             }
                         }
                     }
+                };
+
+                if (existing != null)
+                {
+                    xTextbox.Current.Value = existing.EndX.ToString();
+                    yTextbox.Current.Value = existing.EndY.ToString();
+                    timeTextbox.Current.Value = existing.Time.ToString();
                 }
-            };
-
-            selectedTilePlaceholder.Add(container);
-        }
-
-        public Action<DrawableTile, TileAction> Edited;
-
-        private void trySave(DrawableTile tile, string timeString, string xString, string yString)
-        {
-            float time = 0;
-            float x = 0;
-            float y = 0;
-
-            try
-            {
-                time = float.Parse(timeString);
-                x = float.Parse(xString);
-                y = float.Parse(yString);
             }
-            catch
-            {
-                notifications.Push("Make sure input is correct", NotificationState.Bad);
-                return;
-            }
-
-            var action = new TileAction
-            {
-                EndX = x,
-                EndY = y,
-                Time = time,
-            };
-
-            Edited?.Invoke(tile, action);
         }
     }
 }
