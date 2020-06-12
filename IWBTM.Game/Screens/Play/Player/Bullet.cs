@@ -68,7 +68,7 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            var blocker = drawableRoom.GetTileAt(position, TileType.BulletBlocker);
+            var blocker = drawableRoom.GetTileAtPixel(position, TileType.BulletBlocker);
 
             if (blocker != null)
             {
@@ -77,7 +77,7 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            var save = drawableRoom.GetTileAt(position, TileType.Save);
+            var save = drawableRoom.GetTileAtPixel(position, TileType.Save);
 
             if (save != null)
             {

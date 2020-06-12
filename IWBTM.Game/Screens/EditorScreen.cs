@@ -1,6 +1,7 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Edit;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
@@ -107,6 +108,8 @@ namespace IWBTM.Game.Screens
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
             blueprint.Tool.BindTo(toolSelector.Current);
             toolSelector.SelectedTile.BindTo(blueprint.TileToEdit);
+
+            toolSelector.Edited += blueprint.ReplaceAction;
         }
 
         private void test()

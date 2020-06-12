@@ -126,14 +126,5 @@ namespace IWBTM.Game.Screens.Edit
                 }
             });
         }
-
-        private class EditorButton : IWannaButton
-        {
-            public EditorButton(string text, Action action)
-                : base(text, action)
-            {
-                Size = new Vector2(100, 50);
-            }
-        }
     }
 }

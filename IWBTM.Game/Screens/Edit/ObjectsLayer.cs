@@ -11,8 +11,22 @@ namespace IWBTM.Game.Screens.Edit
         public readonly Bindable<int> SnapValue = new Bindable<int>();
 
         public ObjectsLayer(Room room)
-            : base(room, true, true, false)
+            : base(room, true, true, false, false)
         {
+        }
+
+        public void ReplaceAction(DrawableTile old, DrawableTile newTile)
+        {
+            foreach (var child in Children)
+            {
+                if (child == old)
+                {
+                    child.Tile.Action = newTile.Tile.Action;
+                    break;
+                }
+            }
+
+            Save();
         }
 
         public void TryPlace(TileType type, Vector2 position)
@@ -31,9 +45,7 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            DrawableTile placed = GetTileAt(position, type);
-
-            if (placed != null)
+            if (HasTileAt(snappedPosition, type))
                 return;
 
             addTile(type, snappedPosition);
@@ -96,6 +108,7 @@ namespace IWBTM.Game.Screens.Edit
                     Type = c.Tile.Type,
                     PositionX = (int)c.Position.X,
                     PositionY = (int)c.Position.Y,
+                    Action = c.Tile.Action
                 }).ToList();
             }, 10);
         }

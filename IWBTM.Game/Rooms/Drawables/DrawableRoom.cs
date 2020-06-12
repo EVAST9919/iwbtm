@@ -1,4 +1,5 @@
-﻿using osu.Framework.Graphics.Containers;
+﻿using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osuTK;
 using System.Collections.Generic;
 
@@ -13,13 +14,15 @@ namespace IWBTM.Game.Rooms.Drawables
         private readonly bool showPlayerSpawn;
         private readonly bool showBulletBlocker;
         private readonly bool animatedCherry;
+        private readonly bool executeActions;
 
-        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry)
+        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions)
         {
             Room = room;
             this.showPlayerSpawn = showPlayerSpawn;
             this.showBulletBlocker = showBulletBlocker;
             this.animatedCherry = animatedCherry;
+            this.executeActions = executeActions;
 
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
 
@@ -30,9 +33,35 @@ namespace IWBTM.Game.Rooms.Drawables
             }
         }
 
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            RestartAnimations();
+        }
+
+        public void RestartAnimations()
+        {
+            if (executeActions)
+            {
+                foreach (var child in Children)
+                {
+                    var action = child.Tile.Action;
+
+                    if (action != null)
+                    {
+                        child.ClearTransforms();
+                        child.Position = new Vector2(child.Tile.PositionX, child.Tile.PositionY);
+                        child.MoveTo(new Vector2(action.EndX, action.EndY), action.Time).Then().MoveTo(new Vector2(child.Tile.PositionX, child.Tile.PositionY), action.Time).Loop();
+                    }
+                }
+            }
+        }
+
         public bool HasTileOfGroupAt(Vector2 pixelPosition, TileGroup group) => GetTileOfGroupAt(pixelPosition, group) != null;
 
-        public bool HasTileAt(Vector2 pixelPosition, TileType type) => GetTileAt(pixelPosition, type) != null;
+        public bool HasTileAtPixel(Vector2 pixelPosition, TileType type) => GetTileAtPixel(pixelPosition, type) != null;
+
+        public bool HasTileAt(Vector2 position, TileType type) => GetTileAt(position, type) != null;
 
         public bool HasAnyTileAt(Vector2 pixelPosition) => GetAnyTileAt(pixelPosition) != null;
 
@@ -82,7 +111,7 @@ namespace IWBTM.Game.Rooms.Drawables
             return null;
         }
 
-        public DrawableTile GetTileAt(Vector2 pixelPosition, TileType type)
+        public DrawableTile GetTileAtPixel(Vector2 pixelPosition, TileType type)
         {
             foreach (var child in Children)
             {
@@ -97,6 +126,17 @@ namespace IWBTM.Game.Rooms.Drawables
                             return child;
                     }
                 }
+            }
+
+            return null;
+        }
+
+        public DrawableTile GetTileAt(Vector2 position, TileType type)
+        {
+            foreach (var child in Children)
+            {
+                if (child.Position == position && child.Tile.Type == type)
+                    return child;
             }
 
             return null;

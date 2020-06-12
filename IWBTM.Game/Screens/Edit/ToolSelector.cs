@@ -1,5 +1,8 @@
-﻿using IWBTM.Game.Rooms.Drawables;
+﻿using IWBTM.Game.Overlays;
+using IWBTM.Game.Rooms;
+using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
@@ -9,6 +12,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
+using System;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -17,8 +21,11 @@ namespace IWBTM.Game.Screens.Edit
         public Bindable<ToolEnum> Current => control.Current;
         public readonly Bindable<DrawableTile> SelectedTile = new Bindable<DrawableTile>();
 
+        [Resolved]
+        private NotificationOverlay notifications { get; set; }
+
         private readonly ToolSelectorTabControl control;
-        private readonly Container selectedTilePlaceholder;
+        private readonly FillFlowContainer selectedTilePlaceholder;
 
         public ToolSelector()
         {
@@ -37,10 +44,12 @@ namespace IWBTM.Game.Screens.Edit
                     RelativeSizeAxes = Axes.Both,
                     Colour = IWannaColour.GrayDark
                 },
-                selectedTilePlaceholder = new Container
+                selectedTilePlaceholder = new FillFlowContainer
                 {
                     RelativeSizeAxes = Axes.X,
                     AutoSizeAxes = Axes.Y,
+                    Spacing = new Vector2(0, 10),
+                    Direction = FillDirection.Vertical,
                     Padding = new MarginPadding(10),
                 },
                 control = new ToolSelectorTabControl
@@ -55,7 +64,6 @@ namespace IWBTM.Game.Screens.Edit
         protected override void LoadComplete()
         {
             base.LoadComplete();
-
             SelectedTile.BindValueChanged(onSelectedTileChanged, true);
         }
 
@@ -86,9 +94,101 @@ namespace IWBTM.Game.Screens.Edit
                     new SpriteText
                     {
                         Text = $"Y: {tile.NewValue.Y}"
+                    },
+                    new SpriteText
+                    {
+                        Text = $"Action: {tile.NewValue.Tile.Action != null}"
+                    },
+                    new EditorButton("Add action", () => onAddAction(tile.NewValue)),
+                }
+            };
+        }
+
+        private void onAddAction(DrawableTile tile)
+        {
+            IWannaTextBox timeTextbox;
+            IWannaTextBox xTextbox;
+            IWannaTextBox yTextbox;
+
+            var container = new Container
+            {
+                RelativeSizeAxes = Axes.X,
+                AutoSizeAxes = Axes.Y,
+                Children = new Drawable[]
+                {
+                    new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = IWannaColour.GrayDarker,
+                    },
+                    new Container
+                    {
+                        RelativeSizeAxes = Axes.X,
+                        AutoSizeAxes = Axes.Y,
+                        Padding = new MarginPadding(10),
+                        Child = new FillFlowContainer
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            AutoSizeAxes = Axes.Y,
+                            Spacing = new Vector2(0, 10),
+                            Direction = FillDirection.Vertical,
+                            Children = new Drawable[]
+                            {
+                                xTextbox = new IWannaTextBox
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    PlaceholderText = "X"
+                                },
+                                yTextbox = new IWannaTextBox
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    PlaceholderText = "Y"
+                                },
+                                timeTextbox = new IWannaTextBox
+                                {
+                                    RelativeSizeAxes = Axes.X,
+                                    PlaceholderText = "Time (ms)"
+                                },
+                                new EditorButton("Ok", () => trySave(tile, timeTextbox.Current.Value, xTextbox.Current.Value, yTextbox.Current.Value))
+                            }
+                        }
                     }
                 }
             };
+
+            selectedTilePlaceholder.Add(container);
+        }
+
+        public Action<DrawableTile, DrawableTile> Edited;
+
+        private void trySave(DrawableTile tile, string timeString, string xString, string yString)
+        {
+            var oldTile = tile;
+            float time = 0;
+            float x = 0;
+            float y = 0;
+
+            try
+            {
+                time = float.Parse(timeString);
+                x = float.Parse(xString);
+                y = float.Parse(yString);
+            }
+            catch
+            {
+                notifications.Push("Make sure input is correct", NotificationState.Bad);
+                return;
+            }
+
+            tile.Tile.Action = new TileAction
+            {
+                EndX = x,
+                EndY = y,
+                Time = time,
+            };
+
+            SelectedTile.Value = null;
+            Edited?.Invoke(oldTile, tile);
         }
     }
 }

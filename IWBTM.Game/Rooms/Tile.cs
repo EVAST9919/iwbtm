@@ -9,5 +9,7 @@ namespace IWBTM.Game.Rooms
         public int PositionY { get; set; }
 
         public TileType Type { get; set; }
+
+        public TileAction Action { get; set; }
     }
 }

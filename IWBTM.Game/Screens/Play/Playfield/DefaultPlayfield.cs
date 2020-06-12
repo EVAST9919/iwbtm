@@ -39,7 +39,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         [BackgroundDependencyLoader]
         private void load(AudioManager audio)
         {
-            DrawableRoom = new DrawableRoom(room, false, false, true);
+            DrawableRoom = new DrawableRoom(room, false, false, true, true);
             dependencies.Cache(DrawableRoom);
 
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
@@ -86,6 +86,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public void Restart(Vector2 position, bool rightwards)
         {
             Player.Revive(position, rightwards);
+            DrawableRoom.RestartAnimations();
             deathOverlay.Restore();
             roomEntering.Stop();
             roomEntering.Play();
