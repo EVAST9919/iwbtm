@@ -8,7 +8,6 @@ using System.Linq;
 using osuTK.Input;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
-using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens.Edit
 {

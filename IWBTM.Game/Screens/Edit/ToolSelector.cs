@@ -38,8 +38,9 @@ namespace IWBTM.Game.Screens.Edit
                 },
                 control = new ToolSelectorTabControl
                 {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Margin = new MarginPadding { Bottom = 20 }
                 }
             });
         }
