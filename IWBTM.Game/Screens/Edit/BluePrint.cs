@@ -121,10 +121,11 @@ namespace IWBTM.Game.Screens.Edit
             tileToPlace?.Expire();
         }
 
-        public void ReplaceAction(DrawableTile old, DrawableTile newTile)
+        public void UpdateAction(DrawableTile tile, TileAction action)
         {
-            objectsLayer.ReplaceAction(old, newTile);
-            TileToEdit.Value = newTile;
+            objectsLayer.UpdateAction(tile, action);
+            TileToEdit.Value = null;
+            TileToEdit.Value = tile;
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)

@@ -159,11 +159,10 @@ namespace IWBTM.Game.Screens.Edit
             selectedTilePlaceholder.Add(container);
         }
 
-        public Action<DrawableTile, DrawableTile> Edited;
+        public Action<DrawableTile, TileAction> Edited;
 
         private void trySave(DrawableTile tile, string timeString, string xString, string yString)
         {
-            var oldTile = tile;
             float time = 0;
             float x = 0;
             float y = 0;
@@ -180,15 +179,14 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            tile.Tile.Action = new TileAction
+            var action = new TileAction
             {
                 EndX = x,
                 EndY = y,
                 Time = time,
             };
 
-            SelectedTile.Value = null;
-            Edited?.Invoke(oldTile, tile);
+            Edited?.Invoke(tile, action);
         }
     }
 }

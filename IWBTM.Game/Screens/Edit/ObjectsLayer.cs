@@ -15,13 +15,13 @@ namespace IWBTM.Game.Screens.Edit
         {
         }
 
-        public void ReplaceAction(DrawableTile old, DrawableTile newTile)
+        public void UpdateAction(DrawableTile tile, TileAction action)
         {
             foreach (var child in Children)
             {
-                if (child == old)
+                if (child == tile)
                 {
-                    child.Tile.Action = newTile.Tile.Action;
+                    child.Tile.Action = action;
                     break;
                 }
             }

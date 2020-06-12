@@ -109,7 +109,7 @@ namespace IWBTM.Game.Screens
             blueprint.Tool.BindTo(toolSelector.Current);
             toolSelector.SelectedTile.BindTo(blueprint.TileToEdit);
 
-            toolSelector.Edited += blueprint.ReplaceAction;
+            toolSelector.Edited += blueprint.UpdateAction;
         }
 
         private void test()
