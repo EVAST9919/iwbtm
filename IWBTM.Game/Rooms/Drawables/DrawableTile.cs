@@ -60,32 +60,32 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (Tile.Type)
             {
                 case TileType.PlatformCorner:
-                    return PixelTextures.Get($"Tiles/{Skin}/platform-corner") ?? PixelTextures.Get($"Tiles/Default/platform-corner");
+                    return PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get($"Tiles/Default/block");
 
                 case TileType.PlatformMiddle:
-                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle") ?? PixelTextures.Get($"Tiles/{Skin}/platform-corner") ?? PixelTextures.Get("Tiles/Default/platform-middle");
+                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get("Tiles/Default/platform-middle");
 
                 case TileType.PlatformMiddleRotated:
-                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle-rotated") ?? PixelTextures.Get($"Tiles/{Skin}/platform-corner") ?? PixelTextures.Get("Tiles/Default/platform-middle-rotated");
+                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle-rotated") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get("Tiles/Default/platform-middle-rotated");
 
                 case TileType.PlayerStart:
-                    return Textures.Get($"Tiles/{Skin}/player-start") ?? Textures.Get("Tiles/Default/player-start");
+                    return Textures.Get($"Tiles/{Skin}/playerstart") ?? Textures.Get("Tiles/Default/playerstart");
 
                 case TileType.SmallSpikeBottom:
                 case TileType.SpikeBottom:
-                    return Textures.Get($"Tiles/{Skin}/spike-bottom") ?? Textures.Get("Tiles/Default/spike-bottom");
+                    return Textures.Get($"Tiles/{Skin}/spikedown") ?? Textures.Get("Tiles/Default/spikedown");
 
                 case TileType.SmallSpikeTop:
                 case TileType.SpikeTop:
-                    return Textures.Get($"Tiles/{Skin}/spike-top") ?? Textures.Get("Tiles/Default/spike-top");
+                    return Textures.Get($"Tiles/{Skin}/spikeup") ?? Textures.Get("Tiles/Default/spikeup");
 
                 case TileType.SmallSpikeLeft:
                 case TileType.SpikeLeft:
-                    return Textures.Get($"Tiles/{Skin}/spike-left") ?? Textures.Get("Tiles/Default/spike-left");
+                    return Textures.Get($"Tiles/{Skin}/spikeleft") ?? Textures.Get("Tiles/Default/spikeleft");
 
                 case TileType.SmallSpikeRight:
                 case TileType.SpikeRight:
-                    return Textures.Get($"Tiles/{Skin}/spike-right") ?? Textures.Get("Tiles/Default/spike-right");
+                    return Textures.Get($"Tiles/{Skin}/spikeright") ?? Textures.Get("Tiles/Default/spikeright");
 
                 case TileType.Save:
                     return Textures.Get($"Tiles/{Skin}/save") ?? Textures.Get("Tiles/Default/save");
