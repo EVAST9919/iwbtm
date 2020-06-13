@@ -202,7 +202,6 @@ namespace IWBTM.Game.Rooms.Drawables
         PlatformCorner,
         PlatformMiddle,
         PlatformMiddleRotated,
-        Miniblock,
         PlayerStart,
         SpikeTop,
         SpikeBottom,
@@ -216,7 +215,8 @@ namespace IWBTM.Game.Rooms.Drawables
         Warp,
         Cherry,
         KillerBlock,
-        BulletBlocker
+        BulletBlocker,
+        Miniblock
     }
 
     public enum TileGroup
