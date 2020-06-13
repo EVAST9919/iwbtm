@@ -13,6 +13,8 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         public Vector2 PlayerSpawnPosition { get; private set; }
 
+        public List<DrawableTile> Tiles => content.Children.ToList();
+
         protected Room Room { get; set; }
 
         private readonly bool showPlayerSpawn;
@@ -183,8 +185,6 @@ namespace IWBTM.Game.Rooms.Drawables
 
             return null;
         }
-
-        public List<DrawableTile> GetAllTiles() => content.Children.ToList();
 
         protected void AddTile(Tile t)
         {
