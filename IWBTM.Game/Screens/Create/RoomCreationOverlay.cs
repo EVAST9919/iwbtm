@@ -82,7 +82,7 @@ namespace IWBTM.Game.Screens.Create
                                     Width = 300,
                                     Height = 40,
                                     Anchor = Anchor.Centre,
-                                    Depth = -int.MaxValue,
+                                    Depth = -10,
                                     Origin = Anchor.Centre,
                                     Child = MusicSelector = new MusicSelector()
                                 },

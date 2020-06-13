@@ -11,6 +11,8 @@ namespace IWBTM.Game.Screens.Create
 
             AddDropdownItem("Default");
             AddDropdownItem("Avoider");
+            AddDropdownItem("Zeus_red");
+            AddDropdownItem("Zeus_blue");
 
             Current.Value = "Default";
         }
