@@ -26,20 +26,21 @@ namespace IWBTM.Game.Rooms.Drawables
         protected readonly string Skin;
         private readonly Container selectContainer;
 
-        public DrawableTile(Tile tile, string skin)
+        public DrawableTile(Tile tile, string skin, bool allowEdit)
         {
             Tile = tile;
             Skin = skin;
 
             Size = GetSize(tile.Type);
             Position = new Vector2(tile.PositionX, tile.PositionY);
-            AddRangeInternal(new Drawable[]
+            AddInternal(MainSprite = new Sprite
             {
-                MainSprite = new Sprite
-                {
-                    RelativeSizeAxes = Axes.Both
-                },
-                selectContainer = new Container
+                RelativeSizeAxes = Axes.Both
+            });
+
+            if (allowEdit)
+            {
+                AddInternal(selectContainer = new Container
                 {
                     RelativeSizeAxes = Axes.Both,
                     Masking = true,
@@ -50,8 +51,8 @@ namespace IWBTM.Game.Rooms.Drawables
                         Alpha = 0,
                         AlwaysPresent = true
                     }
-                }
-            });
+                });
+            };
         }
 
         [BackgroundDependencyLoader]

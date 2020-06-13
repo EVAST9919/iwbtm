@@ -87,7 +87,7 @@ namespace IWBTM.Game.Screens.Select
                 }
             };
 
-            content.Add(new DrawableRoom(room, showPlayerSpawn, true, false, false));
+            content.Add(new DrawableRoom(room, showPlayerSpawn, true, false, false, false));
 
             if (deathSpots != null)
             {

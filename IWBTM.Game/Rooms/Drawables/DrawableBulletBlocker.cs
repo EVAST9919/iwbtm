@@ -6,8 +6,8 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         private readonly bool show;
 
-        public DrawableBulletBlocker(Tile tile, string skin, bool show)
-            : base(tile, skin)
+        public DrawableBulletBlocker(Tile tile, string skin, bool show, bool allowEdit)
+            : base(tile, skin, allowEdit)
         {
             this.show = show;
 

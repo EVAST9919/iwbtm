@@ -15,7 +15,7 @@ namespace IWBTM.Game.Screens.Edit
         public readonly Bindable<int> SnapValue = new Bindable<int>();
 
         public ObjectsLayer(Room room)
-            : base(room, true, true, false, false)
+            : base(room, true, true, false, false, true)
         {
         }
 

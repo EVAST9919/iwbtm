@@ -2,8 +2,8 @@
 {
     public class SaveTile : DrawableTile
     {
-        public SaveTile(Tile t, string skin)
-            : base(t, skin)
+        public SaveTile(Tile t, string skin, bool allowEdit)
+            : base(t, skin, allowEdit)
         {
         }
 

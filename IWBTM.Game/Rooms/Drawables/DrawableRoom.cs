@@ -21,17 +21,19 @@ namespace IWBTM.Game.Rooms.Drawables
         private readonly bool showBulletBlocker;
         private readonly bool animatedCherry;
         private readonly bool executeActions;
+        private readonly bool allowEdit;
 
         private readonly Sprite bg;
         private readonly Container<DrawableTile> content;
 
-        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions)
+        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions, bool allowEdit)
         {
             Room = room;
             this.showPlayerSpawn = showPlayerSpawn;
             this.showBulletBlocker = showBulletBlocker;
             this.animatedCherry = animatedCherry;
             this.executeActions = executeActions;
+            this.allowEdit = allowEdit;
 
             Size = new Vector2(Room.SizeX, Room.SizeY) * DrawableTile.SIZE;
             Masking = true;
@@ -191,27 +193,27 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (t.Type)
             {
                 case TileType.Save:
-                    content.Add(new SaveTile(t, Room.Skin));
+                    content.Add(new SaveTile(t, Room.Skin, allowEdit));
                     return;
 
                 case TileType.BulletBlocker:
-                    content.Add(new DrawableBulletBlocker(t, Room.Skin, showBulletBlocker));
+                    content.Add(new DrawableBulletBlocker(t, Room.Skin, showBulletBlocker, allowEdit));
                     return;
 
                 case TileType.Cherry:
-                    content.Add(new DrawableCherry(t, Room.Skin, animatedCherry));
+                    content.Add(new DrawableCherry(t, Room.Skin, animatedCherry, allowEdit));
                     return;
 
                 case TileType.PlayerStart:
                     PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
 
                     if (showPlayerSpawn)
-                        content.Add(new DrawableTile(t, Room.Skin));
+                        content.Add(new DrawableTile(t, Room.Skin, allowEdit));
 
                     return;
 
                 default:
-                    content.Add(new DrawableTile(t, Room.Skin));
+                    content.Add(new DrawableTile(t, Room.Skin, allowEdit));
                     return;
             }
         }

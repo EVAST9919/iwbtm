@@ -275,9 +275,9 @@ namespace IWBTM.Game.Screens.Edit
         private DrawableTile createTile(Tile tile, string skin)
         {
             if (tile.Type == TileType.Cherry)
-                return new DrawableCherry(tile, skin, false);
+                return new DrawableCherry(tile, skin, false, false);
 
-            return new DrawableTile(tile, skin);
+            return new DrawableTile(tile, skin, false);
         }
     }
 }

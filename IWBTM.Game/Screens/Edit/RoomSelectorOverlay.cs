@@ -314,7 +314,7 @@ namespace IWBTM.Game.Screens.Edit
                         AutoSizeAxes = Axes.Both,
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Child = new DrawableRoom(room, true, true, false, false)
+                        Child = new DrawableRoom(room, true, true, false, false, false)
                     }
                 });
             }

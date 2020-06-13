@@ -7,8 +7,8 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         private readonly bool animated;
 
-        public DrawableCherry(Tile tile, string skin, bool animated)
-            : base(tile, skin)
+        public DrawableCherry(Tile tile, string skin, bool animated, bool allowEdit)
+            : base(tile, skin, allowEdit)
         {
             this.animated = animated;
             MainSprite.RelativeSizeAxes = Axes.None;
