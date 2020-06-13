@@ -358,7 +358,8 @@ namespace IWBTM.Game.Screens.Play.Player
             if (topDrawableTile != null || middleDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(topDrawableTile?.X ?? double.MinValue, middleDrawableTile?.X ?? double.MinValue);
-                player.X = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.X / 2;
+                var closestDrawableTileSize = Math.Max(topDrawableTile?.Size.X ?? double.MinValue, middleDrawableTile?.Size.X ?? double.MinValue);
+                player.X = (float)(closestDrawableTilePosition + closestDrawableTileSize) + SIZE.X / 2;
             }
             else
                 player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
@@ -390,7 +391,8 @@ namespace IWBTM.Game.Screens.Play.Player
             if (leftDrawableTile != null || rightDrawableTile != null)
             {
                 var closestDrawableTilePosition = Math.Max(leftDrawableTile?.Y ?? double.MinValue, rightDrawableTile?.Y ?? double.MinValue);
-                player.Y = (float)closestDrawableTilePosition + DrawableTile.SIZE + SIZE.Y / 2;
+                var closestDrawableTileSize = Math.Max(leftDrawableTile?.Size.Y ?? double.MinValue, rightDrawableTile?.Size.Y ?? double.MinValue);
+                player.Y = (float)(closestDrawableTilePosition + closestDrawableTileSize) + SIZE.Y / 2;
                 verticalSpeed = 0;
             }
         }
