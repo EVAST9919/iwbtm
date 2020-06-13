@@ -14,6 +14,7 @@ namespace IWBTM.Game.Screens.Create
             AddDropdownItem("Zeus_red");
             AddDropdownItem("Zeus_blue");
             AddDropdownItem("Zelda2");
+            AddDropdownItem("blowgame");
 
             Current.Value = "Default";
         }
