@@ -120,19 +120,11 @@ namespace IWBTM.Game.Screens
                 return;
             }
 
-            var room = selectedRoom.Value;
-
             this.Push(new TestGameplayScreen(new Level
             {
                 Rooms = new List<Room>
                 {
-                    new Room
-                    {
-                        Music = room.Music,
-                        Tiles = room.Tiles,
-                        SizeX = room.SizeX,
-                        SizeY = room.SizeY
-                    }
+                    selectedRoom.Value
                 }
             }, name));
         }
