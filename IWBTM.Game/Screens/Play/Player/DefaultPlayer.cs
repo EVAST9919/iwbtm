@@ -317,16 +317,14 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerRightBorderPosition = player.X + SIZE.X / 2;
 
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
-            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
-            var middleDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
+            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var hasMiddleCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, player.Y), TileGroup.Solid);
+            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
 
-            if (topDrawableTile != null || middleDrawableTile != null)
-            {
-                var closestDrawableTilePosition = Math.Min(topDrawableTile?.X ?? double.MaxValue, middleDrawableTile?.X ?? double.MaxValue);
-                player.X = (int)closestDrawableTilePosition - SIZE.X / 2;
-            }
+            if (hasTopCollision || hasMiddleCollision || hasBottomCollision)
+                player.X = (int)playerRightBorderPosition - SIZE.X / 2;
             else
                 player.X += (float)(max_horizontal_speed * elapsedFrameTime);
         }
@@ -338,10 +336,10 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var middleDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
 
-            if (topDrawableTile != null || middleDrawableTile != null)
+            if (hasTopCollision || hasBottomCollision)
                 onDeath();
         }
 
@@ -350,17 +348,14 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2 - 1;
 
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
-            var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
-            var middleDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.Solid);
+            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var hasMiddleCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, player.Y), TileGroup.Solid);
+            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
 
-            if (topDrawableTile != null || middleDrawableTile != null)
-            {
-                var closestDrawableTilePosition = Math.Max(topDrawableTile?.X ?? double.MinValue, middleDrawableTile?.X ?? double.MinValue);
-                var closestDrawableTileSize = Math.Max(topDrawableTile?.Size.X ?? double.MinValue, middleDrawableTile?.Size.X ?? double.MinValue);
-                player.X = (float)(closestDrawableTilePosition + closestDrawableTileSize) + SIZE.X / 2;
-            }
+            if (hasTopCollision || hasMiddleCollision || hasBottomCollision)
+                player.X = (int)playerLeftBorderPosition + 1 + SIZE.X / 2;
             else
                 player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
         }
@@ -372,10 +367,10 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var topDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var middleDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
 
-            if (topDrawableTile != null || middleDrawableTile != null)
+            if (hasTopCollision || hasBottomCollision)
                 onDeath();
         }
 
@@ -385,14 +380,14 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
-            var rightDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var leftTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.Solid);
+            var rightTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.Solid);
 
-            if (leftDrawableTile != null || rightDrawableTile != null)
+            if (leftTile != null || rightTile != null)
             {
-                var closestDrawableTilePosition = Math.Max(leftDrawableTile?.Y ?? double.MinValue, rightDrawableTile?.Y ?? double.MinValue);
-                var closestDrawableTileSize = Math.Max(leftDrawableTile?.Size.Y ?? double.MinValue, rightDrawableTile?.Size.Y ?? double.MinValue);
-                player.Y = (float)(closestDrawableTilePosition + closestDrawableTileSize) + SIZE.Y / 2;
+                var closestDrawableTilePosition = Math.Max(leftTile?.Y ?? double.MinValue, rightTile?.Y ?? double.MinValue);
+                var closestDrawableTileSize = Math.Max(leftTile?.Size.Y ?? double.MinValue, rightTile?.Size.Y ?? double.MinValue);
+                player.Y = (float)(closestDrawableTilePosition + closestDrawableTileSize + SIZE.Y / 2);
                 verticalSpeed = 0;
             }
         }
@@ -403,27 +398,26 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var rightDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var hasLeftCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var hasRightCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
 
-            if (leftDrawableTile != null || rightDrawableTile != null)
+            if (hasLeftCollision || hasRightCollision)
                 onDeath();
         }
 
         private void checkBottomCollision()
         {
-            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 + 1;
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2;
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
-            var rightDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
+            var leftTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
+            var rightTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.Solid);
 
-            if (leftDrawableTile != null || rightDrawableTile != null)
+            if (leftTile != null || rightTile != null)
             {
-                var closestDrawableTilePosition = Math.Min(leftDrawableTile?.Y ?? double.MaxValue, rightDrawableTile?.Y ?? double.MaxValue);
-                player.Y = (int)Math.Round(closestDrawableTilePosition) - SIZE.Y / 2;
-
+                var closestDrawableTilePosition = Math.Min(leftTile?.Y ?? double.MaxValue, rightTile?.Y ?? double.MaxValue);
+                player.Y = (float)(closestDrawableTilePosition - SIZE.Y / 2);
                 resetJumpLogic();
             }
             else
@@ -442,10 +436,10 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
-            var rightDrawableTile = drawableRoom.GetTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
+            var leftTileCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
+            var rightTileCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
 
-            if (leftDrawableTile != null || rightDrawableTile != null)
+            if (leftTileCollision || rightTileCollision)
                 onDeath();
         }
 
