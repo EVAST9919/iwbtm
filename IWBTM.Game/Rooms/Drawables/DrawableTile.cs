@@ -60,13 +60,6 @@ namespace IWBTM.Game.Rooms.Drawables
             MainSprite.Texture = getTexture();
         }
 
-        public Tile ToTile() => new Tile
-        {
-            PositionX = (int)X,
-            PositionY = (int)Y,
-            Type = Tile.Type
-        };
-
         public void Select() => selectContainer.BorderThickness = 5;
         public void Deselect() => selectContainer.BorderThickness = 0;
 
