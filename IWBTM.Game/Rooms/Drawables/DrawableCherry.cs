@@ -1,48 +1,20 @@
-﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
+﻿using osu.Framework.Graphics;
 using osuTK;
-using osuTK.Graphics;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
     public class DrawableCherry : DrawableTile
     {
-        private readonly Sprite overlay;
-        private readonly Sprite branch;
-
         private readonly bool animated;
 
         public DrawableCherry(Tile tile, string skin, bool animated)
             : base(tile, skin)
         {
             this.animated = animated;
-
-            AddRangeInternal(new Drawable[]
-            {
-                overlay = new Sprite
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    RelativeSizeAxes = Axes.Both,
-                },
-                branch = new Sprite
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    RelativeSizeAxes = Axes.Both,
-                    Position = new Vector2(0, -1)
-                }
-            });
-
-            MainSprite.Colour = Color4.Red;
-        }
-
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-            overlay.Texture = PixelTextures.Get("Objects/Cherry/cherry-1-overlay");
-            branch.Texture = PixelTextures.Get("Objects/Cherry/cherry-1-branch");
+            MainSprite.RelativeSizeAxes = Axes.None;
+            MainSprite.Size = new Vector2(21, 24);
+            MainSprite.Anchor = Anchor.BottomCentre;
+            MainSprite.Origin = Anchor.BottomCentre;
         }
 
         protected override void LoadComplete()
@@ -58,10 +30,7 @@ namespace IWBTM.Game.Rooms.Drawables
         private void updateFrame()
         {
             secondFrame = !secondFrame;
-            MainSprite.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}");
-            branch.Y = secondFrame ? -3 : -1;
-            branch.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-branch");
-            overlay.Texture = PixelTextures.Get($"Objects/Cherry/cherry-{(secondFrame ? 2 : 1)}-overlay");
+            MainSprite.Texture = Textures.Get($"Tiles/{Skin}/cherry-{(secondFrame ? 2 : 1)}") ?? Textures.Get($"Tiles/Default/cherry-{(secondFrame ? 2 : 1)}");
         }
     }
 }

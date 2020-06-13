@@ -6,6 +6,7 @@ using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using IWBTM.Game.UserInterface;
+using osu.Framework.Graphics.Shapes;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
@@ -23,6 +24,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         protected readonly Sprite MainSprite;
         protected readonly string Skin;
+        private readonly Container selectContainer;
 
         public DrawableTile(Tile tile, string skin)
         {
@@ -31,11 +33,24 @@ namespace IWBTM.Game.Rooms.Drawables
 
             Size = GetSize(tile.Type);
             Position = new Vector2(tile.PositionX, tile.PositionY);
-            Masking = true;
-            BorderColour = IWannaColour.Blue;
-            AddInternal(MainSprite = new Sprite
+            AddRangeInternal(new Drawable[]
             {
-                RelativeSizeAxes = Axes.Both
+                MainSprite = new Sprite
+                {
+                    RelativeSizeAxes = Axes.Both
+                },
+                selectContainer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Masking = true,
+                    BorderColour = IWannaColour.Blue,
+                    Child = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0,
+                        AlwaysPresent = true
+                    }
+                }
             });
         }
 
@@ -52,8 +67,8 @@ namespace IWBTM.Game.Rooms.Drawables
             Type = Tile.Type
         };
 
-        public void Select() => BorderThickness = 5;
-        public void Deselect() => BorderThickness = 0;
+        public void Select() => selectContainer.BorderThickness = 5;
+        public void Deselect() => selectContainer.BorderThickness = 0;
 
         private Texture getTexture()
         {
@@ -94,7 +109,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     return Textures.Get($"Tiles/{Skin}/warp") ?? Textures.Get("Tiles/Default/warp");
 
                 case TileType.Cherry:
-                    return PixelTextures.Get("Objects/Cherry/cherry-1");
+                    return Textures.Get($"Tiles/{Skin}/cherry-1") ?? Textures.Get("Tiles/Default/cherry-1");
 
                 case TileType.KillerBlock:
                     return Textures.Get($"Tiles/{Skin}/killerblock") ?? Textures.Get("Tiles/Default/killerblock");
