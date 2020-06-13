@@ -21,7 +21,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public void UpdateAction(DrawableTile tile, TileAction action)
         {
-            foreach (var child in Children)
+            foreach (var child in GetAllTiles())
             {
                 if (child == tile)
                 {
@@ -37,7 +37,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             var snappedPosition = BluePrint.GetSnappedPosition(position, SnapValue.Value);
 
-            if (!this.Any())
+            if (!GetAllTiles().Any())
             {
                 addTile(type, snappedPosition);
                 return;
@@ -91,7 +91,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public void ClearTiles()
         {
-            foreach (var c in Children)
+            foreach (var c in GetAllTiles())
                 c.Expire();
 
             Save();
@@ -99,7 +99,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public void DeselectAll()
         {
-            foreach (var child in Children)
+            foreach (var child in GetAllTiles())
                 child.Deselect();
         }
 
@@ -107,7 +107,9 @@ namespace IWBTM.Game.Screens.Edit
         {
             Scheduler.AddDelayed(() =>
             {
-                Room.Tiles = Children.Select(c => new Tile
+                var tiles = GetAllTiles();
+
+                Room.Tiles = tiles.Select(c => new Tile
                 {
                     Type = c.Tile.Type,
                     PositionX = (int)c.Position.X,
@@ -115,7 +117,7 @@ namespace IWBTM.Game.Screens.Edit
                     Action = c.Tile.Action
                 }).ToList();
 
-                Updated?.Invoke(Children.ToList());
+                Updated?.Invoke(tiles);
             }, 10);
         }
     }

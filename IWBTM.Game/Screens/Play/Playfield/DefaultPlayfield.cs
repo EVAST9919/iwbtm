@@ -1,7 +1,6 @@
 ﻿using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using osu.Framework.Allocation;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Audio;
 using osuTK;
 using IWBTM.Game.Rooms;
@@ -48,10 +47,6 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
             InternalChildren = new Drawable[]
             {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both
-                },
                 DrawableRoom,
                 CreateLayerBehindPlayer(),
                 Player = new DefaultPlayer

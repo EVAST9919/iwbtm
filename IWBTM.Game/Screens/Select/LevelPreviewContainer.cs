@@ -5,7 +5,6 @@ using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Input.Events;
 using osuTK;
@@ -88,14 +87,7 @@ namespace IWBTM.Game.Screens.Select
                 }
             };
 
-            content.AddRange(new Drawable[]
-            {
-                new Box
-                {
-                    RelativeSizeAxes = Axes.Both
-                },
-                new DrawableRoom(room, showPlayerSpawn, true, false, false)
-            });
+            content.Add(new DrawableRoom(room, showPlayerSpawn, true, false, false));
 
             if (deathSpots != null)
             {

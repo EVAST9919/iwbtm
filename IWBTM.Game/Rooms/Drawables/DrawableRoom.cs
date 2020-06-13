@@ -1,11 +1,15 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.Textures;
 using osuTK;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
-    public class DrawableRoom : Container<DrawableTile>
+    public class DrawableRoom : CompositeDrawable
     {
         public Vector2 PlayerSpawnPosition { get; private set; }
 
@@ -16,6 +20,9 @@ namespace IWBTM.Game.Rooms.Drawables
         private readonly bool animatedCherry;
         private readonly bool executeActions;
 
+        private readonly Sprite bg;
+        private readonly Container<DrawableTile> content;
+
         public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions)
         {
             Room = room;
@@ -24,13 +31,31 @@ namespace IWBTM.Game.Rooms.Drawables
             this.animatedCherry = animatedCherry;
             this.executeActions = executeActions;
 
-            Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
-
-            if (room != null)
+            Size = new Vector2(Room.SizeX, Room.SizeY) * DrawableTile.SIZE;
+            Masking = true;
+            AddRangeInternal(new Drawable[]
             {
-                foreach (var t in room.Tiles)
-                    AddTile(t);
-            }
+                bg = new Sprite
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    FillMode = FillMode.Fill
+                },
+                content = new Container<DrawableTile>
+                {
+                    RelativeSizeAxes = Axes.Both
+                }
+            });
+
+            foreach (var t in Room.Tiles)
+                AddTile(t);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(TextureStore textures)
+        {
+            bg.Texture = textures.Get("Tiles/Default/bg");
         }
 
         protected override void LoadComplete()
@@ -43,7 +68,7 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             if (executeActions)
             {
-                foreach (var child in Children)
+                foreach (var child in content.Children)
                 {
                     var action = child.Tile.Action;
 
@@ -69,7 +94,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableTile GetTile(TileType type)
         {
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 if (child.Tile.Type == type)
                     return child;
@@ -82,7 +107,7 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             var tiles = new List<DrawableTile>();
 
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 if (child.Tile.Type == type)
                     tiles.Add(child);
@@ -93,7 +118,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableTile GetTileOfGroupAt(Vector2 pixelPosition, TileGroup group)
         {
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 var tilePosition = child.Position;
                 var tileSize = child.Size;
@@ -113,7 +138,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableTile GetTileAtPixel(Vector2 pixelPosition, TileType type)
         {
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 var tilePosition = child.Position;
                 var tileSize = child.Size;
@@ -133,7 +158,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableTile GetTileAt(Vector2 position, TileType type)
         {
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 if (child.Position == position && child.Tile.Type == type)
                     return child;
@@ -144,7 +169,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public DrawableTile GetAnyTileAt(Vector2 pixelPosition)
         {
-            foreach (var child in Children)
+            foreach (var child in content.Children)
             {
                 var tilePosition = child.Position;
                 var tileSize = child.Size;
@@ -159,32 +184,34 @@ namespace IWBTM.Game.Rooms.Drawables
             return null;
         }
 
+        public List<DrawableTile> GetAllTiles() => content.Children.ToList();
+
         protected void AddTile(Tile t)
         {
             switch (t.Type)
             {
                 case TileType.Save:
-                    Add(new SaveTile(t));
+                    content.Add(new SaveTile(t));
                     break;
 
                 case TileType.BulletBlocker:
-                    Add(new DrawableBulletBlocker(t, showBulletBlocker));
+                    content.Add(new DrawableBulletBlocker(t, showBulletBlocker));
                     break;
 
                 case TileType.Cherry:
-                    Add(new DrawableCherry(t, animatedCherry));
+                    content.Add(new DrawableCherry(t, animatedCherry));
                     break;
 
                 case TileType.PlayerStart:
                     PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
 
                     if (showPlayerSpawn)
-                        Add(new DrawableTile(t));
+                        content.Add(new DrawableTile(t));
 
                     break;
 
                 default:
-                    Add(new DrawableTile(t));
+                    content.Add(new DrawableTile(t));
                     break;
             }
         }

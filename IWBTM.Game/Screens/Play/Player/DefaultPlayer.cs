@@ -257,7 +257,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkSpikes()
         {
-            foreach (var t in drawableRoom.Children)
+            foreach (var t in drawableRoom.GetAllTiles())
             {
                 if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
                 {
@@ -290,7 +290,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (died || completed)
                 return;
 
-            foreach (var t in drawableRoom.Children)
+            foreach (var t in drawableRoom.GetAllTiles())
             {
                 if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
                 {
