@@ -57,47 +57,47 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (Tile.Type)
             {
                 case TileType.PlatformCorner:
-                    return PixelTextures.Get("Tiles/platform-corner");
+                    return PixelTextures.Get("Tiles/Default/platform-corner");
 
                 case TileType.PlatformMiddle:
-                    return PixelTextures.Get("Tiles/platform-middle");
+                    return PixelTextures.Get("Tiles/Default/platform-middle");
 
                 case TileType.PlatformMiddleRotated:
-                    return PixelTextures.Get("Tiles/platform-middle-rotated");
+                    return PixelTextures.Get("Tiles/Default/platform-middle-rotated");
 
                 case TileType.PlayerStart:
-                    return Textures.Get("Tiles/player-start");
+                    return Textures.Get("Tiles/Default/player-start");
 
                 case TileType.SmallSpikeBottom:
                 case TileType.SpikeBottom:
-                    return Textures.Get("Tiles/spike-bottom");
+                    return Textures.Get("Tiles/Default/spike-bottom");
 
                 case TileType.SmallSpikeTop:
                 case TileType.SpikeTop:
-                    return Textures.Get("Tiles/spike-top");
+                    return Textures.Get("Tiles/Default/spike-top");
 
                 case TileType.SmallSpikeLeft:
                 case TileType.SpikeLeft:
-                    return Textures.Get("Tiles/spike-left");
+                    return Textures.Get("Tiles/Default/spike-left");
 
                 case TileType.SmallSpikeRight:
                 case TileType.SpikeRight:
-                    return Textures.Get("Tiles/spike-right");
+                    return Textures.Get("Tiles/Default/spike-right");
 
                 case TileType.Save:
-                    return Textures.Get("Tiles/save");
+                    return Textures.Get("Tiles/Default/save");
 
                 case TileType.Warp:
-                    return Textures.Get("Tiles/warp");
+                    return Textures.Get("Tiles/Default/warp");
 
                 case TileType.Cherry:
                     return PixelTextures.Get("Objects/Cherry/cherry-1");
 
                 case TileType.KillerBlock:
-                    return Textures.Get("Tiles/killerblock");
+                    return Textures.Get("Tiles/Default/killerblock");
 
                 case TileType.BulletBlocker:
-                    return Textures.Get("Tiles/bulletblocker");
+                    return Textures.Get("Tiles/Default/bulletblocker");
             }
 
             throw new NotImplementedException("Tile is not implemented");
