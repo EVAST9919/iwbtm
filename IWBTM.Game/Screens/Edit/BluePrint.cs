@@ -97,7 +97,7 @@ namespace IWBTM.Game.Screens.Edit
 
                     if (tile != null)
                     {
-                        tile.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
+                        tile.Position = GetSnappedPosition(mousePosition, SnapValue.Value, tile.Tile.Type);
                         TileToEdit.Value = null;
                         TileToEdit.Value = tile;
                         objectsLayer.Save();
@@ -113,7 +113,7 @@ namespace IWBTM.Game.Screens.Edit
                     t.Alpha = 0.5f;
                 });
 
-            tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value);
+            tileToPlace.Position = GetSnappedPosition(mousePosition, SnapValue.Value, Selected.Value);
 
             if (buttons.IsPressed(MouseButton.Left))
             {
@@ -262,9 +262,14 @@ namespace IWBTM.Game.Screens.Edit
             return base.OnKeyDown(e);
         }
 
-        public static Vector2 GetSnappedPosition(Vector2 input, int snapValue)
+        public static Vector2 GetSnappedPosition(Vector2 input, int snapValue, TileType type)
         {
-            return new Vector2((int)(input.X / snapValue), (int)(input.Y / snapValue)) * snapValue;
+            var position = new Vector2((int)(input.X / snapValue), (int)(input.Y / snapValue)) * snapValue;
+
+            if (type == TileType.Cherry)
+                position -= DrawableTile.GetSize(type) / 2f;
+
+            return position;
         }
 
         private DrawableTile createTile(Tile tile, string skin)
