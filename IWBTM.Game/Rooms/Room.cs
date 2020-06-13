@@ -6,6 +6,8 @@ namespace IWBTM.Game.Rooms
     {
         public string Music { get; set; }
 
+        public string Skin { get; set; }
+
         public List<Tile> Tiles { get; set; }
 
         public float SizeX { get; set; } = 25;

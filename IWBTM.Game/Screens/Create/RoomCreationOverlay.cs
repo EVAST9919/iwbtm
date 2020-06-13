@@ -22,6 +22,7 @@ namespace IWBTM.Game.Screens.Create
 
         private readonly Container content;
         protected readonly MusicSelector MusicSelector;
+        protected readonly SkinSelector SkinSelector;
         protected readonly SizeSetting SizeSetting;
         private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
         private readonly BasicCheckbox createBorders;
@@ -64,6 +65,16 @@ namespace IWBTM.Game.Screens.Create
                                     Origin = Anchor.Centre,
                                     LabelText = "Create borders",
                                     Alpha = showCreationSettings ? 1 : 0
+                                },
+                                new SettingName("Skin"),
+                                new Container
+                                {
+                                    Width = 300,
+                                    Height = 40,
+                                    Anchor = Anchor.Centre,
+                                    Depth = -int.MaxValue,
+                                    Origin = Anchor.Centre,
+                                    Child = SkinSelector = new SkinSelector()
                                 },
                                 new SettingName("Audio"),
                                 new Container
@@ -184,6 +195,7 @@ namespace IWBTM.Game.Screens.Create
             return new Room
             {
                 Music = MusicSelector.Current.Value,
+                Skin = SkinSelector.Current.Value,
                 Tiles = tiles,
                 SizeX = xSize,
                 SizeY = ySize

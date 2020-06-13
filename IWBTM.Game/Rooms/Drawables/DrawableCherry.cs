@@ -13,8 +13,8 @@ namespace IWBTM.Game.Rooms.Drawables
 
         private readonly bool animated;
 
-        public DrawableCherry(Tile tile, bool animated)
-            : base(tile)
+        public DrawableCherry(Tile tile, string skin, bool animated)
+            : base(tile, skin)
         {
             this.animated = animated;
 

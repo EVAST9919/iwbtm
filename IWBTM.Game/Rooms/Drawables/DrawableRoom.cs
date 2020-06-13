@@ -57,7 +57,7 @@ namespace IWBTM.Game.Rooms.Drawables
         [BackgroundDependencyLoader]
         private void load(TextureStore textures)
         {
-            bg.Texture = textures.Get("Tiles/Default/bg");
+            bg.Texture = textures.Get($"Tiles/{Room.Skin}/bg") ?? textures.Get("Tiles/Default/bg");
         }
 
         protected override void LoadComplete()
@@ -191,28 +191,28 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (t.Type)
             {
                 case TileType.Save:
-                    content.Add(new SaveTile(t));
-                    break;
+                    content.Add(new SaveTile(t, Room.Skin));
+                    return;
 
                 case TileType.BulletBlocker:
-                    content.Add(new DrawableBulletBlocker(t, showBulletBlocker));
-                    break;
+                    content.Add(new DrawableBulletBlocker(t, Room.Skin, showBulletBlocker));
+                    return;
 
                 case TileType.Cherry:
-                    content.Add(new DrawableCherry(t, animatedCherry));
-                    break;
+                    content.Add(new DrawableCherry(t, Room.Skin, animatedCherry));
+                    return;
 
                 case TileType.PlayerStart:
                     PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
 
                     if (showPlayerSpawn)
-                        content.Add(new DrawableTile(t));
+                        content.Add(new DrawableTile(t, Room.Skin));
 
-                    break;
+                    return;
 
                 default:
-                    content.Add(new DrawableTile(t));
-                    break;
+                    content.Add(new DrawableTile(t, Room.Skin));
+                    return;
             }
         }
     }

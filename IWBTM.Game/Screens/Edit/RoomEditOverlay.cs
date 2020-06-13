@@ -19,9 +19,11 @@ namespace IWBTM.Game.Screens.Edit
         {
             roomToEdit = room;
             var music = room.Music;
+            var skin = room.Skin;
 
             SizeSetting.Current.Value = new Vector2(room.SizeX, room.SizeY);
             MusicSelector.Current.Value = string.IsNullOrEmpty(music) ? "none" : music;
+            SkinSelector.Current.Value = string.IsNullOrEmpty(skin) ? "Default" : skin;
 
             Show();
         }
@@ -33,6 +35,7 @@ namespace IWBTM.Game.Screens.Edit
             roomToEdit = new Room
             {
                 Music = MusicSelector.Current.Value,
+                Skin = SkinSelector.Current.Value,
                 SizeX = newSize.X,
                 SizeY = newSize.Y,
                 Tiles = convertTiles(roomToEdit, newSize)

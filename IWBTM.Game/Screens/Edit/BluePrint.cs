@@ -21,9 +21,12 @@ namespace IWBTM.Game.Screens.Edit
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
         private readonly ActionsLayer actionsLayer;
+        private readonly Room room;
 
         public BluePrint(Room room)
         {
+            this.room = room;
+
             Size = new Vector2(room.SizeX, room.SizeY) * DrawableTile.SIZE;
 
             Grid grid;
@@ -105,7 +108,7 @@ namespace IWBTM.Game.Screens.Edit
             }
 
             if (!hoverLayer.Any())
-                hoverLayer.Child = tileToPlace = createTile(new Tile { Type = Selected.Value }).With(t =>
+                hoverLayer.Child = tileToPlace = createTile(new Tile { Type = Selected.Value }, room.Skin).With(t =>
                 {
                     t.Alpha = 0.5f;
                 });
@@ -264,12 +267,12 @@ namespace IWBTM.Game.Screens.Edit
             return new Vector2((int)(input.X / snapValue), (int)(input.Y / snapValue)) * snapValue;
         }
 
-        private static DrawableTile createTile(Tile tile)
+        private DrawableTile createTile(Tile tile, string skin)
         {
             if (tile.Type == TileType.Cherry)
-                return new DrawableCherry(tile, false);
+                return new DrawableCherry(tile, skin, false);
 
-            return new DrawableTile(tile);
+            return new DrawableTile(tile, skin);
         }
     }
 }
