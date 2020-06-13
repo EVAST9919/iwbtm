@@ -77,6 +77,9 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.PlatformCorner:
                     return PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get($"Tiles/Default/block");
 
+                case TileType.Miniblock:
+                    return PixelTextures.Get($"Tiles/{Skin}/miniblock") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get($"Tiles/Default/miniblock");
+
                 case TileType.PlatformMiddle:
                     return PixelTextures.Get($"Tiles/{Skin}/platform-middle") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get("Tiles/Default/platform-middle");
 
@@ -137,6 +140,7 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SmallSpikeTop:
                 case TileType.SmallSpikeLeft:
                 case TileType.SmallSpikeRight:
+                case TileType.Miniblock:
                     return new Vector2(SIZE / 2);
 
                 case TileType.Cherry:
@@ -173,6 +177,7 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.PlatformCorner:
                 case TileType.PlatformMiddle:
                 case TileType.PlatformMiddleRotated:
+                case TileType.Miniblock:
                     return TileGroup.Solid;
 
                 case TileType.Cherry:
@@ -204,6 +209,7 @@ namespace IWBTM.Game.Rooms.Drawables
         PlatformCorner,
         PlatformMiddle,
         PlatformMiddleRotated,
+        Miniblock,
         PlayerStart,
         SpikeTop,
         SpikeBottom,
