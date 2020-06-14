@@ -28,7 +28,7 @@ namespace IWBTM.Game.Helpers
             return false;
         }
 
-        public static bool CollidedWithCherry(Vector2 playerPosition, DrawableTile tile)
+        public static bool CollidedWithCircle(Vector2 playerPosition, DrawableTile tile)
         {
             var radius = tile.Size.X / 2;
             var circlePosition = new Vector2(tile.Position.X + radius, tile.Position.Y + radius);

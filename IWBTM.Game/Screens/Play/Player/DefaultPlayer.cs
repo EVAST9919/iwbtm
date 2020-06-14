@@ -244,6 +244,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
             checkSpikes();
             checkCherries();
+            checkJumpRefresher();
             updatePlayerState();
             checkCompletion();
         }
@@ -294,9 +295,9 @@ namespace IWBTM.Game.Screens.Play.Player
             {
                 if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
                 {
-                    if (DrawableTile.IsGroup(t, TileGroup.Cherry))
+                    if (t.Tile.Type == TileType.Cherry)
                     {
-                        if (CollisionHelper.CollidedWithCherry(PlayerPosition(), t))
+                        if (CollisionHelper.CollidedWithCircle(PlayerPosition(), t))
                         {
                             onDeath();
                             return;
@@ -441,6 +442,30 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (leftTileCollision || rightTileCollision)
                 onDeath();
+        }
+
+        private void checkJumpRefresher()
+        {
+            foreach (var t in drawableRoom.Tiles)
+            {
+                if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
+                {
+                    if (t.Tile.Type == TileType.Jumprefresher)
+                    {
+                        var refresher = (DrawableJumpRefresher)t;
+
+                        if (refresher.IsActive)
+                        {
+                            if (CollisionHelper.CollidedWithCircle(PlayerPosition(), t))
+                            {
+                                refresher.Deactivate();
+                                availableJumpCount = 1;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void resetJumpLogic()

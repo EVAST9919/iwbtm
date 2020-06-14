@@ -121,6 +121,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.BulletBlocker:
                     return Textures.Get($"Tiles/{Skin}/bulletblocker") ?? Textures.Get("Tiles/Default/bulletblocker");
+
+                case TileType.Jumprefresher:
+                    return Textures.Get($"Tiles/{Skin}/jumprefresher") ?? Textures.Get("Tiles/Default/jumprefresher");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -139,6 +142,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.Cherry:
                     return new Vector2(21, 22);
+
+                case TileType.Jumprefresher:
+                    return new Vector2(13);
 
                 default:
                     return new Vector2(SIZE);
@@ -192,6 +198,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.BulletBlocker:
                     return TileGroup.BulletBlocker;
+
+                case TileType.Jumprefresher:
+                    return TileGroup.Jumprefresher;
             }
 
             return TileGroup.Ungrouped;
@@ -217,7 +226,8 @@ namespace IWBTM.Game.Rooms.Drawables
         Cherry,
         KillerBlock,
         BulletBlocker,
-        Miniblock
+        Miniblock,
+        Jumprefresher
     }
 
     public enum TileGroup
@@ -230,6 +240,7 @@ namespace IWBTM.Game.Rooms.Drawables
         Cherry,
         KillerBlock,
         BulletBlocker,
+        Jumprefresher,
         Ungrouped
     }
 }

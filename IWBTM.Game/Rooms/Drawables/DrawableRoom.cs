@@ -70,19 +70,22 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public void RestartAnimations()
         {
-            if (executeActions)
+            foreach (var tile in Tiles)
             {
-                foreach (var child in content.Children)
+                if (executeActions)
                 {
-                    var action = child.Tile.Action;
+                    var action = tile.Tile.Action;
 
                     if (action != null)
                     {
-                        child.ClearTransforms();
-                        child.Position = new Vector2(child.Tile.PositionX, child.Tile.PositionY);
-                        child.MoveTo(new Vector2(action.EndX, action.EndY), action.Time).Then().MoveTo(new Vector2(child.Tile.PositionX, child.Tile.PositionY), action.Time).Loop();
+                        tile.ClearTransforms();
+                        tile.Position = new Vector2(tile.Tile.PositionX, tile.Tile.PositionY);
+                        tile.MoveTo(new Vector2(action.EndX, action.EndY), action.Time).Then().MoveTo(new Vector2(tile.Tile.PositionX, tile.Tile.PositionY), action.Time).Loop();
                     }
                 }
+
+                if (tile is DrawableJumpRefresher)
+                    ((DrawableJumpRefresher)tile).Activate();
             }
         }
 
@@ -192,6 +195,10 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             switch (t.Type)
             {
+                case TileType.Jumprefresher:
+                    content.Add(new DrawableJumpRefresher(t, Room.Skin, allowEdit));
+                    return;
+
                 case TileType.Save:
                     content.Add(new SaveTile(t, Room.Skin, allowEdit));
                     return;

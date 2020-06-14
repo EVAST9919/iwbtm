@@ -266,7 +266,7 @@ namespace IWBTM.Game.Screens.Edit
         {
             var position = new Vector2((int)(input.X / snapValue), (int)(input.Y / snapValue)) * snapValue;
 
-            if (type == TileType.Cherry)
+            if (type == TileType.Cherry || type == TileType.Jumprefresher)
                 position -= DrawableTile.GetSize(type) / 2f;
 
             return position;
