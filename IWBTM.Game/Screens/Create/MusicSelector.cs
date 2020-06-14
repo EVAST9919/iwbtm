@@ -13,6 +13,7 @@ namespace IWBTM.Game.Screens.Create
             AddDropdownItem("room-1");
             AddDropdownItem("room-2");
             AddDropdownItem("room-3");
+            AddDropdownItem("room-4");
 
             Current.Value = "none";
         }
