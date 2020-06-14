@@ -234,12 +234,9 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (midAir)
             {
-                var legacyDistance = verticalSpeed;
-                var adjustedDistance = legacyDistance * (elapsedFrameTime / 20);
-
-                player.Y -= (float)adjustedDistance;
-
-                verticalSpeed -= gravity * (elapsedFrameTime / 20);
+                var timeDifference = elapsedFrameTime / 20;
+                player.Y -= (float)(verticalSpeed * timeDifference);
+                verticalSpeed -= gravity * timeDifference;
             }
 
             checkSpikes();
