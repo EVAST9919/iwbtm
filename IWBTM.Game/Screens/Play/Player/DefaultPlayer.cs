@@ -260,16 +260,16 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             foreach (var t in drawableRoom.Tiles)
             {
-                if (MathExtensions.Distance(PlayerPosition(), t.Position) < 64)
+                if (MathExtensions.Distance(PlayerPosition(), t.Position) > 64)
+                    continue;
+
+                if (!DrawableTile.IsGroup(t, TileGroup.Spike))
+                    continue;
+
+                if (CollisionHelper.Collided(PlayerPosition(), t))
                 {
-                    if (DrawableTile.IsGroup(t, TileGroup.Spike))
-                    {
-                        if (CollisionHelper.Collided(PlayerPosition(), t))
-                        {
-                            onDeath();
-                            return;
-                        }
-                    }
+                    onDeath();
+                    return;
                 }
             }
         }
@@ -279,7 +279,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (died || completed)
                 return;
 
-            if (drawableRoom.HasTileOfGroupAt(PlayerPosition(), TileGroup.Warp))
+            if (drawableRoom.HasTileAtPixel(PlayerPosition(), TileType.Warp))
             {
                 completed = true;
                 Completed?.Invoke();
@@ -337,8 +337,8 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+            var hasTopCollision = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileType.KillerBlock);
+            var hasBottomCollision = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerMiddleBorderPosition), TileType.KillerBlock);
 
             if (hasTopCollision || hasBottomCollision)
                 onDeath();
@@ -368,8 +368,8 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerTopBorderPosition = player.Y - SIZE.Y / 2;
             var playerMiddleBorderPosition = player.Y + SIZE.Y / 2 - 1;
 
-            var hasTopCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var hasBottomCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileGroup.KillerBlock);
+            var hasTopCollision = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileType.KillerBlock);
+            var hasBottomCollision = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerMiddleBorderPosition), TileType.KillerBlock);
 
             if (hasTopCollision || hasBottomCollision)
                 onDeath();
@@ -399,8 +399,8 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var hasLeftCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
-            var hasRightCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileGroup.KillerBlock);
+            var hasLeftCollision = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileType.KillerBlock);
+            var hasRightCollision = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileType.KillerBlock);
 
             if (hasLeftCollision || hasRightCollision)
                 onDeath();
@@ -437,8 +437,8 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftTileCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
-            var rightTileCollision = drawableRoom.HasTileOfGroupAt(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileGroup.KillerBlock);
+            var leftTileCollision = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileType.KillerBlock);
+            var rightTileCollision = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileType.KillerBlock);
 
             if (leftTileCollision || rightTileCollision)
                 onDeath();

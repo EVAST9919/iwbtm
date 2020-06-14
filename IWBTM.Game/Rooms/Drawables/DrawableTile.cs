@@ -155,33 +155,21 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             var type = tile?.Tile.Type ?? null;
 
-            if (GetGroup(type) == group)
+            if (getGroup(type) == group)
                 return true;
 
             return false;
         }
 
-        public static TileGroup GetGroup(TileType? type)
+        private static TileGroup getGroup(TileType? type)
         {
             switch (type)
             {
-                case TileType.Save:
-                    return TileGroup.Save;
-
-                case TileType.PlayerStart:
-                    return TileGroup.Start;
-
-                case TileType.Warp:
-                    return TileGroup.Warp;
-
                 case TileType.PlatformCorner:
                 case TileType.PlatformMiddle:
                 case TileType.PlatformMiddleRotated:
                 case TileType.Miniblock:
                     return TileGroup.Solid;
-
-                case TileType.Cherry:
-                    return TileGroup.Cherry;
 
                 case TileType.SmallSpikeBottom:
                 case TileType.SmallSpikeLeft:
@@ -192,15 +180,6 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.SpikeRight:
                 case TileType.SpikeTop:
                     return TileGroup.Spike;
-
-                case TileType.KillerBlock:
-                    return TileGroup.KillerBlock;
-
-                case TileType.BulletBlocker:
-                    return TileGroup.BulletBlocker;
-
-                case TileType.Jumprefresher:
-                    return TileGroup.Jumprefresher;
             }
 
             return TileGroup.Ungrouped;
@@ -234,13 +213,6 @@ namespace IWBTM.Game.Rooms.Drawables
     {
         Solid,
         Spike,
-        Warp,
-        Save,
-        Start,
-        Cherry,
-        KillerBlock,
-        BulletBlocker,
-        Jumprefresher,
         Ungrouped
     }
 }

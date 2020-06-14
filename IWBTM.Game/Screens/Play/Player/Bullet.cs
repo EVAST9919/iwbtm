@@ -56,12 +56,6 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
             }
 
-            if (!drawableRoom.HasAnyTileAt(position))
-            {
-                move();
-                return;
-            }
-
             if (drawableRoom.HasTileOfGroupAt(position, TileGroup.Solid))
             {
                 Expire();
