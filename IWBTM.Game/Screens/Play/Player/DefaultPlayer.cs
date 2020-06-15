@@ -450,10 +450,10 @@ namespace IWBTM.Game.Screens.Play.Player
             var playerLeftBorderPosition = player.X - SIZE.X / 2;
             var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
 
-            var leftBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileType.Water);
-            var rightBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileType.Water);
-            var leftTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileType.Water);
-            var rightTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileType.Water);
+            var leftBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileType.Water3);
+            var rightBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileType.Water3);
+            var leftTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileType.Water3);
+            var rightTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileType.Water3);
 
             if (leftBottomCornerInWater || rightBottomCornerInWater || leftTopCornerInWater || rightTopCornerInWater)
                 return true;

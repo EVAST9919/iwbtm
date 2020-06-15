@@ -197,7 +197,7 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             switch (t.Type)
             {
-                case TileType.Water:
+                case TileType.Water3:
                     content.Add(new DrawableTile(t, Room.Skin, allowEdit)
                     {
                         Alpha = showWater ? 1 : 0

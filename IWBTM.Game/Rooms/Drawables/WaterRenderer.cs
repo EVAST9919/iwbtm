@@ -11,7 +11,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
             foreach (var tile in room.Tiles)
             {
-                if (tile.Type == TileType.Water)
+                if (tile.Type == TileType.Water3)
                     AddInternal(new DrawableTile(tile, room.Skin, false));
             }
         }

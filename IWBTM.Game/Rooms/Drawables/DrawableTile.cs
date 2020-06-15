@@ -125,7 +125,7 @@ namespace IWBTM.Game.Rooms.Drawables
                 case TileType.Jumprefresher:
                     return Textures.Get($"Tiles/{Skin}/jumprefresher") ?? Textures.Get("Tiles/Default/jumprefresher");
 
-                case TileType.Water:
+                case TileType.Water3:
                     return PixelTextures.Get($"Tiles/{Skin}/water3") ?? PixelTextures.Get("Tiles/Default/water3");
             }
 
@@ -210,7 +210,7 @@ namespace IWBTM.Game.Rooms.Drawables
         BulletBlocker,
         Miniblock,
         Jumprefresher,
-        Water
+        Water3
     }
 
     public enum TileGroup
