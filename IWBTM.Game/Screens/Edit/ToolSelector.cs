@@ -104,7 +104,7 @@ namespace IWBTM.Game.Screens.Edit
                 }
             };
 
-            if (!DrawableTile.IsGroup(tile.NewValue, TileGroup.Spike))
+            if (!DrawableTile.IsGroup(tile.NewValue, TileGroup.Spike) && tile.NewValue.Tile.Type != TileType.Cherry)
                 return;
 
             var hasAction = tile.NewValue.Tile.Action != null;
