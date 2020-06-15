@@ -15,7 +15,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public List<DrawableTile> Tiles => content.Children.ToList();
 
-        protected Room Room { get; set; }
+        public Room Room { get; set; }
 
         private readonly bool showPlayerSpawn;
         private readonly bool showBulletBlocker;

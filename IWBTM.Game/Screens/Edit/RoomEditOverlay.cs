@@ -20,10 +20,12 @@ namespace IWBTM.Game.Screens.Edit
             roomToEdit = room;
             var music = room.Music;
             var skin = room.Skin;
+            var completion = room.RoomCompletionType;
 
             SizeSetting.Current.Value = new Vector2(room.SizeX, room.SizeY);
             MusicSelector.Current.Value = string.IsNullOrEmpty(music) ? "none" : music;
             SkinSelector.Current.Value = string.IsNullOrEmpty(skin) ? "Default" : skin;
+            RoomCompletionSelector.Current.Value = completion;
 
             Show();
         }
@@ -36,6 +38,7 @@ namespace IWBTM.Game.Screens.Edit
             {
                 Music = MusicSelector.Current.Value,
                 Skin = SkinSelector.Current.Value,
+                RoomCompletionType = RoomCompletionSelector.Current.Value,
                 SizeX = newSize.X,
                 SizeY = newSize.Y,
                 Tiles = convertTiles(roomToEdit, newSize)

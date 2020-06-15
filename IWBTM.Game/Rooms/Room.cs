@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using IWBTM.Game.Screens.Create;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Rooms
 {
@@ -13,5 +14,7 @@ namespace IWBTM.Game.Rooms
         public float SizeX { get; set; } = 25;
 
         public float SizeY { get; set; } = 19;
+
+        public RoomCompletionType RoomCompletionType { get; set; } = RoomCompletionType.Warp;
     }
 }

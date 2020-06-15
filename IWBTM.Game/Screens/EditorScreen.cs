@@ -2,6 +2,7 @@
 using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Create;
 using IWBTM.Game.Screens.Edit;
 using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Allocation;
@@ -139,7 +140,7 @@ namespace IWBTM.Game.Screens
                     return;
                 }
 
-                if (!RoomHelper.EndDefined(rooms[i]))
+                if (rooms[i].RoomCompletionType == RoomCompletionType.Warp && !RoomHelper.EndDefined(rooms[i]))
                 {
                     notifications.Push($"Room end is not defined in room-{i}", NotificationState.Bad);
                     return;

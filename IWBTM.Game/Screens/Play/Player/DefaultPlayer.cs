@@ -13,6 +13,7 @@ using osuTK.Graphics;
 using osu.Framework.Utils;
 using IWBTM.Game.Helpers;
 using IWBTM.Game.Rooms.Drawables;
+using IWBTM.Game.Screens.Create;
 
 namespace IWBTM.Game.Screens.Play.Player
 {
@@ -208,7 +209,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
             checkBorders();
 
-            if (died)
+            if (died || completed)
                 return;
 
             if (verticalSpeed <= 0)
@@ -263,9 +264,20 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkBorders()
         {
-            if (PlayerPosition().X - SIZE.X / 2f <= 0 || PlayerPosition().X + SIZE.X / 2f >= drawableRoom.Size.X
+            if (drawableRoom.Room.RoomCompletionType == RoomCompletionType.Warp)
+            {
+                if (PlayerPosition().X - SIZE.X / 2f <= 0 || PlayerPosition().X + SIZE.X / 2f >= drawableRoom.Size.X
                 || PlayerPosition().Y - SIZE.Y / 2f <= 0 || PlayerPosition().Y + SIZE.Y / 2f + 1 >= drawableRoom.Size.Y)
-                onDeath();
+                    onDeath();
+            }
+            else
+            {
+                if (PlayerPosition().X <= 0 || PlayerPosition().X >= drawableRoom.Size.X || PlayerPosition().Y <= 0 || PlayerPosition().Y >= drawableRoom.Size.Y)
+                {
+                    completed = true;
+                    Completed?.Invoke();
+                }
+            }
         }
 
         private void checkSpikes()

@@ -23,6 +23,7 @@ namespace IWBTM.Game.Screens.Create
         private readonly Container content;
         protected readonly MusicSelector MusicSelector;
         protected readonly SkinSelector SkinSelector;
+        protected readonly RoomCompletionSelector RoomCompletionSelector;
         protected readonly SizeSetting SizeSetting;
         private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
         private readonly BasicCheckbox createBorders;
@@ -66,13 +67,23 @@ namespace IWBTM.Game.Screens.Create
                                     LabelText = "Create borders",
                                     Alpha = showCreationSettings ? 1 : 0
                                 },
-                                new SettingName("Skin"),
+                                new SettingName("Room completion"),
                                 new Container
                                 {
                                     Width = 300,
                                     Height = 40,
                                     Anchor = Anchor.Centre,
                                     Depth = -int.MaxValue,
+                                    Origin = Anchor.Centre,
+                                    Child = RoomCompletionSelector = new RoomCompletionSelector()
+                                },
+                                new SettingName("Skin"),
+                                new Container
+                                {
+                                    Width = 300,
+                                    Height = 40,
+                                    Anchor = Anchor.Centre,
+                                    Depth = -20,
                                     Origin = Anchor.Centre,
                                     Child = SkinSelector = new SkinSelector()
                                 },
@@ -196,6 +207,7 @@ namespace IWBTM.Game.Screens.Create
             {
                 Music = MusicSelector.Current.Value,
                 Skin = SkinSelector.Current.Value,
+                RoomCompletionType = RoomCompletionSelector.Current.Value,
                 Tiles = tiles,
                 SizeX = xSize,
                 SizeY = ySize
