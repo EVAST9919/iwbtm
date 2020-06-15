@@ -124,6 +124,9 @@ namespace IWBTM.Game.Rooms.Drawables
 
                 case TileType.Jumprefresher:
                     return Textures.Get($"Tiles/{Skin}/jumprefresher") ?? Textures.Get("Tiles/Default/jumprefresher");
+
+                case TileType.Water:
+                    return PixelTextures.Get($"Tiles/{Skin}/water3") ?? PixelTextures.Get("Tiles/Default/water3");
             }
 
             throw new NotImplementedException("Tile is not implemented");
@@ -206,7 +209,8 @@ namespace IWBTM.Game.Rooms.Drawables
         KillerBlock,
         BulletBlocker,
         Miniblock,
-        Jumprefresher
+        Jumprefresher,
+        Water
     }
 
     public enum TileGroup

@@ -27,6 +27,7 @@ namespace IWBTM.Game.Screens.Play.Player
         private const double jump2_speed = 7;
         private const double gravity = 0.426; // 0.4 is legacy, but this one matches better for some reason
         private const double max_vertical_speed = 9;
+        private const double max_water_vertical_speed = 2;
 
         public readonly Bindable<PlayerState> State = new Bindable<PlayerState>(PlayerState.Idle);
         public readonly Bindable<bool> ShowHitbox = new Bindable<bool>();
@@ -182,13 +183,6 @@ namespace IWBTM.Game.Screens.Play.Player
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
 
-            // Limit vertical speed
-            if (Math.Abs(verticalSpeed) > max_vertical_speed)
-                verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
-
-            if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
-                verticalSpeed = 0;
-
             if (verticalSpeed <= 0)
             {
                 checkBottomCollision();
@@ -231,6 +225,27 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (died)
                 return;
+
+            bool inWater = checkWater();
+
+            if (verticalSpeed > 0)
+            {
+                if (Math.Abs(verticalSpeed) > max_vertical_speed)
+                    verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
+            }
+            else
+            {
+                var maxVerticalSpeed = inWater ? max_water_vertical_speed : max_vertical_speed;
+
+                if (verticalSpeed < -maxVerticalSpeed)
+                    verticalSpeed = -maxVerticalSpeed;
+            }
+
+            if (inWater && State.Value == PlayerState.Fall)
+                availableJumpCount = 1;
+
+            if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
+                verticalSpeed = 0;
 
             if (midAir)
             {
@@ -426,6 +441,24 @@ namespace IWBTM.Game.Screens.Play.Player
                     availableJumpCount = 1;
                 }
             }
+        }
+
+        private bool checkWater()
+        {
+            var playerBottomBorderPosition = player.Y + SIZE.Y / 2 - 1;
+            var playerTopBorderPosition = player.Y - SIZE.Y / 2;
+            var playerLeftBorderPosition = player.X - SIZE.X / 2;
+            var playerRightBorderPosition = player.X + SIZE.X / 2 - 1;
+
+            var leftBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerBottomBorderPosition), TileType.Water);
+            var rightBottomCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerBottomBorderPosition), TileType.Water);
+            var leftTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerLeftBorderPosition, playerTopBorderPosition), TileType.Water);
+            var rightTopCornerInWater = drawableRoom.HasTileAtPixel(new Vector2(playerRightBorderPosition, playerTopBorderPosition), TileType.Water);
+
+            if (leftBottomCornerInWater || rightBottomCornerInWater || leftTopCornerInWater || rightTopCornerInWater)
+                return true;
+
+            return false;
         }
 
         private void checkBottomKillerBlock()

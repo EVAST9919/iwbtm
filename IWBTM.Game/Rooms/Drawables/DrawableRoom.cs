@@ -22,11 +22,12 @@ namespace IWBTM.Game.Rooms.Drawables
         private readonly bool animatedCherry;
         private readonly bool executeActions;
         private readonly bool allowEdit;
+        private readonly bool showWater;
 
         private readonly Sprite bg;
         private readonly Container<DrawableTile> content;
 
-        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions, bool allowEdit)
+        public DrawableRoom(Room room, bool showPlayerSpawn, bool showBulletBlocker, bool animatedCherry, bool executeActions, bool allowEdit, bool showWater)
         {
             Room = room;
             this.showPlayerSpawn = showPlayerSpawn;
@@ -34,6 +35,7 @@ namespace IWBTM.Game.Rooms.Drawables
             this.animatedCherry = animatedCherry;
             this.executeActions = executeActions;
             this.allowEdit = allowEdit;
+            this.showWater = showWater;
 
             Size = new Vector2(Room.SizeX, Room.SizeY) * DrawableTile.SIZE;
             Masking = true;
@@ -195,6 +197,13 @@ namespace IWBTM.Game.Rooms.Drawables
         {
             switch (t.Type)
             {
+                case TileType.Water:
+                    content.Add(new DrawableTile(t, Room.Skin, allowEdit)
+                    {
+                        Alpha = showWater ? 1 : 0
+                    });
+                    return;
+
                 case TileType.Jumprefresher:
                     content.Add(new DrawableJumpRefresher(t, Room.Skin, allowEdit));
                     return;
