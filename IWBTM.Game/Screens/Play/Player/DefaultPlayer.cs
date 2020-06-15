@@ -176,12 +176,40 @@ namespace IWBTM.Game.Screens.Play.Player
             if (died || completed)
                 return;
 
+            var elapsedFrameTime = Clock.ElapsedFrameTime;
+
+            bool inWater = checkWater();
+
+            if (verticalSpeed > 0)
+            {
+                if (Math.Abs(verticalSpeed) > max_vertical_speed)
+                    verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
+            }
+            else
+            {
+                var maxVerticalSpeed = inWater ? max_water_vertical_speed : max_vertical_speed;
+
+                if (verticalSpeed < -maxVerticalSpeed)
+                    verticalSpeed = -maxVerticalSpeed;
+            }
+
+            if (inWater && State.Value == PlayerState.Fall)
+                availableJumpCount = 1;
+
+            if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
+                verticalSpeed = 0;
+
+            if (midAir)
+            {
+                var timeDifference = elapsedFrameTime / 20;
+                player.Y -= (float)(verticalSpeed * timeDifference);
+                verticalSpeed -= gravity * timeDifference;
+            }
+
             checkBorders();
 
             if (died)
                 return;
-
-            var elapsedFrameTime = Clock.ElapsedFrameTime;
 
             if (verticalSpeed <= 0)
             {
@@ -225,34 +253,6 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (died)
                 return;
-
-            bool inWater = checkWater();
-
-            if (verticalSpeed > 0)
-            {
-                if (Math.Abs(verticalSpeed) > max_vertical_speed)
-                    verticalSpeed = Math.Sign(verticalSpeed) * max_vertical_speed;
-            }
-            else
-            {
-                var maxVerticalSpeed = inWater ? max_water_vertical_speed : max_vertical_speed;
-
-                if (verticalSpeed < -maxVerticalSpeed)
-                    verticalSpeed = -maxVerticalSpeed;
-            }
-
-            if (inWater && State.Value == PlayerState.Fall)
-                availableJumpCount = 1;
-
-            if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
-                verticalSpeed = 0;
-
-            if (midAir)
-            {
-                var timeDifference = elapsedFrameTime / 20;
-                player.Y -= (float)(verticalSpeed * timeDifference);
-                verticalSpeed -= gravity * timeDifference;
-            }
 
             checkSpikes();
             checkCherries();
