@@ -10,18 +10,22 @@ namespace IWBTM.Game.Helpers
     {
         public static bool Collided(Vector2 position, DrawableTile tile)
         {
-            var rectanglePoints = createRectanglePoints(position);
-            var trianglePoints = createTrianglePoints(tile);
+            var rectanglePoints1 = createRectanglePoints1(position);
+            var trianglePoints1 = createTrianglePoints1(tile);
 
-            foreach (var t in trianglePoints)
+            var rectanglePoints2 = createRectanglePoints2(position);
+            var trianglePoints2 = createTrianglePoints2(tile);
+
+
+            foreach (var t in trianglePoints1)
             {
-                if (pointInPlayer(t, rectanglePoints))
+                if (pointInPlayer(t, rectanglePoints1))
                     return true;
             }
 
-            foreach (var r in rectanglePoints)
+            foreach (var r in rectanglePoints2)
             {
-                if (pointInTriangle(r, trianglePoints))
+                if (pointInTriangle(r, trianglePoints2))
                     return true;
             }
 
@@ -43,7 +47,7 @@ namespace IWBTM.Game.Helpers
             return MathExtensions.Pow(deltaX) + MathExtensions.Pow(deltaY) < MathExtensions.Pow(radius);
         }
 
-        private static List<Vector2> createTrianglePoints(DrawableTile tile)
+        private static List<Vector2> createTrianglePoints1(DrawableTile tile)
         {
             var list = new List<Vector2>();
 
@@ -56,13 +60,13 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeBottom:
                     list.Add(cornerPosition);
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y));
-                    list.Add(new Vector2(cornerPosition.X + ((size.X - 1) / 2f), cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2f, cornerPosition.Y + size.Y - 1));
                     break;
 
                 case TileType.SpikeTop:
                 case TileType.SmallSpikeTop:
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
-                    list.Add(new Vector2(cornerPosition.X + ((size.X - 1) / 2f), cornerPosition.Y));
+                    list.Add(new Vector2(cornerPosition.X + (size.X - 1) / 2f, cornerPosition.Y));
                     list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
                     break;
 
@@ -77,14 +81,55 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeRight:
                     list.Add(cornerPosition);
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y - 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + ((size.Y - 1) / 2f)));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + (size.Y - 1) / 2f));
                     break;
             }
 
             return list;
         }
 
-        private static List<Vector2> createRectanglePoints(Vector2 position)
+        private static List<Vector2> createTrianglePoints2(DrawableTile tile)
+        {
+            var list = new List<Vector2>();
+
+            var cornerPosition = tile.Position;
+            var size = tile.Size;
+
+            switch (tile.Tile.Type)
+            {
+                case TileType.SpikeBottom:
+                case TileType.SmallSpikeBottom:
+                    list.Add(cornerPosition + Vector2.One);
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X / 2f - 1, cornerPosition.Y + size.Y - 1));
+                    break;
+
+                case TileType.SpikeTop:
+                case TileType.SmallSpikeTop:
+                    list.Add(new Vector2(cornerPosition.X + 1, cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X / 2f, cornerPosition.Y + 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
+                    break;
+
+                case TileType.SpikeLeft:
+                case TileType.SmallSpikeLeft:
+                    list.Add(new Vector2(cornerPosition.X + 1, cornerPosition.Y + size.Y / 2f - 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y - 1));
+                    break;
+
+                case TileType.SpikeRight:
+                case TileType.SmallSpikeRight:
+                    list.Add(cornerPosition + Vector2.One);
+                    list.Add(new Vector2(cornerPosition.X + 1, cornerPosition.Y + size.Y - 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y / 2f - 1));
+                    break;
+            }
+
+            return list;
+        }
+
+        private static List<Vector2> createRectanglePoints1(Vector2 position)
         {
             var size = DefaultPlayer.SIZE;
 
@@ -99,11 +144,26 @@ namespace IWBTM.Game.Helpers
             return list;
         }
 
+        private static List<Vector2> createRectanglePoints2(Vector2 position)
+        {
+            var size = DefaultPlayer.SIZE;
+
+            var list = new List<Vector2>
+            {
+                new Vector2(position.X - size.X / 2f, position.Y - size.Y / 2f),
+                new Vector2(position.X + size.X / 2f, position.Y - size.Y / 2f),
+                new Vector2(position.X - size.X / 2f, position.Y + size.Y / 2f),
+                new Vector2(position.X + size.X / 2f, position.Y + size.Y / 2f)
+            };
+
+            return list;
+        }
+
         private static bool pointInPlayer(Vector2 point, List<Vector2> playerPoints)
         {
-            if (point.X >= playerPoints[0].X && point.X < playerPoints[1].X)
+            if (point.X >= playerPoints[0].X && point.X <= playerPoints[1].X)
             {
-                if (point.Y >= playerPoints[0].Y && point.Y < playerPoints[3].Y)
+                if (point.Y >= playerPoints[0].Y && point.Y <= playerPoints[3].Y)
                     return true;
             }
 
