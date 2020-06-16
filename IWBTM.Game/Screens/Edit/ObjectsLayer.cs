@@ -1,7 +1,10 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
 using osu.Framework.Bindables;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Shapes;
 using osuTK;
+using osuTK.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +21,13 @@ namespace IWBTM.Game.Screens.Edit
             : base(room, true, true, false, false, true, true)
         {
         }
+
+        protected override Drawable CreateDrawableBelowContent() => new Box
+        {
+            RelativeSizeAxes = Axes.Both,
+            Colour = Color4.Black,
+            Alpha = 0.5f
+        };
 
         public void UpdateAction(DrawableTile tile, TileAction action)
         {

@@ -48,6 +48,7 @@ namespace IWBTM.Game.Rooms.Drawables
                     Origin = Anchor.Centre,
                     FillMode = FillMode.Fill
                 },
+                CreateDrawableBelowContent(),
                 content = new Container<DrawableTile>
                 {
                     RelativeSizeAxes = Axes.Both
@@ -69,6 +70,8 @@ namespace IWBTM.Game.Rooms.Drawables
             base.LoadComplete();
             RestartAnimations();
         }
+
+        protected virtual Drawable CreateDrawableBelowContent() => Empty();
 
         public void RestartAnimations()
         {
