@@ -53,7 +53,7 @@ namespace IWBTM.Game.Screens.Select
 
         public void OnDelete()
         {
-            confirmationOverlay.Push("Are you sure you want to delete this level?", () => Deleted?.Invoke(this));
+            confirmationOverlay.Push($"Are you sure you want to delete \"{LevelName}\" level?", () => Deleted?.Invoke(this));
         }
 
         public bool IsSelected;
