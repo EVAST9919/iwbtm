@@ -1,7 +1,6 @@
 ﻿using IWBTM.Game.Helpers;
 using IWBTM.Game.Overlays;
 using IWBTM.Game.Rooms;
-using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Screens.Create;
 using IWBTM.Game.Screens.Edit;
 using IWBTM.Game.Screens.Play.Playfield;
@@ -63,10 +62,15 @@ namespace IWBTM.Game.Screens
                     {
                         new Drawable[]
                         {
-                            toolSelector = new ToolSelector(),
+                            toolSelector = new ToolSelector
+                            {
+                                Depth = -3
+                            },
                             drawableRoomPlaceholder = new Container
                             {
-                                RelativeSizeAxes = Axes.Both
+                                RelativeSizeAxes = Axes.Both,
+                                Anchor = Anchor.Centre,
+                                Origin = Anchor.Centre,
                             },
                             toolbar = new ToolBar()
                             {
@@ -104,6 +108,9 @@ namespace IWBTM.Game.Screens
                 Scale = new Vector2(0.9f),
                 Child = blueprint = new BluePrint(newRoom)
             };
+
+            drawableRoomPlaceholder.Scale = Vector2.One;
+            drawableRoomPlaceholder.Position = Vector2.Zero;
 
             blueprint.Selected.BindTo(toolbar.Selected);
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
@@ -214,6 +221,31 @@ namespace IWBTM.Game.Screens
             }
 
             return base.OnKeyDown(e);
+        }
+
+        protected override bool OnScroll(ScrollEvent e)
+        {
+            base.OnScroll(e);
+
+            var delta = e.ScrollDelta.Y;
+            var scrollDeltaFloat = (e.IsPrecise ? 10 : 80) * delta;
+
+            if (e.AltPressed)
+            {
+                var oldScale = drawableRoomPlaceholder.Scale;
+
+                drawableRoomPlaceholder.ScaleTo(oldScale.X + delta / 10, 100, Easing.Out);
+                return true;
+            }
+
+            if (e.ControlPressed)
+            {
+                drawableRoomPlaceholder.MoveToOffset(new Vector2(scrollDeltaFloat, 0), 100, Easing.Out);
+                return true;
+            }
+
+            drawableRoomPlaceholder.MoveToOffset(new Vector2(0, scrollDeltaFloat), 100, Easing.Out);
+            return true;
         }
     }
 }
