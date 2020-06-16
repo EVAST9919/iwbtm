@@ -1,5 +1,4 @@
 ﻿using IWBTM.Game.Rooms.Drawables;
-using IWBTM.Game.Screens.Play.Playfield;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -55,7 +54,7 @@ namespace IWBTM.Game.Screens.Edit
                 RelativeSizeAxes = Axes.Y;
                 Width = 0.5f;
                 Origin = Anchor.TopCentre;
-                Colour = Color4.Gray;
+                Colour = Color4.White;
                 EdgeSmoothness = Vector2.One;
             }
         }
@@ -67,7 +66,7 @@ namespace IWBTM.Game.Screens.Edit
                 RelativeSizeAxes = Axes.X;
                 Height = 0.5f;
                 Origin = Anchor.CentreLeft;
-                Colour = Color4.Gray;
+                Colour = Color4.White;
                 EdgeSmoothness = Vector2.One;
             }
         }
