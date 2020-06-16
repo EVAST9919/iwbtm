@@ -229,12 +229,17 @@ namespace IWBTM.Game.Screens
 
             var delta = e.ScrollDelta.Y;
             var scrollDeltaFloat = (e.IsPrecise ? 10 : 80) * delta;
+            if (e.ShiftPressed)
+                scrollDeltaFloat *= 10;
 
             if (e.AltPressed)
             {
                 var oldScale = drawableRoomPlaceholder.Scale;
+                var newScale = oldScale.X + scrollDeltaFloat / 100;
+                if (newScale <= 0)
+                    newScale = 0;
 
-                drawableRoomPlaceholder.ScaleTo(oldScale.X + delta / 10, 100, Easing.Out);
+                drawableRoomPlaceholder.ScaleTo(newScale, 100, Easing.Out);
                 return true;
             }
 
