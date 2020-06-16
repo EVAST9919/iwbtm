@@ -89,7 +89,16 @@ namespace IWBTM.Game.Screens.Create
         {
             try
             {
-                NewSize.Invoke(new Vector2(float.Parse(widthTextBox.Current.Value), float.Parse(heightTextBox.Current.Value)));
+                var sizeX = float.Parse(widthTextBox.Current.Value);
+                var sizeY = float.Parse(heightTextBox.Current.Value);
+
+                if (sizeX > 200 || sizeY > 200)
+                {
+                    notifications.Push("Maximum room size is 200", NotificationState.Bad);
+                    return;
+                }
+
+                NewSize.Invoke(new Vector2(sizeX, sizeY));
                 Hide();
             }
             catch
