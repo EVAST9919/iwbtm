@@ -1,5 +1,6 @@
 ﻿using IWBTM.Resources;
 using osu.Framework.Allocation;
+using osu.Framework.Configuration;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 
@@ -17,7 +18,7 @@ namespace IWBTM.Game
         private DependencyContainer dependencies;
 
         [BackgroundDependencyLoader]
-        private void load()
+        private void load(FrameworkConfigManager config)
         {
             // Load the assets from our Resources project
             Resources.AddStore(new DllResourceStore(IWBTMResources.ResourceAssembly));
@@ -34,6 +35,8 @@ namespace IWBTM.Game
 
             levelAudioManager = new LevelAudioManager(Host.AudioThread, tracks, new ResourceStore<byte[]>()) { EventScheduler = Scheduler };
             dependencies.Cache(levelAudioManager);
+
+            config.GetBindable<FrameSync>(FrameworkSetting.FrameSync).Value = FrameSync.Unlimited;
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
