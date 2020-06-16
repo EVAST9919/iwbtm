@@ -2,6 +2,7 @@
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Events;
 using System;
 
 namespace IWBTM.Game.UserInterface
@@ -24,6 +25,12 @@ namespace IWBTM.Game.UserInterface
             });
 
             Action = () => action?.Invoke();
+        }
+
+        protected override bool OnHover(HoverEvent e)
+        {
+            base.OnHover(e);
+            return true;
         }
     }
 }

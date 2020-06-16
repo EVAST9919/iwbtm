@@ -4,6 +4,7 @@ using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Create;
 using IWBTM.Game.Screens.Edit;
 using IWBTM.Game.Screens.Play.Playfield;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
@@ -66,11 +67,24 @@ namespace IWBTM.Game.Screens
                             {
                                 Depth = -3
                             },
-                            drawableRoomPlaceholder = new Container
+                            new Container
                             {
                                 RelativeSizeAxes = Axes.Both,
                                 Anchor = Anchor.Centre,
                                 Origin = Anchor.Centre,
+                                Children = new Drawable[]
+                                {
+                                    drawableRoomPlaceholder = new Container
+                                    {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Anchor = Anchor.Centre,
+                                        Origin = Anchor.Centre,
+                                    },
+                                    new IWannaBasicButton("Move to centre", moveToCentre)
+                                    {
+                                        Margin = new MarginPadding(10)
+                                    }
+                                }
                             },
                             toolbar = new ToolBar()
                             {
@@ -109,8 +123,7 @@ namespace IWBTM.Game.Screens
                 Child = blueprint = new BluePrint(newRoom)
             };
 
-            drawableRoomPlaceholder.Scale = Vector2.One;
-            drawableRoomPlaceholder.Position = Vector2.Zero;
+            moveToCentre();
 
             blueprint.Selected.BindTo(toolbar.Selected);
             blueprint.SnapValue.BindTo(toolbar.SnapValue);
@@ -118,6 +131,12 @@ namespace IWBTM.Game.Screens
             toolSelector.SelectedTile.BindTo(blueprint.TileToEdit);
 
             toolSelector.Edited += blueprint.UpdateAction;
+        }
+
+        private void moveToCentre()
+        {
+            drawableRoomPlaceholder.Scale = Vector2.One;
+            drawableRoomPlaceholder.Position = Vector2.Zero;
         }
 
         private void test()
