@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
 using System;
@@ -70,6 +71,8 @@ namespace IWBTM.Game.Screens.Edit
             base.LoadComplete();
             SelectedTile.BindValueChanged(onSelectedTileChanged, true);
         }
+
+        protected override bool OnHover(HoverEvent e) => true;
 
         private void onSelectedTileChanged(ValueChangedEvent<DrawableTile> tile)
         {

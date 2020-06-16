@@ -86,6 +86,9 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnMouseMove(MouseMoveEvent e)
         {
+            if (!IsHovered)
+                return false;
+
             mousePosition = e.MousePosition;
             var buttons = e.CurrentState.Mouse.Buttons;
 
@@ -162,6 +165,9 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override bool OnMouseDown(MouseDownEvent e)
         {
+            if (!IsHovered)
+                return false;
+
             switch (Tool.Value)
             {
                 case ToolEnum.Place:
