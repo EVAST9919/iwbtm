@@ -59,7 +59,7 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
-            if (HasTileAt(snappedPosition, type))
+            if (HasTileAtPixel(snappedPosition, type))
                 return;
 
             addTile(type, snappedPosition);
