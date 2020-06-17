@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Graphics.Shapes;
+using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
@@ -59,6 +60,54 @@ namespace IWBTM.Game.Rooms.Drawables
         private void load()
         {
             MainSprite.Texture = getTexture();
+        }
+
+        public void RestartAnimation()
+        {
+            var action = Tile.Action;
+
+            if (action != null)
+            {
+                Position = new Vector2(Tile.PositionX, Tile.PositionY);
+                origin = new Vector2(action.EndX, action.EndY);
+
+                switch (action.Type)
+                {
+                    case TileActionType.Movement:
+                        ClearTransforms();
+                        this.MoveTo(origin, action.Time).Then().MoveTo(new Vector2(Tile.PositionX, Tile.PositionY), action.Time).Loop();
+                        break;
+
+                    case TileActionType.Rotation:
+                        positionOffset = Vector2.Divide(GetSize(Tile.Type), new Vector2(2));
+                        var initialPosition = new Vector2(Tile.PositionX, Tile.PositionY);
+                        movingAngle = MathExtensions.GetAngle(initialPosition + positionOffset, origin);
+                        distance = MathExtensions.Distance(initialPosition + positionOffset, origin);
+                        playAnimation = true;
+                        break;
+                }
+            }
+        }
+
+        private bool playAnimation;
+
+        private Vector2 origin;
+        private Vector2 positionOffset;
+        private float distance;
+        private float movingAngle;
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (!playAnimation)
+                return;
+
+            movingAngle += (float)(Clock.ElapsedFrameTime / Tile.Action.Time * 360f);
+            if (movingAngle >= 360)
+                movingAngle %= 360;
+
+            Position = MathExtensions.GetRotatedPosition(origin, distance, movingAngle) - positionOffset;
         }
 
         public void Select() => selectContainer.BorderThickness = 5;

@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
@@ -133,12 +134,12 @@ namespace IWBTM.Game.Screens.Edit
 
             var actionEditor = new ActionEditor(tile.Tile.Action);
             selectedTilePlaceholder.Add(actionEditor);
-            actionEditor.OnConfirm += actionParams => trySave(tile, actionParams.time, actionParams.x, actionParams.y);
+            actionEditor.OnConfirm += actionParams => trySave(tile, actionParams.type, actionParams.time, actionParams.x, actionParams.y);
         }
 
         public Action<DrawableTile, TileAction> Edited;
 
-        private void trySave(DrawableTile tile, string timeString, string xString, string yString)
+        private void trySave(DrawableTile tile, TileActionType type, string timeString, string xString, string yString)
         {
             float time, x, y;
 
@@ -159,6 +160,7 @@ namespace IWBTM.Game.Screens.Edit
                 EndX = x,
                 EndY = y,
                 Time = time,
+                Type = type,
             };
 
             Edited?.Invoke(tile, action);
@@ -166,11 +168,12 @@ namespace IWBTM.Game.Screens.Edit
 
         private class ActionEditor : Container
         {
-            public Action<(string time, string x, string y)> OnConfirm;
+            public Action<(TileActionType type, string time, string x, string y)> OnConfirm;
 
             private readonly IWannaTextBox timeTextbox;
             private readonly IWannaTextBox xTextbox;
             private readonly IWannaTextBox yTextbox;
+            private readonly ActionTypeSelector typeSelector;
 
             public ActionEditor(TileAction existing = null)
             {
@@ -196,6 +199,7 @@ namespace IWBTM.Game.Screens.Edit
                             Direction = FillDirection.Vertical,
                             Children = new Drawable[]
                             {
+                                typeSelector = new ActionTypeSelector(),
                                 xTextbox = new IWannaTextBox
                                 {
                                     RelativeSizeAxes = Axes.X,
@@ -211,7 +215,7 @@ namespace IWBTM.Game.Screens.Edit
                                     RelativeSizeAxes = Axes.X,
                                     PlaceholderText = "Time (ms)"
                                 },
-                                new EditorButton("Ok", () => OnConfirm?.Invoke((timeTextbox.Current.Value, xTextbox.Current.Value, yTextbox.Current.Value)))
+                                new EditorButton("Ok", () => OnConfirm?.Invoke((typeSelector.Current.Value, timeTextbox.Current.Value, xTextbox.Current.Value, yTextbox.Current.Value)))
                             }
                         }
                     }
@@ -219,9 +223,23 @@ namespace IWBTM.Game.Screens.Edit
 
                 if (existing != null)
                 {
+                    typeSelector.Current.Value = existing.Type;
                     xTextbox.Current.Value = existing.EndX.ToString();
                     yTextbox.Current.Value = existing.EndY.ToString();
                     timeTextbox.Current.Value = existing.Time.ToString();
+                }
+            }
+
+            private class ActionTypeSelector : BasicDropdown<TileActionType>
+            {
+                public ActionTypeSelector()
+                {
+                    RelativeSizeAxes = Axes.X;
+
+                    AddDropdownItem(TileActionType.Movement);
+                    AddDropdownItem(TileActionType.Rotation);
+
+                    Current.TriggerChange();
                 }
             }
         }

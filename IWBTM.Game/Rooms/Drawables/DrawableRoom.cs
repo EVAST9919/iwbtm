@@ -68,26 +68,17 @@ namespace IWBTM.Game.Rooms.Drawables
         protected override void LoadComplete()
         {
             base.LoadComplete();
-            RestartAnimations();
+            Restart();
         }
 
         protected virtual Drawable CreateDrawableBelowContent() => Empty();
 
-        public void RestartAnimations()
+        public void Restart()
         {
             foreach (var tile in Tiles)
             {
                 if (executeActions)
-                {
-                    var action = tile.Tile.Action;
-
-                    if (action != null)
-                    {
-                        tile.ClearTransforms();
-                        tile.Position = new Vector2(tile.Tile.PositionX, tile.Tile.PositionY);
-                        tile.MoveTo(new Vector2(action.EndX, action.EndY), action.Time).Then().MoveTo(new Vector2(tile.Tile.PositionX, tile.Tile.PositionY), action.Time).Loop();
-                    }
-                }
+                    tile.RestartAnimation();
 
                 if (tile is DrawableJumpRefresher)
                     ((DrawableJumpRefresher)tile).Activate();

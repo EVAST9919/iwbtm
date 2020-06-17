@@ -82,7 +82,7 @@ namespace IWBTM.Game.Screens.Play.Playfield
         public void Restart(Vector2 position, bool rightwards)
         {
             Player.Revive(position, rightwards);
-            DrawableRoom.RestartAnimations();
+            DrawableRoom.Restart();
             deathOverlay.Restore();
             roomEntering.Stop();
             roomEntering.Play();

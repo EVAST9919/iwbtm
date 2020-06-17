@@ -19,12 +19,23 @@ namespace IWBTM.Game.Helpers
 
         public static float GetAngle(Vector2 input1, Vector2 input2)
         {
-            var angle = (float)(Math.Atan2(input1.Y - input2.Y, input1.X - input2.X) * 180 / Math.PI + 180);
+            var angle = (float)(Math.Atan2(input1.Y - input2.Y, input1.X - input2.X) * 180 / Math.PI) + 90;
+
+            if (angle < 0)
+                angle += 360;
 
             if (angle > 360)
                 angle %= 360f;
 
             return angle;
+        }
+
+        public static Vector2 GetRotatedPosition(Vector2 originPosition, float distance, float angle)
+        {
+            var rotatedXPos = originPosition.X + (distance * Math.Sin(angle * Math.PI / 180));
+            var rotatedYPos = originPosition.Y + (distance * -Math.Cos(angle * Math.PI / 180));
+
+            return new Vector2((float)rotatedXPos, (float)rotatedYPos);
         }
     }
 }
