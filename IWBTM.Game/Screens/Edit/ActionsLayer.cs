@@ -43,7 +43,10 @@ namespace IWBTM.Game.Screens.Edit
                             Add(new EndPoint(tile));
                             end = new Vector2(tile.Tile.Action.EndX, tile.Tile.Action.EndY);
                             Add(new ConnectionLine(start, end));
-                            //Add(new ConnectionCircle(tile));
+                            Add(new ConnectionCircle(tile)
+                            {
+                                Size = new Vector2(MathExtensions.Distance(start, end) * 2)
+                            });
                             break;
                     }
                 }
@@ -67,6 +70,28 @@ namespace IWBTM.Game.Screens.Edit
                         RelativeSizeAxes = Axes.Both,
                         Colour = Color4.Red,
                         EdgeSmoothness = Vector2.One
+                    }
+                });
+            }
+        }
+
+        private class ConnectionCircle : CompositeDrawable
+        {
+            public ConnectionCircle(DrawableTile tile)
+            {
+                Origin = Anchor.Centre;
+                Position = new Vector2(tile.Tile.Action.EndX, tile.Tile.Action.EndY);
+                AddInternal(new CircularContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Masking = true,
+                    BorderColour = Color4.Red,
+                    BorderThickness = 3,
+                    Child = new Box
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Alpha = 0,
+                        AlwaysPresent = true
                     }
                 });
             }
