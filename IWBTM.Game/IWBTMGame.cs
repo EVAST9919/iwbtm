@@ -4,6 +4,7 @@ using osu.Framework.Allocation;
 using IWBTM.Game.Overlays;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics;
+using IWBTM.Game.UserInterface;
 
 namespace IWBTM.Game
 {
@@ -29,11 +30,15 @@ namespace IWBTM.Game
             Add(new BasicContextMenuContainer
             {
                 RelativeSizeAxes = Axes.Both,
-                Children = new Drawable[]
+                Child = new IWannaTooltipContainer
                 {
-                    screens,
-                    notifications,
-                    confirmationOverlay
+                    RelativeSizeAxes = Axes.Both,
+                    Children = new Drawable[]
+                    {
+                        screens,
+                        notifications,
+                        confirmationOverlay
+                    }
                 }
             });
         }

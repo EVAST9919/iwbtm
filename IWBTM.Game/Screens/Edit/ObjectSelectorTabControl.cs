@@ -3,6 +3,7 @@ using osuTK;
 using System;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Rooms;
+using osu.Framework.Graphics.Cursor;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -16,7 +17,7 @@ namespace IWBTM.Game.Screens.Edit
 
         protected override EditorTabItem<TileType> CreateItem(TileType value) => new ObjectSelectorTabItem(value);
 
-        private class ObjectSelectorTabItem : EditorTabItem<TileType>
+        private class ObjectSelectorTabItem : EditorTabItem<TileType>, IHasTooltip
         {
             public ObjectSelectorTabItem(TileType value)
                 : base(value)
@@ -28,6 +29,8 @@ namespace IWBTM.Game.Screens.Edit
                     t.Origin = Anchor.Centre;
                 }));
             }
+
+            public string TooltipText => Value.ToString();
 
             private static DrawableTile createTile(Tile tile)
             {
