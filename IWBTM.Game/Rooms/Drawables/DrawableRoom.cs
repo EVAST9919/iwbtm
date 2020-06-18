@@ -139,6 +139,46 @@ namespace IWBTM.Game.Rooms.Drawables
             return null;
         }
 
+        public DrawableTile GetSolidTileForVerticalCheck(Vector2 pixelPosition)
+        {
+            foreach (var child in content.Children)
+            {
+                var tilePosition = child.Position;
+                var tileSize = child.Size;
+
+                if (pixelPosition.X > tilePosition.X && pixelPosition.X < tilePosition.X + tileSize.X)
+                {
+                    if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y < tilePosition.Y + tileSize.Y)
+                    {
+                        if (DrawableTile.IsGroup(child, TileGroup.Solid))
+                            return child;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public DrawableTile GetSolidTileForHorizontalCheck(Vector2 pixelPosition)
+        {
+            foreach (var child in content.Children)
+            {
+                var tilePosition = child.Position;
+                var tileSize = child.Size;
+
+                if (pixelPosition.X >= tilePosition.X && pixelPosition.X < tilePosition.X + tileSize.X)
+                {
+                    if (pixelPosition.Y > tilePosition.Y && pixelPosition.Y < tilePosition.Y + tileSize.Y)
+                    {
+                        if (DrawableTile.IsGroup(child, TileGroup.Solid))
+                            return child;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public DrawableTile GetTileAtPixel(Vector2 pixelPosition, TileType type)
         {
             foreach (var child in content.Children)

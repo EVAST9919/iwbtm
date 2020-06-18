@@ -2,12 +2,15 @@
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Screens.Test;
 using osu.Framework.Allocation;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 using osuTK;
+using osuTK.Graphics;
 
 namespace IWBTM.Game.Screens
 {
@@ -15,6 +18,9 @@ namespace IWBTM.Game.Screens
     {
         private SpriteText xPosition;
         private SpriteText yPosition;
+        private SpriteText state;
+        private SpriteText xSpeed;
+        private SpriteText ySpeed;
 
         private BasicCheckbox hitboxCheckbox;
         private BasicCheckbox deathSpotsCheckbox;
@@ -29,25 +35,41 @@ namespace IWBTM.Game.Screens
         {
             AddInternal(new Container
             {
-                AutoSizeAxes = Axes.Both,
-                Padding = new MarginPadding(10),
-                Child = new FillFlowContainer
+                AutoSizeAxes = Axes.Y,
+                Width = 250,
+                Children = new Drawable[]
                 {
-                    AutoSizeAxes = Axes.Both,
-                    Direction = FillDirection.Vertical,
-                    Spacing = new Vector2(0, 5),
-                    Children = new Drawable[]
+                    new Box
                     {
-                        hitboxCheckbox = new BasicCheckbox
+                        RelativeSizeAxes = Axes.Both,
+                        Colour = Color4.Black.Opacity(0.5f)
+                    },
+                    new Container
+                    {
+                        AutoSizeAxes = Axes.Both,
+                        Padding = new MarginPadding(10),
+                        Child = new FillFlowContainer
                         {
-                            LabelText = "Show hitbox",
-                        },
-                        deathSpotsCheckbox = new BasicCheckbox
-                        {
-                            LabelText = "Show death spots",
-                        },
-                        xPosition = new SpriteText(),
-                        yPosition = new SpriteText(),
+                            AutoSizeAxes = Axes.Both,
+                            Direction = FillDirection.Vertical,
+                            Spacing = new Vector2(0, 5),
+                            Children = new Drawable[]
+                            {
+                                hitboxCheckbox = new BasicCheckbox
+                                {
+                                    LabelText = "Show hitbox",
+                                },
+                                deathSpotsCheckbox = new BasicCheckbox
+                                {
+                                    LabelText = "Show death spots",
+                                },
+                                xPosition = new SpriteText(),
+                                yPosition = new SpriteText(),
+                                state = new SpriteText(),
+                                xSpeed = new SpriteText(),
+                                ySpeed = new SpriteText(),
+                            }
+                        }
                     }
                 }
             });
@@ -71,13 +93,24 @@ namespace IWBTM.Game.Screens
 
             if (playfield != null)
             {
-                var playerPosition = playfield.Player.PlayerPosition();
+                var player = playfield.Player;
+                var playerPosition = player.PlayerPosition();
 
                 if (playerPosition != lastPlayerPosition)
                 {
                     lastPlayerPosition = playerPosition;
                     xPosition.Text = $"X: {playerPosition.X}";
                     yPosition.Text = $"Y: {playerPosition.Y}";
+                }
+
+                state.Text = $"State: {player.State.Value.ToString()}";
+
+                if (!player.IsDead)
+                {
+                    var speed = player.PlayerSpeed();
+
+                    xSpeed.Text = $"Horizontal speed: {speed.X}";
+                    ySpeed.Text = $"Vertical speed: {speed.Y}";
                 }
             }
         }

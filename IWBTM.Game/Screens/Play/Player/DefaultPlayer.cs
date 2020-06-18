@@ -41,8 +41,6 @@ namespace IWBTM.Game.Screens.Play.Player
         public Action<Vector2, Vector2> Died;
         public Action Completed;
         public Action<Vector2, bool> Saved;
-
-        private bool died;
         private bool completed;
 
         private DrawableSample jump;
@@ -52,7 +50,6 @@ namespace IWBTM.Game.Screens.Play.Player
         private int availableJumpCount = 2;
         private double verticalSpeed;
         private double horizontalSpeed;
-        private bool midAir;
         private bool rightwards = true;
 
         private Container player;
@@ -111,6 +108,10 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public Vector2 PlayerPosition() => player.Position;
 
+        public Vector2 PlayerSpeed() => new Vector2((float)horizontalSpeed, (float)verticalSpeed);
+
+        public bool IsDead { get; private set; }
+
         public void Revive(Vector2 position, bool rightwards)
         {
             if (completed)
@@ -120,24 +121,23 @@ namespace IWBTM.Game.Screens.Play.Player
             this.rightwards = rightwards;
 
             verticalSpeed = 0;
-            midAir = true;
             availableJumpCount = 1;
 
-            died = false;
+            IsDead = false;
             updateAnimationDirection();
             player.Show();
         }
 
         private void onDeath()
         {
-            died = true;
+            IsDead = true;
             player.Hide();
             Died?.Invoke(PlayerPosition(), new Vector2((float)horizontalSpeed, (float)verticalSpeed));
         }
 
         protected override bool OnKeyDown(KeyDownEvent e)
         {
-            if (died || completed)
+            if (IsDead || completed)
                 return false;
 
             if (!e.Repeat)
@@ -159,7 +159,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         protected override void OnKeyUp(KeyUpEvent e)
         {
-            if (died || completed)
+            if (IsDead || completed)
                 return;
 
             switch (e.Key)
@@ -182,48 +182,67 @@ namespace IWBTM.Game.Screens.Play.Player
         private float innerLeftBorderPosition() => (float)(player.X - half_width);
         private float outherLeftBorderPosition() => innerLeftBorderPosition() - 1;
 
+        private bool midAir;
+
         protected override void Update()
         {
             base.Update();
 
-            if (died || completed)
+            if (IsDead || completed)
                 return;
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
-
-            horizontalSpeed = 0;
-
+            var timeDifference = elapsedFrameTime / 20;
             var keys = GetContainingInputManager().CurrentState.Keyboard.Keys;
 
             if (keys.IsPressed(Key.Right))
+            {
                 horizontalSpeed = 3;
+                rightwards = true;
+            }
             else if (keys.IsPressed(Key.Left))
+            {
                 horizontalSpeed = -3;
+                rightwards = false;
+            }
+            else
+                horizontalSpeed = 0;
 
             if (horizontalSpeed != 0)
-            {
-                rightwards = horizontalSpeed > 0;
                 updateAnimationDirection();
 
-                if (rightwards)
+            if (horizontalSpeed > 0)
+            {
+                if (adjustRightAlignment())
                 {
-                    checkRightCollision(elapsedFrameTime);
+                    moveRight(elapsedFrameTime);
+                    adjustRightAlignment();
                     checkRightKillerBlock();
                 }
-                else
+            }
+
+            if (horizontalSpeed < 0)
+            {
+                if (adjustLeftAlignment())
                 {
-                    checkLeftCollision(elapsedFrameTime);
+                    moveLeft(elapsedFrameTime);
+                    adjustLeftAlignment();
                     checkLeftKillerBlock();
                 }
             }
 
-            if (died)
+            if (IsDead)
                 return;
-
-            bool inWater = checkInWater();
 
             if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
                 verticalSpeed = 0;
+
+            verticalSpeed -= gravity * timeDifference;
+
+            bool inWater = checkInWater();
+
+            if (inWater)
+                availableJumpCount = 1;
 
             if (verticalSpeed < 0)
             {
@@ -233,33 +252,42 @@ namespace IWBTM.Game.Screens.Play.Player
                     verticalSpeed = -maxVerticalSpeed;
             }
 
-            if (inWater && State.Value == PlayerState.Fall)
-                availableJumpCount = 1;
-
-            if (midAir)
+            if (verticalSpeed > 0)
             {
-                var timeDifference = elapsedFrameTime / 20;
-                player.Y -= (float)(verticalSpeed * timeDifference);
-                verticalSpeed -= gravity * timeDifference;
+                if (adjustTopAlignment())
+                {
+                    moveVertical(timeDifference);
+                    adjustTopAlignment();
+                    checkTopKillerBlock();
+                }
+                else
+                    verticalSpeed = 0;
             }
-
-            checkBorders();
-
-            if (died || completed)
-                return;
 
             if (verticalSpeed <= 0)
             {
-                checkBottomCollision();
-                checkBottomKillerBlock();
-            }
-            else
-            {
-                checkTopCollision();
-                checkTopKillerBlock();
+                if (adjustBottomAlignment())
+                {
+                    moveVertical(timeDifference);
+                    adjustBottomAlignment();
+                    checkBottomKillerBlock();
+
+                    if (!midAir)
+                    {
+                        midAir = true;
+                        availableJumpCount = 1;
+                    }
+                }
+                else
+                    resetJumpLogic();
             }
 
-            if (died)
+            if (IsDead)
+                return;
+
+            checkBorders();
+
+            if (completed || IsDead)
                 return;
 
             checkSpikes();
@@ -305,9 +333,90 @@ namespace IWBTM.Game.Screens.Play.Player
             }
         }
 
+        private bool adjustRightAlignment()
+        {
+            var topTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherRightBorderPosition(), innerTopBorderPosition()));
+            var middleTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherRightBorderPosition(), player.Y));
+            var bottomTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherRightBorderPosition(), outherBottomBorderPosition()));
+
+            if (topTile != null || middleTile != null || bottomTile != null)
+            {
+                var closestDrawableTilePosition = Math.Max(topTile?.X ?? double.MinValue, middleTile?.X ?? double.MinValue);
+                closestDrawableTilePosition = Math.Max(closestDrawableTilePosition, bottomTile?.X ?? double.MinValue);
+
+                player.X = (float)(closestDrawableTilePosition - half_width);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool adjustLeftAlignment()
+        {
+            var topTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherLeftBorderPosition(), innerTopBorderPosition()));
+            var middleTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherLeftBorderPosition(), player.Y));
+            var bottomTile = drawableRoom.GetSolidTileForHorizontalCheck(new Vector2(outherLeftBorderPosition(), outherBottomBorderPosition()));
+
+            if (topTile != null || middleTile != null || bottomTile != null)
+            {
+                var closestDrawableTilePosition = Math.Max(topTile?.X + topTile?.Size.X ?? double.MinValue, middleTile?.X + middleTile?.Size.X ?? double.MinValue);
+                closestDrawableTilePosition = Math.Max(closestDrawableTilePosition, bottomTile?.X + bottomTile?.Size.X ?? double.MinValue);
+
+                player.X = (float)(closestDrawableTilePosition + half_width);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool adjustTopAlignment()
+        {
+            var leftTile = drawableRoom.GetSolidTileForVerticalCheck(new Vector2(innerLeftBorderPosition(), outherTopBorderPosition()));
+            var rightTile = drawableRoom.GetSolidTileForVerticalCheck(new Vector2(outherRightBorderPosition(), outherTopBorderPosition()));
+
+            if (leftTile != null || rightTile != null)
+            {
+                var closestDrawableTilePosition = Math.Max(leftTile?.Y + leftTile?.Size.Y ?? double.MinValue, rightTile?.Y + rightTile?.Size.Y ?? double.MinValue);
+                player.Y = (float)(closestDrawableTilePosition + half_height);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool adjustBottomAlignment()
+        {
+            var leftTile = drawableRoom.GetSolidTileForVerticalCheck(new Vector2(innerLeftBorderPosition(), outherBottomBorderPosition()));
+            var rightTile = drawableRoom.GetSolidTileForVerticalCheck(new Vector2(outherRightBorderPosition(), outherBottomBorderPosition()));
+
+            if (leftTile != null || rightTile != null)
+            {
+                var closestDrawableTilePosition = Math.Min(leftTile?.Y ?? double.MaxValue, rightTile?.Y ?? double.MaxValue);
+                player.Y = (float)(closestDrawableTilePosition - half_height);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void moveRight(double elapsedFrameTime)
+        {
+            player.X += (float)(max_horizontal_speed * elapsedFrameTime);
+        }
+
+        private void moveLeft(double elapsedFrameTime)
+        {
+            player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
+        }
+
+        private void moveVertical(double timeDifference)
+        {
+            player.Y -= (float)(verticalSpeed * timeDifference);
+        }
+
         private void checkCompletion()
         {
-            if (died)
+            if (IsDead)
                 return;
 
             if (drawableRoom.HasTileAtPixel(PlayerPosition(), TileType.Warp))
@@ -319,7 +428,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkCherries()
         {
-            if (died)
+            if (IsDead)
                 return;
 
             foreach (var t in drawableRoom.Tiles)
@@ -363,45 +472,11 @@ namespace IWBTM.Game.Screens.Play.Player
             return false;
         }
 
-        private void checkRightCollision(double elapsedFrameTime)
-        {
-            var topTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherRightBorderPosition(), innerTopBorderPosition()), TileGroup.Solid);
-            var middleTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherRightBorderPosition(), player.Y), TileGroup.Solid);
-            var bottomTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherRightBorderPosition(), innerBottomBorderPosition()), TileGroup.Solid);
-
-            if (topTile != null || middleTile != null || bottomTile != null)
-            {
-                var closestDrawableTilePosition = Math.Max(topTile?.X ?? double.MinValue, middleTile?.X ?? double.MinValue);
-                closestDrawableTilePosition = Math.Max(closestDrawableTilePosition, bottomTile?.X ?? double.MinValue);
-
-                player.X = (float)(closestDrawableTilePosition - half_width);
-            }
-            else
-                player.X += (float)(max_horizontal_speed * elapsedFrameTime);
-        }
-
         private void checkRightKillerBlock()
         {
             if (drawableRoom.HasTileAtPixel(new Vector2(innerRightBorderPosition(), innerTopBorderPosition()), TileType.KillerBlock)
                 || drawableRoom.HasTileAtPixel(new Vector2(innerRightBorderPosition(), innerBottomBorderPosition()), TileType.KillerBlock))
                 onDeath();
-        }
-
-        private void checkLeftCollision(double elapsedFrameTime)
-        {
-            var topTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherLeftBorderPosition(), innerTopBorderPosition()), TileGroup.Solid);
-            var middleTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherLeftBorderPosition(), player.Y), TileGroup.Solid);
-            var bottomTile = drawableRoom.GetTileOfGroupAt(new Vector2(outherLeftBorderPosition(), innerBottomBorderPosition()), TileGroup.Solid);
-
-            if (topTile != null || middleTile != null || bottomTile != null)
-            {
-                var closestDrawableTilePosition = Math.Max(topTile?.X + topTile?.Size.X ?? double.MinValue, middleTile?.X + middleTile?.Size.X ?? double.MinValue);
-                closestDrawableTilePosition = Math.Max(closestDrawableTilePosition, bottomTile?.X + bottomTile?.Size.X ?? double.MinValue);
-
-                player.X = (float)(closestDrawableTilePosition + half_width);
-            }
-            else
-                player.X -= (float)(max_horizontal_speed * elapsedFrameTime);
         }
 
         private void checkLeftKillerBlock()
@@ -411,45 +486,11 @@ namespace IWBTM.Game.Screens.Play.Player
                 onDeath();
         }
 
-        private void checkTopCollision()
-        {
-            var leftTile = drawableRoom.GetTileOfGroupAt(new Vector2(innerLeftBorderPosition(), outherTopBorderPosition()), TileGroup.Solid);
-            var rightTile = drawableRoom.GetTileOfGroupAt(new Vector2(innerRightBorderPosition(), outherTopBorderPosition()), TileGroup.Solid);
-
-            if (leftTile != null || rightTile != null)
-            {
-                var closestDrawableTilePosition = Math.Max(leftTile?.Y + leftTile?.Size.Y ?? double.MinValue, rightTile?.Y + rightTile?.Size.Y ?? double.MinValue);
-                player.Y = (float)(closestDrawableTilePosition + half_height);
-                verticalSpeed = 0;
-            }
-        }
-
         private void checkTopKillerBlock()
         {
             if (drawableRoom.HasTileAtPixel(new Vector2(innerLeftBorderPosition(), innerTopBorderPosition()), TileType.KillerBlock)
                 || drawableRoom.HasTileAtPixel(new Vector2(innerRightBorderPosition(), innerTopBorderPosition()), TileType.KillerBlock))
                 onDeath();
-        }
-
-        private void checkBottomCollision()
-        {
-            var leftTile = drawableRoom.GetTileOfGroupAt(new Vector2(innerLeftBorderPosition(), outherBottomBorderPosition()), TileGroup.Solid);
-            var rightTile = drawableRoom.GetTileOfGroupAt(new Vector2(innerRightBorderPosition(), outherBottomBorderPosition()), TileGroup.Solid);
-
-            if (leftTile != null || rightTile != null)
-            {
-                var closestDrawableTilePosition = Math.Min(leftTile?.Y ?? double.MaxValue, rightTile?.Y ?? double.MaxValue);
-                player.Y = (float)(closestDrawableTilePosition - half_height);
-                resetJumpLogic();
-            }
-            else
-            {
-                if (!midAir)
-                {
-                    midAir = true;
-                    availableJumpCount = 1;
-                }
-            }
         }
 
         private void checkBottomKillerBlock()
@@ -461,7 +502,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void checkJumpRefresher()
         {
-            if (died)
+            if (IsDead)
                 return;
 
             foreach (var t in drawableRoom.Tiles)
@@ -537,7 +578,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void updatePlayerState()
         {
-            if (died)
+            if (IsDead)
                 return;
 
             if (verticalSpeed < 0)
