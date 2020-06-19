@@ -255,32 +255,28 @@ namespace IWBTM.Game.Screens.Play.Player
 
             if (verticalSpeed > 0)
             {
-                if (adjustTopAlignment())
-                {
-                    moveVertical(timeDifference);
-                    adjustTopAlignment();
-                    checkTopKillerBlock();
-                }
-                else
+                moveVertical(timeDifference);
+                if (!adjustTopAlignment())
                     verticalSpeed = 0;
+
+                checkTopKillerBlock();
             }
+
+            if (IsDead)
+                return;
 
             if (verticalSpeed <= 0)
             {
-                if (adjustBottomAlignment())
-                {
-                    moveVertical(timeDifference);
-                    adjustBottomAlignment();
-                    checkBottomKillerBlock();
+                moveVertical(timeDifference);
 
-                    if (!midAir)
-                    {
-                        midAir = true;
-                        availableJumpCount = 1;
-                    }
-                }
-                else
+                if (!adjustBottomAlignment())
                     resetJumpLogic();
+                else if (!midAir)
+                {
+                    midAir = true;
+                    availableJumpCount = 1;
+                }
+                checkBottomKillerBlock();
             }
 
             if (IsDead)
