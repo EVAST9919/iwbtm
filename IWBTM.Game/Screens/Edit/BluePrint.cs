@@ -101,8 +101,7 @@ namespace IWBTM.Game.Screens.Edit
                     if (tile != null)
                     {
                         tile.Position = GetSnappedPosition(mousePosition, SnapValue.Value, tile.Tile.Type);
-                        TileToEdit.Value = null;
-                        TileToEdit.Value = tile;
+                        reselectTile(tile);
                         objectsLayer.Save();
                     }
                 }
@@ -159,8 +158,7 @@ namespace IWBTM.Game.Screens.Edit
         public void UpdateAction(DrawableTile tile, TileAction action)
         {
             objectsLayer.UpdateAction(tile, action);
-            TileToEdit.Value = null;
-            TileToEdit.Value = tile;
+            reselectTile(tile);
         }
 
         protected override bool OnMouseDown(MouseDownEvent e)
@@ -218,8 +216,7 @@ namespace IWBTM.Game.Screens.Edit
                         if (newY >= 0)
                         {
                             tile.MoveToY(newY);
-                            TileToEdit.Value = null;
-                            TileToEdit.Value = tile;
+                            reselectTile(tile);
                             objectsLayer.Save();
                         }
                         return true;
@@ -229,8 +226,7 @@ namespace IWBTM.Game.Screens.Edit
                         if (newY < Size.Y)
                         {
                             tile.MoveToY(newY);
-                            TileToEdit.Value = null;
-                            TileToEdit.Value = tile;
+                            reselectTile(tile);
                             objectsLayer.Save();
                         }
                         return true;
@@ -240,8 +236,7 @@ namespace IWBTM.Game.Screens.Edit
                         if (newX >= 0)
                         {
                             tile.MoveToX(newX);
-                            TileToEdit.Value = null;
-                            TileToEdit.Value = tile;
+                            reselectTile(tile);
                             objectsLayer.Save();
                         }
                         return true;
@@ -251,8 +246,7 @@ namespace IWBTM.Game.Screens.Edit
                         if (newX < Size.X)
                         {
                             tile.MoveToX(newX);
-                            TileToEdit.Value = null;
-                            TileToEdit.Value = tile;
+                            reselectTile(tile);
                             objectsLayer.Save();
                         }
                         return true;
@@ -284,6 +278,12 @@ namespace IWBTM.Game.Screens.Edit
                 return new DrawableCherry(tile, skin, false, false);
 
             return new DrawableTile(tile, skin, false);
+        }
+
+        private void reselectTile(DrawableTile tile)
+        {
+            TileToEdit.Value = null;
+            TileToEdit.Value = tile;
         }
     }
 }
