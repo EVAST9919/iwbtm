@@ -27,23 +27,17 @@ namespace IWBTM.Game.Screens.Edit
         {
             ClearInternal();
 
-            if (snapValue < 4)
+            if (snapValue < 8)
                 return;
 
             for (int i = 0; i <= Size.X; i += snapValue)
             {
-                AddInternal(new VerticalLine
-                {
-                    X = i
-                });
+                AddInternal(new VerticalLine { X = i });
             }
 
             for (int i = 0; i <= Size.Y; i += snapValue)
             {
-                AddInternal(new HorizontalLine
-                {
-                    Y = i
-                });
+                AddInternal(new HorizontalLine { Y = i });
             }
         }
 
@@ -52,7 +46,7 @@ namespace IWBTM.Game.Screens.Edit
             public VerticalLine()
             {
                 RelativeSizeAxes = Axes.Y;
-                Width = 0.5f;
+                Width = 0.01f;
                 Origin = Anchor.TopCentre;
                 Colour = Color4.White;
                 EdgeSmoothness = Vector2.One;
@@ -64,7 +58,7 @@ namespace IWBTM.Game.Screens.Edit
             public HorizontalLine()
             {
                 RelativeSizeAxes = Axes.X;
-                Height = 0.5f;
+                Height = 0.01f;
                 Origin = Anchor.CentreLeft;
                 Colour = Color4.White;
                 EdgeSmoothness = Vector2.One;
