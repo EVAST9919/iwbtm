@@ -91,7 +91,7 @@ namespace IWBTM.Game.Screens.Edit
                 PositionY = (int)position.Y
             };
 
-            AddTile(tile);
+            AddTile(tile, true);
             Save();
         }
 

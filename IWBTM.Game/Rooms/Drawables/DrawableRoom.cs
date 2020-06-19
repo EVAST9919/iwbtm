@@ -56,7 +56,7 @@ namespace IWBTM.Game.Rooms.Drawables
             });
 
             foreach (var t in Room.Tiles)
-                AddTile(t);
+                AddTile(t, false);
         }
 
         [BackgroundDependencyLoader]
@@ -227,45 +227,58 @@ namespace IWBTM.Game.Rooms.Drawables
             return null;
         }
 
-        protected void AddTile(Tile t)
+        protected void AddTile(Tile t, bool animated)
         {
+            DrawableTile drawable = null;
+
             switch (t.Type)
             {
                 case TileType.Water3:
-                    content.Add(new DrawableTile(t, Room.Skin, allowEdit)
+                    drawable = new DrawableTile(t, Room.Skin, allowEdit)
                     {
                         Alpha = showWater ? 1 : 0
-                    });
-                    return;
+                    };
+                    break;
 
                 case TileType.Jumprefresher:
-                    content.Add(new DrawableJumpRefresher(t, Room.Skin, allowEdit));
-                    return;
+                    drawable = new DrawableJumpRefresher(t, Room.Skin, allowEdit);
+                    break;
 
                 case TileType.Save:
-                    content.Add(new SaveTile(t, Room.Skin, allowEdit));
-                    return;
+                    drawable = new SaveTile(t, Room.Skin, allowEdit);
+                    break;
 
                 case TileType.BulletBlocker:
-                    content.Add(new DrawableBulletBlocker(t, Room.Skin, showBulletBlocker, allowEdit));
-                    return;
+                    drawable = new DrawableBulletBlocker(t, Room.Skin, showBulletBlocker, allowEdit);
+                    break;
 
                 case TileType.Cherry:
-                    content.Add(new DrawableCherry(t, Room.Skin, animatedCherry, allowEdit));
-                    return;
+                    drawable = new DrawableCherry(t, Room.Skin, animatedCherry, allowEdit);
+                    break;
 
                 case TileType.PlayerStart:
                     PlayerSpawnPosition = new Vector2(t.PositionX, t.PositionY);
 
                     if (showPlayerSpawn)
-                        content.Add(new DrawableTile(t, Room.Skin, allowEdit));
+                        drawable = new DrawableTile(t, Room.Skin, allowEdit);
 
-                    return;
+                    break;
 
                 default:
-                    content.Add(new DrawableTile(t, Room.Skin, allowEdit));
-                    return;
+                    drawable = new DrawableTile(t, Room.Skin, allowEdit);
+                    break;
             }
+
+            if (drawable == null)
+                return;
+
+            content.Add(drawable);
+
+            if (!animated)
+                return;
+
+            drawable.MainSprite.Scale = Vector2.Zero;
+            drawable.MainSprite.ScaleTo(1, 300, Easing.Out);
         }
     }
 }

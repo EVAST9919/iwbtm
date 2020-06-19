@@ -22,7 +22,7 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public Tile Tile { get; private set; }
 
-        protected readonly Sprite MainSprite;
+        public readonly Sprite MainSprite;
         protected readonly string Skin;
 
         public DrawableTile(Tile tile, string skin, bool allowEdit)
@@ -36,7 +36,9 @@ namespace IWBTM.Game.Rooms.Drawables
             BorderColour = IWannaColour.Blue;
             AddInternal(MainSprite = new Sprite
             {
-                RelativeSizeAxes = Axes.Both
+                RelativeSizeAxes = Axes.Both,
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre
             });
         }
 
