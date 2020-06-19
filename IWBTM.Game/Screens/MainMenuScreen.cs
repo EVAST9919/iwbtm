@@ -32,7 +32,9 @@ namespace IWBTM.Game.Screens
                     Origin = Anchor.Centre,
                     Text = "I Wanna Be The Mapper",
                     Font = FontUsage.Default.With(size: 50),
-                    Y = -100
+                    Y = -100,
+                    Shadow = true,
+                    ShadowOffset = new Vector2(0, 0.15f)
                 },
                 new FillFlowContainer<Button>
                 {
