@@ -28,7 +28,8 @@ namespace IWBTM.Game.Screens.Play.Player
         private const double vertical_stop_speed_multiplier = 0.45;
         private const double jump_speed = 8.5;
         private const double jump2_speed = 7;
-        private const double gravity = 0.423; // 0.4 is legacy, but this one matches better for some reason
+        private const double gravity_up = 0.42;
+        private const double gravity_down = 0.442;
         private const double max_vertical_speed = 9;
         private const double max_water_vertical_speed = 2;
 
@@ -192,7 +193,7 @@ namespace IWBTM.Game.Screens.Play.Player
                 return;
 
             var elapsedFrameTime = Clock.ElapsedFrameTime;
-            var timeDifference = elapsedFrameTime / 20;
+            var timeDifference = elapsedFrameTime / 21;
             var keys = GetContainingInputManager().CurrentState.Keyboard.Keys;
 
             if (keys.IsPressed(Key.Right))
@@ -237,7 +238,7 @@ namespace IWBTM.Game.Screens.Play.Player
             if (Precision.AlmostEquals(verticalSpeed, 0, 0.0001))
                 verticalSpeed = 0;
 
-            verticalSpeed -= gravity * timeDifference;
+            verticalSpeed -= (verticalSpeed > 0 ? gravity_up : gravity_down) * timeDifference;
 
             bool inWater = checkInWater();
 
