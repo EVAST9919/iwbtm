@@ -21,6 +21,8 @@ namespace IWBTM.Game.Screens.Select
         private Container buttonsContainer;
         private Button leftButton;
         private Button rightButton;
+        private IWannaProgressBar progress;
+        private SpriteText roomCounter;
 
         [BackgroundDependencyLoader]
         private void load()
@@ -29,6 +31,19 @@ namespace IWBTM.Game.Screens.Select
             Padding = new MarginPadding(10);
             AddRangeInternal(new Drawable[]
             {
+                new FillFlowContainer
+                {
+                    RelativeSizeAxes = Axes.X,
+                    AutoSizeAxes = Axes.Y,
+                    Direction = FillDirection.Vertical,
+                    Spacing = new Vector2(0, 5),
+                    Margin = new MarginPadding { Top = 10 },
+                    Children = new Drawable[]
+                    {
+                        progress = new IWannaProgressBar(),
+                        roomCounter = new SpriteText()
+                    }
+                },
                 placeholder = new Container
                 {
                     RelativeSizeAxes = Axes.Both
@@ -105,6 +120,11 @@ namespace IWBTM.Game.Screens.Select
 
             leftButton.Alpha = roomIndex == 0 ? 0 : 1;
             rightButton.Alpha = roomIndex == rooms.Count - 1 ? 0 : 1;
+
+            var count = rooms.Count;
+
+            progress.ProgressTo((roomIndex + 1) / (float)count);
+            roomCounter.Text = $"Room {roomIndex + 1} of {count}";
         }
 
         private void trySelectNext()
