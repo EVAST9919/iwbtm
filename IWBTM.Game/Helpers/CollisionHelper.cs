@@ -57,7 +57,7 @@ namespace IWBTM.Game.Helpers
                 case TileType.SpikeBottom:
                 case TileType.SmallSpikeBottom:
                     list.Add(cornerPosition + new Vector2(0, 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X, cornerPosition.Y + 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + 1));
                     list.Add(new Vector2(cornerPosition.X + size.X / 2, cornerPosition.Y + size.Y));
                     break;
 
@@ -65,21 +65,21 @@ namespace IWBTM.Game.Helpers
                 case TileType.SmallSpikeTop:
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y));
                     list.Add(new Vector2(cornerPosition.X + size.X / 2, cornerPosition.Y + 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X, cornerPosition.Y + size.Y));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y));
                     break;
 
                 case TileType.SpikeLeft:
                 case TileType.SmallSpikeLeft:
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y / 2));
-                    list.Add(new Vector2(cornerPosition.X + size.X, cornerPosition.Y + 1));
-                    list.Add(new Vector2(cornerPosition.X + size.X, cornerPosition.Y + size.Y));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + 1));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y));
                     break;
 
                 case TileType.SpikeRight:
                 case TileType.SmallSpikeRight:
                     list.Add(cornerPosition + new Vector2(0, 1));
                     list.Add(new Vector2(cornerPosition.X, cornerPosition.Y + size.Y));
-                    list.Add(new Vector2(cornerPosition.X + size.X, cornerPosition.Y + size.Y / 2));
+                    list.Add(new Vector2(cornerPosition.X + size.X - 1, cornerPosition.Y + size.Y / 2));
                     break;
             }
 
@@ -144,7 +144,7 @@ namespace IWBTM.Game.Helpers
 
         private static bool pointInPlayer(Vector2 point, List<Vector2> playerPoints)
         {
-            if (point.X > playerPoints[0].X && point.X < playerPoints[1].X)
+            if (point.X >= playerPoints[0].X && point.X < playerPoints[1].X)
             {
                 if (point.Y > playerPoints[0].Y && point.Y <= playerPoints[3].Y)
                     return true;
