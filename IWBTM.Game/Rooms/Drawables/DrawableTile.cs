@@ -6,7 +6,6 @@ using osuTK;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using IWBTM.Game.UserInterface;
-using osu.Framework.Graphics.Shapes;
 using IWBTM.Game.Helpers;
 
 namespace IWBTM.Game.Rooms.Drawables
@@ -25,7 +24,6 @@ namespace IWBTM.Game.Rooms.Drawables
 
         protected readonly Sprite MainSprite;
         protected readonly string Skin;
-        private readonly Container selectContainer;
 
         public DrawableTile(Tile tile, string skin, bool allowEdit)
         {
@@ -34,26 +32,12 @@ namespace IWBTM.Game.Rooms.Drawables
 
             Size = GetSize(tile.Type);
             Position = new Vector2(tile.PositionX, tile.PositionY);
+            Masking = allowEdit;
+            BorderColour = IWannaColour.Blue;
             AddInternal(MainSprite = new Sprite
             {
                 RelativeSizeAxes = Axes.Both
             });
-
-            if (allowEdit)
-            {
-                AddInternal(selectContainer = new Container
-                {
-                    RelativeSizeAxes = Axes.Both,
-                    Masking = true,
-                    BorderColour = IWannaColour.Blue,
-                    Child = new Box
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                        Alpha = 0,
-                        AlwaysPresent = true
-                    }
-                });
-            };
         }
 
         [BackgroundDependencyLoader]
@@ -110,8 +94,8 @@ namespace IWBTM.Game.Rooms.Drawables
             Position = MathExtensions.GetRotatedPosition(origin, distance, movingAngle) - positionOffset;
         }
 
-        public void Select() => selectContainer.BorderThickness = 5;
-        public void Deselect() => selectContainer.BorderThickness = 0;
+        public void Select() => BorderThickness = 5;
+        public void Deselect() => BorderThickness = 0;
 
         private Texture getTexture()
         {
