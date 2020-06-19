@@ -63,8 +63,8 @@ namespace IWBTM.Game.Screens.Play.Death
 
         public void Play()
         {
-            tint.FadeTo(0.6f, 260);
-            blackFlash.FadeIn(0.8f).Then().FadeOut(180);
+            tint.FadeTo(0.52f, 260);
+            blackFlash.FadeIn(0.75f).Then().FadeOut(180);
             sprite.Delay(200).FadeIn(600);
             letterbox.Delay(330).FadeIn(700);
             deathSample.Play();
