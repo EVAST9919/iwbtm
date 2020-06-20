@@ -1,13 +1,13 @@
 ﻿using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.Screens.Test;
+using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 using osuTK;
 using osuTK.Graphics;
@@ -22,8 +22,8 @@ namespace IWBTM.Game.Screens
         private SpriteText xSpeed;
         private SpriteText ySpeed;
 
-        private BasicCheckbox hitboxCheckbox;
-        private BasicCheckbox deathSpotsCheckbox;
+        private IWannaCheckbox hitboxCheckbox;
+        private IWannaCheckbox deathSpotsCheckbox;
 
         public TestGameplayScreen(Level level, string name)
             : base(level, name)
@@ -55,11 +55,11 @@ namespace IWBTM.Game.Screens
                             Spacing = new Vector2(0, 5),
                             Children = new Drawable[]
                             {
-                                hitboxCheckbox = new BasicCheckbox
+                                hitboxCheckbox = new IWannaCheckbox
                                 {
                                     LabelText = "Show hitbox",
                                 },
-                                deathSpotsCheckbox = new BasicCheckbox
+                                deathSpotsCheckbox = new IWannaCheckbox
                                 {
                                     LabelText = "Show death spots",
                                 },

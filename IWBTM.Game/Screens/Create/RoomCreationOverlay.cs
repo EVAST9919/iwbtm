@@ -6,7 +6,6 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.UserInterface;
 using osuTK;
 using System;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ namespace IWBTM.Game.Screens.Create
         protected readonly RoomCompletionSelector RoomCompletionSelector;
         protected readonly SizeSetting SizeSetting;
         private readonly SizeAdjustmentOverlay sizeAdjustmentOverlay;
-        private readonly BasicCheckbox createBorders;
+        private readonly IWannaCheckbox createBorders;
 
         public RoomCreationOverlay(bool showCreationSettings = true)
         {
@@ -60,7 +59,7 @@ namespace IWBTM.Game.Screens.Create
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
                                 },
-                                createBorders = new BasicCheckbox
+                                createBorders = new IWannaCheckbox
                                 {
                                     Anchor = Anchor.Centre,
                                     Origin = Anchor.Centre,
