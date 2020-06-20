@@ -144,7 +144,7 @@ namespace IWBTM.Game.Helpers
 
         private static bool pointInPlayer(Vector2 point, List<Vector2> playerPoints)
         {
-            if (point.X >= playerPoints[0].X && point.X < playerPoints[1].X)
+            if (point.X > playerPoints[0].X - 1 && point.X < playerPoints[1].X)
             {
                 if (point.Y > playerPoints[0].Y && point.Y <= playerPoints[3].Y)
                     return true;
