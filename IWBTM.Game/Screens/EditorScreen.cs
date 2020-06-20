@@ -135,8 +135,8 @@ namespace IWBTM.Game.Screens
 
         private void moveToCentre()
         {
-            drawableRoomPlaceholder.Scale = Vector2.One;
-            drawableRoomPlaceholder.Position = Vector2.Zero;
+            drawableRoomPlaceholder.ScaleTo(Vector2.One, 200, Easing.Out);
+            drawableRoomPlaceholder.MoveTo(Vector2.Zero, 200, Easing.Out);
         }
 
         private void test()
