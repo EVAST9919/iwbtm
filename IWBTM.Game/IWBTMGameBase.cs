@@ -37,6 +37,8 @@ namespace IWBTM.Game
             dependencies.Cache(levelAudioManager);
 
             config.GetBindable<FrameSync>(FrameworkSetting.FrameSync).Value = FrameSync.Unlimited;
+
+            Host.Window.Title = "I Wanna Be The Mapper";
         }
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
