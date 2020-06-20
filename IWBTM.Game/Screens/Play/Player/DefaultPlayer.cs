@@ -35,6 +35,7 @@ namespace IWBTM.Game.Screens.Play.Player
 
         public readonly Bindable<PlayerState> State = new Bindable<PlayerState>(PlayerState.Idle);
         public readonly Bindable<bool> ShowHitbox = new Bindable<bool>();
+        public readonly Bindable<bool> God = new Bindable<bool>();
 
         [Resolved]
         private DrawableRoom drawableRoom { get; set; }
@@ -218,7 +219,8 @@ namespace IWBTM.Game.Screens.Play.Player
                 {
                     moveRight(elapsedFrameTime);
                     adjustRightAlignment();
-                    checkRightKillerBlock();
+                    if (!God.Value)
+                        checkRightKillerBlock();
                 }
             }
 
@@ -228,7 +230,8 @@ namespace IWBTM.Game.Screens.Play.Player
                 {
                     moveLeft(elapsedFrameTime);
                     adjustLeftAlignment();
-                    checkLeftKillerBlock();
+                    if (!God.Value)
+                        checkLeftKillerBlock();
                 }
             }
 
@@ -259,7 +262,8 @@ namespace IWBTM.Game.Screens.Play.Player
                 if (!adjustTopAlignment())
                     verticalSpeed = 0;
 
-                checkTopKillerBlock();
+                if (!God.Value)
+                    checkTopKillerBlock();
             }
 
             if (IsDead)
@@ -276,7 +280,8 @@ namespace IWBTM.Game.Screens.Play.Player
                     midAir = true;
                     availableJumpCount = 1;
                 }
-                checkBottomKillerBlock();
+                if (!God.Value)
+                    checkBottomKillerBlock();
             }
 
             if (IsDead)
@@ -287,8 +292,12 @@ namespace IWBTM.Game.Screens.Play.Player
             if (completed || IsDead)
                 return;
 
-            checkSpikes();
-            checkCherries();
+            if (!God.Value)
+            {
+                checkSpikes();
+                checkCherries();
+            }
+
             checkJumpRefresher();
             updatePlayerState();
             checkCompletion();
@@ -298,9 +307,12 @@ namespace IWBTM.Game.Screens.Play.Player
         {
             if (drawableRoom.Room.RoomCompletionType == RoomCompletionType.Warp)
             {
-                if (player.X - half_width <= 0 || player.X + half_width >= drawableRoom.Size.X
+                if (!God.Value)
+                {
+                    if (player.X - half_width <= 0 || player.X + half_width >= drawableRoom.Size.X
                     || player.Y - half_height <= 0 || player.Y + half_height >= drawableRoom.Size.Y)
-                    onDeath();
+                        onDeath();
+                }
             }
             else
             {

@@ -24,6 +24,7 @@ namespace IWBTM.Game.Screens
 
         private IWannaCheckbox hitboxCheckbox;
         private IWannaCheckbox deathSpotsCheckbox;
+        private IWannaCheckbox godCheckbox;
 
         public TestGameplayScreen(Level level, string name)
             : base(level, name)
@@ -65,6 +66,10 @@ namespace IWBTM.Game.Screens
                                 {
                                     LabelText = "Show death spots",
                                 },
+                                godCheckbox = new IWannaCheckbox
+                                {
+                                    LabelText = "God mode"
+                                },
                                 xPosition = new SpriteText(),
                                 yPosition = new SpriteText(),
                                 state = new SpriteText(),
@@ -85,6 +90,7 @@ namespace IWBTM.Game.Screens
 
             hitboxCheckbox.Current = ((TestPlayfield)playfield).ShowHitbox;
             deathSpotsCheckbox.Current = ((TestPlayfield)playfield).ShowDeath;
+            godCheckbox.Current = ((TestPlayfield)playfield).GodMode;
         }
 
         protected override void Update()

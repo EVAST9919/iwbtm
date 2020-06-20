@@ -12,6 +12,7 @@ namespace IWBTM.Game.Screens.Test
     {
         public readonly Bindable<bool> ShowDeath = new Bindable<bool>();
         public readonly Bindable<bool> ShowHitbox = new Bindable<bool>();
+        public readonly Bindable<bool> GodMode = new Bindable<bool>();
 
         public TestPlayfield(Room room)
             : base(room)
@@ -32,7 +33,9 @@ namespace IWBTM.Game.Screens.Test
             ShowDeath.BindValueChanged(onTrailChanged, true);
             Player.Died += (position, _) => onDeath(position);
             Player.ShowHitbox.BindTo(ShowHitbox);
+            Player.God.BindTo(GodMode);
             ShowHitbox.TriggerChange();
+            GodMode.TriggerChange();
         }
 
         private void onDeath(Vector2 position)
