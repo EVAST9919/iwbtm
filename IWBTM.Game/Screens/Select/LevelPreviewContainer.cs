@@ -46,7 +46,8 @@ namespace IWBTM.Game.Screens.Select
                 },
                 placeholder = new Container
                 {
-                    RelativeSizeAxes = Axes.Both
+                    RelativeSizeAxes = Axes.Both,
+                    Padding = new MarginPadding { Vertical = 40 }
                 },
                 buttonsContainer = new Container
                 {
