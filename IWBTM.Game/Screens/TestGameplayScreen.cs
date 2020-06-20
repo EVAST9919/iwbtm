@@ -35,8 +35,10 @@ namespace IWBTM.Game.Screens
         {
             AddInternal(new Container
             {
-                AutoSizeAxes = Axes.Y,
-                Width = 250,
+                Margin = new MarginPadding(10),
+                AutoSizeAxes = Axes.Both,
+                Masking = true,
+                CornerRadius = 8,
                 Children = new Drawable[]
                 {
                     new Box
@@ -110,7 +112,7 @@ namespace IWBTM.Game.Screens
                     var speed = player.PlayerSpeed();
 
                     xSpeed.Text = $"Horizontal speed: {speed.X}";
-                    ySpeed.Text = $"Vertical speed: {speed.Y}";
+                    ySpeed.Text = $"Vertical speed: {speed.Y.ToString("0.000")}";
                 }
             }
         }
