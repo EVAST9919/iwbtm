@@ -278,7 +278,7 @@ namespace IWBTM.Game.Rooms.Drawables
                 return;
 
             drawable.MainSprite.Scale = Vector2.Zero;
-            drawable.MainSprite.ScaleTo(1, 300, Easing.Out);
+            drawable.MainSprite.ScaleTo(1, 200, Easing.Out);
         }
     }
 }
