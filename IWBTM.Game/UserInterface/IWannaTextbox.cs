@@ -19,6 +19,7 @@ namespace IWBTM.Game.UserInterface
             BackgroundUnfocused = BackgroundFocused = IWannaColour.GrayDarkest;
             BackgroundCommit = IWannaColour.GrayDarker;
             BorderColour = IWannaColour.Blue;
+            Placeholder.Colour = IWannaColour.Blue;
         }
 
         protected override void OnFocus(FocusEvent e)
