@@ -184,7 +184,7 @@ namespace IWBTM.Game.Screens.Edit
                 case ToolEnum.Select:
                     objectsLayer.DeselectAll();
 
-                    var selectedTile = objectsLayer.GetAnyTileAt(mousePosition);
+                    var selectedTile = objectsLayer.GetFirstTileAt(mousePosition);
                     if (selectedTile == null)
                     {
                         TileToEdit.Value = null;

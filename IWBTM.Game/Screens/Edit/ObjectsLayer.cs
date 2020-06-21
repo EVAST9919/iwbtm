@@ -67,7 +67,7 @@ namespace IWBTM.Game.Screens.Edit
 
         public void TryRemove(Vector2 position)
         {
-            var tileToRemove = GetAnyTileAt(position);
+            var tileToRemove = GetFirstTileAt(position);
             tileToRemove?.Expire();
 
             Save();

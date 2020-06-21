@@ -91,8 +91,6 @@ namespace IWBTM.Game.Rooms.Drawables
 
         public bool HasTileAt(Vector2 position, TileType type) => GetTileAt(position, type) != null;
 
-        public bool HasAnyTileAt(Vector2 pixelPosition) => GetAnyTileAt(pixelPosition) != null;
-
         public bool HasTile(TileType type) => GetTile(type) != null;
 
         public DrawableTile GetTile(TileType type)
@@ -210,8 +208,10 @@ namespace IWBTM.Game.Rooms.Drawables
             return null;
         }
 
-        public DrawableTile GetAnyTileAt(Vector2 pixelPosition)
+        public DrawableTile GetFirstTileAt(Vector2 pixelPosition)
         {
+            DrawableTile tile = null;
+
             foreach (var child in content.Children)
             {
                 var tilePosition = child.Position;
@@ -220,11 +220,11 @@ namespace IWBTM.Game.Rooms.Drawables
                 if (pixelPosition.X >= tilePosition.X && pixelPosition.X < tilePosition.X + tileSize.X)
                 {
                     if (pixelPosition.Y >= tilePosition.Y && pixelPosition.Y < tilePosition.Y + tileSize.Y)
-                        return child;
+                        tile = child;
                 }
             }
 
-            return null;
+            return tile;
         }
 
         protected void AddTile(Tile t, bool animated)
