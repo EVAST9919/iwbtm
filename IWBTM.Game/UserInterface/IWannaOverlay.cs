@@ -13,6 +13,8 @@ namespace IWBTM.Game.UserInterface
 
         protected override bool StartHidden => true;
 
+        protected virtual float Dim => 0.5f;
+
         private readonly Box bg;
 
         public IWannaOverlay()
@@ -30,7 +32,7 @@ namespace IWBTM.Game.UserInterface
 
         protected override void PopIn()
         {
-            bg.FadeTo(0.5f, 200, Easing.Out);
+            bg.FadeTo(Dim, 200, Easing.Out);
         }
 
         protected override void PopOut()

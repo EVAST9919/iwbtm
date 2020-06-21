@@ -227,7 +227,7 @@ namespace IWBTM.Game.Rooms.Drawables
             return tile;
         }
 
-        protected void AddTile(Tile t, bool animated)
+        public void AddTile(Tile t, bool animated)
         {
             DrawableTile drawable = null;
 

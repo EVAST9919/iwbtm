@@ -34,6 +34,7 @@ namespace IWBTM.Game.Screens
         private readonly string name;
         private readonly RoomSelectorOverlay roomSelector;
         private readonly RoomEditOverlay roomSettings;
+        private readonly CherriesEditOverlay cherriesSettings;
         private readonly Container drawableRoomPlaceholder;
         private readonly ToolBar toolbar;
         private readonly ToolSelector toolSelector;
@@ -92,11 +93,13 @@ namespace IWBTM.Game.Screens
                                 OnSave = save,
                                 OnRoomSelect = selectRoom,
                                 OnClear = clear,
-                                OnSettings = onSettings
+                                OnSettings = onSettings,
+                                OnCherries = onCherries,
                             }
                         }
                     }
                 },
+                cherriesSettings = new CherriesEditOverlay(),
                 roomSelector = new RoomSelectorOverlay(),
                 roomSettings = new RoomEditOverlay()
             });
@@ -131,6 +134,9 @@ namespace IWBTM.Game.Screens
             toolSelector.SelectedTile.BindTo(blueprint.TileToEdit);
 
             toolSelector.Edited += blueprint.UpdateAction;
+            cherriesSettings.Skin = room.NewValue.Skin;
+            cherriesSettings.PreviewUpdated += blueprint.UpdateCherriesPreview;
+            cherriesSettings.CherriesAdded += blueprint.AddCherriesRange;
         }
 
         private void moveToCentre()
@@ -190,6 +196,11 @@ namespace IWBTM.Game.Screens
         private void onSettings()
         {
             roomSettings.Edit(selectedRoom.Value);
+        }
+
+        private void onCherries()
+        {
+            cherriesSettings.Show();
         }
 
         private void onRoomChanged(Room room)

@@ -8,6 +8,7 @@ using System.Linq;
 using osuTK.Input;
 using IWBTM.Game.Rooms;
 using IWBTM.Game.Rooms.Drawables;
+using System.Collections.Generic;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -21,6 +22,7 @@ namespace IWBTM.Game.Screens.Edit
         private readonly ObjectsLayer objectsLayer;
         private readonly Container hoverLayer;
         private readonly ActionsLayer actionsLayer;
+        private readonly Container cherriesLayer;
         private readonly Room room;
 
         public BluePrint(Room room)
@@ -44,6 +46,10 @@ namespace IWBTM.Game.Screens.Edit
                 {
                     RelativeSizeAxes = Axes.Both
                 },
+                cherriesLayer = new Container
+                {
+                    RelativeSizeAxes = Axes.Both
+                }
             });
 
             grid.Current.BindTo(SnapValue);
@@ -73,6 +79,24 @@ namespace IWBTM.Game.Screens.Edit
                     actionsLayer.Show();
                     return;
             }
+        }
+
+        public void UpdateCherriesPreview(List<DrawableTile> cherries)
+        {
+            cherriesLayer.Clear();
+
+            if (cherries.Any())
+                cherriesLayer.Children = cherries;
+        }
+
+        public void AddCherriesRange(List<DrawableTile> cherries)
+        {
+            cherries.ForEach(c =>
+            {
+                objectsLayer.AddTile(c.Tile, false);
+            });
+
+            objectsLayer.Save();
         }
 
         public bool SpawnDefined() => objectsLayer.SpawnDefined();
