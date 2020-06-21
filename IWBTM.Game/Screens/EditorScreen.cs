@@ -120,6 +120,12 @@ namespace IWBTM.Game.Screens
         {
             var newRoom = room.NewValue;
 
+            if (blueprint != null)
+            {
+                cherriesSettings.PreviewUpdated -= blueprint.UpdateCherriesPreview;
+                cherriesSettings.CherriesAdded -= blueprint.AddCherriesRange;
+            }
+
             drawableRoomPlaceholder.Child = new FullRoomPreviewContainer(new Vector2(newRoom.SizeX, newRoom.SizeY))
             {
                 Scale = new Vector2(0.9f),
