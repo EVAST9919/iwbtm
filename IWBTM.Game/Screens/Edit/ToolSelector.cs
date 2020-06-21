@@ -155,6 +155,12 @@ namespace IWBTM.Game.Screens.Edit
                 return;
             }
 
+            if (time < 0 && type == TileActionType.Movement)
+            {
+                notifications.Push("Negative time is not allowed for selected action type", NotificationState.Bad);
+                return;
+            }
+
             var action = new TileAction
             {
                 EndX = x,
