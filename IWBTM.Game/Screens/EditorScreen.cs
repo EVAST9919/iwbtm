@@ -270,12 +270,12 @@ namespace IWBTM.Game.Screens
 
             if (e.AltPressed)
             {
-                var oldScale = drawableRoomPlaceholder.Scale;
-                var newScale = oldScale.X + scrollDeltaFloat / 100;
-                if (newScale <= 0)
-                    newScale = 0;
+                var scale = drawableRoomPlaceholder.Scale.X;
+                scale += (e.ScrollDelta.Y > 0 ? 1 : -1) * scale * 0.1f;
+                if (scale <= 0)
+                    scale = 0;
 
-                drawableRoomPlaceholder.ScaleTo(newScale, 100, Easing.Out);
+                drawableRoomPlaceholder.ScaleTo(scale, 100, Easing.Out);
                 return true;
             }
 
