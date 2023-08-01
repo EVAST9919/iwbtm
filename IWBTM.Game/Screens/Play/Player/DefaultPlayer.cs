@@ -197,21 +197,22 @@ namespace IWBTM.Game.Screens.Play.Player
             var timeDifference = elapsedFrameTime / 21;
             var keys = GetContainingInputManager().CurrentState.Keyboard.Keys;
 
+            horizontalSpeed = 0;
+
             if (keys.IsPressed(Key.Right))
             {
                 horizontalSpeed = 3;
                 rightwards = true;
+
+                updateAnimationDirection();
             }
             else if (keys.IsPressed(Key.Left))
             {
                 horizontalSpeed = -3;
                 rightwards = false;
-            }
-            else
-                horizontalSpeed = 0;
 
-            if (horizontalSpeed != 0)
                 updateAnimationDirection();
+            }
 
             if (horizontalSpeed > 0)
             {
@@ -458,14 +459,8 @@ namespace IWBTM.Game.Screens.Play.Player
 
         private void updateAnimationDirection()
         {
-            var newScale = new Vector2(rightwards ? 1 : -1, 1);
-            var newX = rightwards ? -1.5f : 1.5f;
-
-            if (animationContainer.Scale != newScale)
-                animationContainer.Scale = newScale;
-
-            if (animationContainer.X != newX)
-                animationContainer.X = newX;
+            animationContainer.Scale = new Vector2(rightwards ? 1 : -1, 1);
+            animationContainer.X = rightwards ? -1.5f : 1.5f;
         }
 
         private bool checkInWater()
