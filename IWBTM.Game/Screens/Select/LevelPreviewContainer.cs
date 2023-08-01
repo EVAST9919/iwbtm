@@ -17,7 +17,7 @@ namespace IWBTM.Game.Screens.Select
 {
     public class LevelPreviewContainer : CompositeDrawable
     {
-        private Container placeholder;
+        private InteractiveContainer placeholder;
         private Container buttonsContainer;
         private Button leftButton;
         private Button rightButton;
@@ -44,10 +44,16 @@ namespace IWBTM.Game.Screens.Select
                         roomCounter = new SpriteText()
                     }
                 },
-                placeholder = new Container
+                new Container
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Padding = new MarginPadding { Vertical = 40 }
+                    Padding = new MarginPadding { Vertical = 60 },
+                    Child = new Container
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                        Masking = true,
+                        Child = placeholder = new InteractiveContainer()
+                    }
                 },
                 buttonsContainer = new Container
                 {
@@ -102,6 +108,7 @@ namespace IWBTM.Game.Screens.Select
                     Origin = Anchor.Centre,
                 }
             };
+            placeholder.Reset();
 
             content.Add(new DrawableRoom(room, showPlayerSpawn, true, false, false, false, true));
 
