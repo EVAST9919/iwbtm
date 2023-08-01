@@ -7,10 +7,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using IWBTM.Game.UserInterface;
 using IWBTM.Game.Helpers;
+using NuGet.Protocol.Plugins;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
-    public class DrawableTile : CompositeDrawable
+    public partial class DrawableTile : CompositeDrawable
     {
         public const int SIZE = 32;
 
@@ -104,67 +105,75 @@ namespace IWBTM.Game.Rooms.Drawables
             switch (Tile.Type)
             {
                 case TileType.PlatformCorner:
-                    return PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get($"Tiles/Default/block");
+                    return getTexture("block", Skin, true) ?? getTexture("block", "Default", true);
 
                 case TileType.Miniblock:
-                    return PixelTextures.Get($"Tiles/{Skin}/miniblock") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get($"Tiles/Default/miniblock");
+                    return getTexture("miniblock", Skin, true) ?? getTexture("block", Skin, true) ?? getTexture("miniblock", "Default", true);
 
                 case TileType.PlatformMiddle:
-                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get("Tiles/Default/platform-middle");
+                    return getTexture("platform-middle", Skin, true) ?? getTexture("block", Skin, true) ?? getTexture("platform-middle", "Default", true);
 
                 case TileType.PlatformMiddleRotated:
-                    return PixelTextures.Get($"Tiles/{Skin}/platform-middle-rotated") ?? PixelTextures.Get($"Tiles/{Skin}/block") ?? PixelTextures.Get("Tiles/Default/platform-middle-rotated");
+                    return getTexture("platform-middle-rotated", Skin, true) ?? getTexture("block", Skin, true) ?? getTexture("platform-middle-rotated", "Default", true);
 
                 case TileType.PlayerStart:
-                    return Textures.Get($"Tiles/{Skin}/playerstart") ?? Textures.Get("Tiles/Default/playerstart");
+                    return getTexture("playerstart", Skin, false) ?? getTexture("playerstart", "Default", false);
 
                 case TileType.SmallSpikeBottom:
-                    return Textures.Get($"Tiles/{Skin}/minidown") ?? Textures.Get($"Tiles/{Skin}/spikedown") ?? Textures.Get("Tiles/Default/spikedown");
+                    return getTexture("minidown", Skin, false) ?? getTexture("spikedown", Skin, false) ?? getTexture("spikedown", "Default", false);
 
                 case TileType.SpikeBottom:
-                    return Textures.Get($"Tiles/{Skin}/spikedown") ?? Textures.Get("Tiles/Default/spikedown");
+                    return getTexture("spikedown", Skin, false) ?? getTexture("spikedown", "Default", false);
 
                 case TileType.SmallSpikeTop:
-                    return Textures.Get($"Tiles/{Skin}/miniup") ?? Textures.Get($"Tiles/{Skin}/spikeup") ?? Textures.Get("Tiles/Default/spikeup");
+                    return getTexture("miniup", Skin, false) ?? getTexture("spikeup", Skin, false) ?? getTexture("spikeup", "Default", false);
 
                 case TileType.SpikeTop:
-                    return Textures.Get($"Tiles/{Skin}/spikeup") ?? Textures.Get("Tiles/Default/spikeup");
+                    return getTexture("spikeup", Skin, false) ?? getTexture("spikeup", "Default", false);
 
                 case TileType.SmallSpikeLeft:
-                    return Textures.Get($"Tiles/{Skin}/minileft") ?? Textures.Get($"Tiles/{Skin}/spikeleft") ?? Textures.Get("Tiles/Default/spikeleft");
+                    return getTexture("minileft", Skin, false) ?? getTexture("spikeleft", Skin, false) ?? getTexture("spikeleft", "Default", false);
 
                 case TileType.SpikeLeft:
-                    return Textures.Get($"Tiles/{Skin}/spikeleft") ?? Textures.Get("Tiles/Default/spikeleft");
+                    return getTexture("spikeleft", Skin, false) ?? getTexture("spikeleft", "Default", false);
 
                 case TileType.SmallSpikeRight:
-                    return Textures.Get($"Tiles/{Skin}/miniright") ?? Textures.Get($"Tiles/{Skin}/spikeright") ?? Textures.Get("Tiles/Default/spikeright");
+                    return getTexture("miniright", Skin, false) ?? getTexture("spikeright", Skin, false) ?? getTexture("spikeright", "Default", false);
 
                 case TileType.SpikeRight:
-                    return Textures.Get($"Tiles/{Skin}/spikeright") ?? Textures.Get("Tiles/Default/spikeright");
+                    return getTexture("spikeright", Skin, false) ?? getTexture("spikeright", "Default", false);
 
                 case TileType.Save:
-                    return Textures.Get($"Tiles/{Skin}/save") ?? Textures.Get("Tiles/Default/save");
+                    return getTexture("save", Skin, false) ?? getTexture("save", "Default", false);
 
                 case TileType.Warp:
-                    return Textures.Get($"Tiles/{Skin}/warp") ?? Textures.Get("Tiles/Default/warp");
+                    return getTexture("warp", Skin, false) ?? getTexture("warp", "Default", false);
 
                 case TileType.Cherry:
-                    return Textures.Get($"Tiles/{Skin}/cherry-1") ?? Textures.Get("Tiles/Default/cherry-1");
+                    return getTexture("cherry-1", Skin, true) ?? getTexture("cherry-1", "Default", true);
 
                 case TileType.KillerBlock:
-                    return Textures.Get($"Tiles/{Skin}/killerblock") ?? Textures.Get("Tiles/Default/killerblock");
+                    return getTexture("killerblock", Skin, true) ?? getTexture("killerblock", "Default", true);
 
                 case TileType.BulletBlocker:
-                    return Textures.Get($"Tiles/{Skin}/bulletblocker") ?? Textures.Get("Tiles/Default/bulletblocker");
+                    return getTexture("bulletblocker", Skin, true) ?? getTexture("bulletblocker", "Default", true);
 
                 case TileType.Jumprefresher:
-                    return Textures.Get($"Tiles/{Skin}/jumprefresher") ?? Textures.Get("Tiles/Default/jumprefresher");
+                    return getTexture("jumprefresher", Skin, true) ?? getTexture("jumprefresher", "Default", true);
 
                 case TileType.Water3:
-                    return PixelTextures.Get($"Tiles/{Skin}/water3") ?? PixelTextures.Get("Tiles/Default/water3");
+                    return getTexture("water3", Skin, false) ?? getTexture("water3", "Default", false);
             }
 
             throw new NotImplementedException("Tile is not implemented");
+        }
+
+        private Texture getTexture(string name, string skin, bool pixelated)
+        {
+            if (pixelated)
+                return PixelTextures.Get($"Tiles/{skin}/{name}", WrapMode.ClampToEdge, WrapMode.ClampToEdge);
+
+            return Textures.Get($"Tiles/{skin}/{name}", WrapMode.ClampToEdge, WrapMode.ClampToEdge);
         }
 
         public static Vector2 GetSize(TileType type)
