@@ -4,6 +4,7 @@ using System;
 using IWBTM.Game.Rooms.Drawables;
 using IWBTM.Game.Rooms;
 using osu.Framework.Graphics.Cursor;
+using osu.Framework.Localisation;
 
 namespace IWBTM.Game.Screens.Edit
 {
@@ -30,7 +31,7 @@ namespace IWBTM.Game.Screens.Edit
                 }));
             }
 
-            public string TooltipText => Value.ToString();
+            public LocalisableString TooltipText => Value.ToString();
 
             private static DrawableTile createTile(Tile tile)
             {

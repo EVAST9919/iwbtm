@@ -208,7 +208,7 @@ namespace IWBTM.Game.Screens
             if (level.Rooms.Last() == level.Rooms[currentRoomIndex])
             {
                 track?.Stop();
-                this.Push(new ResultsScreen(deathSpots, level, timer.Text));
+                this.Push(new ResultsScreen(deathSpots, level, timer.Text.ToString()));
                 return;
             }
 

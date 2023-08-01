@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IWBTM.Game
@@ -19,7 +20,7 @@ namespace IWBTM.Game
             }
         }
 
-        public Task<byte[]> GetAsync(string name) => null;
+        public Task<byte[]> GetAsync(string name, CancellationToken cancellationToken = default) => null;
 
         public Stream GetStream(string name) => File.OpenRead($"Levels/{name}/audio.mp3");
 

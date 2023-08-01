@@ -2,12 +2,12 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
-using osu.Framework.Graphics.Audio;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Sprites;
 using osuTK;
+using osu.Framework.Audio.Sample;
 
 namespace IWBTM.Game.Screens.Play.Death
 {
@@ -17,7 +17,8 @@ namespace IWBTM.Game.Screens.Play.Death
         private Box blackFlash;
         private Sprite sprite;
         private LetterboxOverlay letterbox;
-        private DrawableSample deathSample;
+        private Sample deathSample;
+        private SampleChannel deathSampleChannel;
         private Box continueLayer;
 
         [BackgroundDependencyLoader]
@@ -56,9 +57,10 @@ namespace IWBTM.Game.Screens.Play.Death
                     Alpha = 0,
                     Colour = Color4.Black
                 },
-                letterbox = new LetterboxOverlay(),
-                deathSample = new DrawableSample(audio.Samples.Get("death")),
+                letterbox = new LetterboxOverlay()
             });
+
+            deathSample = audio.Samples.Get("death");
         }
 
         public void Play()
@@ -67,7 +69,7 @@ namespace IWBTM.Game.Screens.Play.Death
             blackFlash.FadeIn(0.75f).Then().FadeOut(180);
             sprite.Delay(200).FadeIn(600);
             letterbox.Delay(330).FadeIn(700);
-            deathSample.Play();
+            deathSampleChannel = deathSample.Play();
         }
 
         public void Restore()
@@ -83,7 +85,7 @@ namespace IWBTM.Game.Screens.Play.Death
             letterbox.ClearTransforms();
             letterbox.FadeOut();
 
-            deathSample.Stop();
+            deathSampleChannel?.Stop();
 
             continueLayer.FadeOutFromOne(100);
         }

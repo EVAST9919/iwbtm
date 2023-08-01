@@ -68,15 +68,15 @@ namespace IWBTM.Game.Screens
             this.Push(new EditorScreen(item.Level, item.LevelName));
         }
 
-        public override void OnEntering(IScreen last)
+        public override void OnEntering(ScreenTransitionEvent e)
         {
-            base.OnEntering(last);
+            base.OnEntering(e);
             carousel.UpdateItems();
         }
 
-        public override void OnResuming(IScreen last)
+        public override void OnResuming(ScreenTransitionEvent e)
         {
-            base.OnResuming(last);
+            base.OnResuming(e);
             carousel.UpdateItems();
         }
 

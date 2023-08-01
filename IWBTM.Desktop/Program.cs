@@ -8,7 +8,7 @@ namespace IWBTM.Desktop
     {
         public static void Main()
         {
-            GameHost host = Host.GetSuitableHost(@"IWBTM");
+            GameHost host = Host.GetSuitableDesktopHost(@"IWBTM");
             host.Run(new IWBTMGame());
         }
     }

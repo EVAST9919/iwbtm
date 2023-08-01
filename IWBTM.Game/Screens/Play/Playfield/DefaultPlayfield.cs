@@ -7,8 +7,8 @@ using IWBTM.Game.Rooms;
 using IWBTM.Game.Screens.Play.Player;
 using IWBTM.Game.Screens.Play.Death;
 using IWBTM.Game.Rooms.Drawables;
-using osu.Framework.Graphics.Audio;
 using System;
+using osu.Framework.Audio.Sample;
 
 namespace IWBTM.Game.Screens.Play.Playfield
 {
@@ -20,7 +20,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
 
         public DefaultPlayer Player;
         private PlayerParticlesContainer deathOverlay;
-        private DrawableSample roomEntering;
+        private Sample roomEntering;
+        private SampleChannel roomEnteringChannel;
 
         private DependencyContainer dependencies;
 
@@ -56,9 +57,10 @@ namespace IWBTM.Game.Screens.Play.Playfield
                     Saved = onSave,
                 },
                 new WaterRenderer(room),
-                deathOverlay = new PlayerParticlesContainer(),
-                roomEntering = new DrawableSample(audio.Samples.Get("room-entering"))
+                deathOverlay = new PlayerParticlesContainer()
             };
+
+            roomEntering = audio.Samples.Get("room-entering");
         }
 
         protected virtual Drawable CreateLayerBehindPlayer() => Empty();
@@ -84,8 +86,8 @@ namespace IWBTM.Game.Screens.Play.Playfield
             Player.Revive(position, rightwards);
             DrawableRoom.Restart();
             deathOverlay.Restore();
-            roomEntering.Stop();
-            roomEntering.Play();
+            roomEnteringChannel?.Stop();
+            roomEnteringChannel = roomEntering.Play();
         }
     }
 }

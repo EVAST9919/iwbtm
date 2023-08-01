@@ -35,30 +35,29 @@ namespace IWBTM.Game.Screens
             return base.OnKeyDown(e);
         }
 
-        public override void OnEntering(IScreen last)
+        public override void OnEntering(ScreenTransitionEvent e)
         {
-            base.OnEntering(last);
+            base.OnEntering(e);
             this.FadeInFromZero(200, Easing.Out);
         }
 
-        public override bool OnExiting(IScreen next)
+        public override bool OnExiting(ScreenExitEvent e)
         {
             this.FadeOut(200, Easing.Out);
             this.ScaleTo(0.9f, 200, Easing.Out);
-            return base.OnExiting(next);
+            return base.OnExiting(e);
         }
 
-        public override void OnSuspending(IScreen next)
+        public override void OnSuspending(ScreenTransitionEvent e)
         {
-            base.OnSuspending(next);
+            base.OnSuspending(e);
             this.ScaleTo(1.1f, 200, Easing.Out);
             this.FadeOut(200, Easing.Out);
         }
 
-        public override void OnResuming(IScreen last)
+        public override void OnResuming(ScreenTransitionEvent e)
         {
-            base.OnResuming(last);
-
+            base.OnResuming(e);
             this.ScaleTo(1, 200, Easing.Out);
             this.FadeIn(200, Easing.Out);
         }

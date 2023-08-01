@@ -1,6 +1,7 @@
 ﻿using IWBTM.Resources;
 using osu.Framework.Allocation;
 using osu.Framework.Configuration;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 
@@ -18,15 +19,19 @@ namespace IWBTM.Game
         private DependencyContainer dependencies;
 
         [BackgroundDependencyLoader]
-        private void load(FrameworkConfigManager config)
+        private void load(FrameworkConfigManager config, IRenderer renderer)
         {
             // Load the assets from our Resources project
             Resources.AddStore(new DllResourceStore(IWBTMResources.ResourceAssembly));
 
             // To preserve the 8-bit aesthetic, disable texture filtering
             // so they won't become blurry when upscaled
-            textures = new TextureStore(Textures);
-            pixelTextures = new PixelTextureStore(Textures);
+            textures = new TextureStore(renderer);
+            textures.AddStore(Textures);
+
+            pixelTextures = new PixelTextureStore(renderer);
+            pixelTextures.AddStore(Textures);
+
             dependencies.Cache(textures);
             dependencies.Cache(pixelTextures);
 

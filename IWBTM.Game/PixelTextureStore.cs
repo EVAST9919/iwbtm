@@ -1,13 +1,12 @@
-﻿using osu.Framework.Graphics.Textures;
-using osu.Framework.IO.Stores;
-using osuTK.Graphics.ES30;
+﻿using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Textures;
 
 namespace IWBTM.Game
 {
     public class PixelTextureStore : TextureStore
     {
-        public PixelTextureStore(IResourceStore<TextureUpload> store)
-            : base(store, filteringMode: All.Nearest)
+        public PixelTextureStore(IRenderer renderer)
+            : base(renderer, filteringMode: TextureFilteringMode.Nearest)
         {
         }
     }

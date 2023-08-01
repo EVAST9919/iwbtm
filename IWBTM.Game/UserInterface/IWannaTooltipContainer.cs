@@ -4,6 +4,7 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Localisation;
 using osuTK;
 using osuTK.Graphics;
 
@@ -19,14 +20,12 @@ namespace IWBTM.Game.UserInterface
             private readonly SpriteText text;
             private bool instantMovement = true;
 
-            public override bool SetContent(object content)
+            public override void SetContent(LocalisableString content)
             {
-                if (!(content is string contentString))
-                    return false;
+                if (content.Equals(text.Text))
+                    return;
 
-                if (contentString == text.Text) return true;
-
-                text.Text = contentString;
+                text.Text = content;
 
                 if (IsPresent)
                 {
@@ -35,8 +34,6 @@ namespace IWBTM.Game.UserInterface
                 }
                 else
                     AutoSizeDuration = 0;
-
-                return true;
             }
 
             public IWannaTooltip()
