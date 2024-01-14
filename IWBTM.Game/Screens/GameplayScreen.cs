@@ -6,7 +6,6 @@ using IWBTM.Game.Screens.Play.Playfield;
 using IWBTM.Game.UserInterface;
 using osu.Framework.Allocation;
 using osu.Framework.Audio;
-using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Audio;
@@ -22,7 +21,7 @@ using System.Linq;
 
 namespace IWBTM.Game.Screens
 {
-    public class GameplayScreen : IWannaScreen
+    public partial class GameplayScreen : IWannaScreen
     {
         protected DefaultPlayfield Playfield
         {

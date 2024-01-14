@@ -7,7 +7,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics;
 using IWBTM.Game.UserInterface;
 using IWBTM.Game.Helpers;
-using NuGet.Protocol.Plugins;
 
 namespace IWBTM.Game.Rooms.Drawables
 {
