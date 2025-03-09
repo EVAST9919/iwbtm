@@ -7,7 +7,7 @@ using osuTK.Input;
 
 namespace IWBTM.Game.Screens
 {
-    public class IWannaScreen : Screen
+    public partial class IWannaScreen : Screen
     {
         public IWannaScreen()
         {
@@ -30,7 +30,7 @@ namespace IWBTM.Game.Screens
                         OnExit();
                         return true;
                 }
-            };
+            }
 
             return base.OnKeyDown(e);
         }

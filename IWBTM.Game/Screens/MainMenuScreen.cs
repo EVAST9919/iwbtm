@@ -9,10 +9,11 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
 using osuTK;
 using System;
+using IWBTM.Game.BossCreation;
 
 namespace IWBTM.Game.Screens
 {
-    public class MainMenuScreen : IWannaScreen
+    public partial class MainMenuScreen : IWannaScreen
     {
         [Resolved]
         private ConfirmationOverlay confirmationOverlay { get; set; }
@@ -46,7 +47,8 @@ namespace IWBTM.Game.Screens
                     Children = new[]
                     {
                         new Button("Play", () => this.Push(consumeSelect())),
-                        new Button("Create", () => this.Push(new CreationScreen()))
+                        new Button("Create", () => this.Push(new CreationScreen())),
+                        //new Button("Create Boss", () => this.Push(new BossCreationScreen()))
                     }
                 },
                 new SpriteText
